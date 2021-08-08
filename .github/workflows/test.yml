@@ -1,0 +1,64 @@
+name: Testing
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/**'
+  pull_request:
+jobs:
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Node v14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      
+      - name: Install Dependencies
+        run: npm ci --no-optional
+
+      - name: Run ESLint
+        run: npm run lint
+  
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Node v14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      
+      - name: Install Dependencies
+        run: npm ci --no-optional
+
+      - name: Register Problem Matcher
+        run: echo "##[add-matcher].github/tsc.json"
+
+      - name: Run Typescript Compiler
+        run: npm run build
+
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Node v14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      
+      - name: Install Dependencies
+        run: npm ci --no-optional
+
+      - name: Build Documentation
+        run: npm run docs

@@ -1,0 +1,44 @@
+name: Documentation Pages
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'docs/**'
+    branches:
+      - main
+      - stable
+jobs:
+  dev-docs:
+    name: Development Documentation
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'XzFirzal/discord-media-player' && github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Commit Changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          branch: gh-pages
+          default_author: github_actions
+          message: 'docs: new development documentation'
+          cwd: docs
+
+  stable-docs:
+    name: Stable Documentation
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'XzFirzal/discord-media-player' && github.ref == 'refs/heads/stable' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Rename
+        run: mv docs stable
+
+      - name: Commit Changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          branch: gh-pages
+          default_author: github_actions
+          message: 'docs: new stable documentation'
+          add: stable
