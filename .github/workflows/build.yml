@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.SECRET_GITHUB_PAT }}
 
       - name: Install Node v14
         uses: actions/setup-node@v2
