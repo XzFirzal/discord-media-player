@@ -93,8 +93,21 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
             createAudioPlayer?: createAudioPlayerType;
     }
     export interface AudioManagerEvents {
+            /**
+                * @param guildID The guildID of the linked connection in player
+                * @param urlOrLocation The audio url or location
+                */
             audioStart(guildID: string, urlOrLocation: string): void;
+            /**
+                * @param guildID The guildID of the linked connection in player
+                * @param urlOrLocation The audio url or location
+                */
             audioEnd(guildID: string, urlOrLocation: string): void;
+            /**
+                * @param guildID The guildID of the linked connection in player
+                * @param urlOrLocation The audio url or location
+                * @param errorCode The error code to identify error
+                */
             audioError(guildID: string, urlOrLocation: string, errorCode: ErrorCode): void;
     }
     export interface AudioManager extends EventEmitter {
@@ -109,6 +122,27 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
         * The manager of the audio players
         */
     export class AudioManager extends EventEmitter {
+            /**
+                * Emitted whenever an audio is started playing
+                *
+                * Listener must implement {@link AudioManagerEvents.audioStart | AudioStartCallback}
+                * @event
+                */
+            static AUDIO_START: string;
+            /**
+                * Emitted whenever an audio is ended after playing
+                *
+                * Listener must implement {@link AudioManagerEvents.audioEnd | AudioEndCallback}
+                * @event
+                */
+            static AUDIO_END: string;
+            /**
+                * Emitted whenever an error is thrown while getting audio source before playing
+                *
+                * Listener must implement {@link AudioManagerEvents.audioError | AudioErrorCallback}
+                * @event
+                */
+            static AUDIO_ERROR: string;
             /**
                 * The audio cache manager
                 */

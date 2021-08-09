@@ -86,3 +86,24 @@ class AudioManager extends events_1.EventEmitter {
     }
 }
 exports.AudioManager = AudioManager;
+/**
+ * Emitted whenever an audio is started playing
+ *
+ * Listener must implement {@link AudioManagerEvents.audioStart | AudioStartCallback}
+ * @event
+ */
+AudioManager.AUDIO_START = "audioStart";
+/**
+ * Emitted whenever an audio is ended after playing
+ *
+ * Listener must implement {@link AudioManagerEvents.audioEnd | AudioEndCallback}
+ * @event
+ */
+AudioManager.AUDIO_END = "audioEnd";
+/**
+ * Emitted whenever an error is thrown while getting audio source before playing
+ *
+ * Listener must implement {@link AudioManagerEvents.audioError | AudioErrorCallback}
+ * @event
+ */
+AudioManager.AUDIO_ERROR = "audioError";
