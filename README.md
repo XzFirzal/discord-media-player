@@ -5,6 +5,10 @@
 
 ## Table Of Contents
 - [About](#about)
+- [Dependencies](#dependencies)
+  - [Opus](#opus-libraries) (Required)
+  - [Encryption](#encryption-libraries) (Required)
+  - [FFmpeg](#ffmpeg) (Optional)
 - [Example](#example)
 - [Links](#links)
 - [Contributing](#contributing)
@@ -19,21 +23,24 @@ and utility method as:
 - Seeking
 
 ## Dependencies
-Opus (Required), install one of the following:
+### Opus Libraries
+Required, install one of the following:
 - @discordjs/opus (Recommended)
 - node-opus
 - opusscript
 
-Encryption (Required), install one of the following:
+### Encryption Libraries
+Required, install one of the following:
 - sodium
 - libsodium-wrappers
 - tweetnacl
 
-FFmpeg (Optional), choose one of the following:
+### FFmpeg
+Optional, choose one of the following:
 - [FFmpeg](https://www.ffmpeg.org/download.html) (Install manually on the machine)
 - npm install ffmpeg-static
 
-FFmpeg is used for audio filters, arbitrary source, and fallback when no opus format found
+FFmpeg is used for audio filters, arbitrary source, and fallback when no opus format found.
 
 ## Example
 This is an example of simple music bot using discord.js v13 with discord-media-player
