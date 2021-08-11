@@ -25,7 +25,7 @@ jobs:
           branch: gh-pages
           default_author: github_actions
           message: 'docs: new development documentation'
-          cwd: docs
+          add: '["assets/*", "classes/*", "enums/*", "interfaces/*", "modules/*", "index.html", "modules.html"]'
 
   stable-docs:
     name: Stable Documentation
