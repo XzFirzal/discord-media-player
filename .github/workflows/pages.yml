@@ -46,7 +46,6 @@ jobs:
 
       - name: Pull Docs From Stable
         run: |
-          git remote add origin https://www.github.com/XzFirzal/discord-media-player.git
           git fetch
           git checkout -m origin/stable -- docs
 
