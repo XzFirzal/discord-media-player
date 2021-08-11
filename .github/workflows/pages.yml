@@ -47,10 +47,10 @@ jobs:
       - name: Pull Docs From Stable
         run: |
           git fetch
-          git checkout -m origin/stable -- docs
+          git checkout origin/stable -- docs
 
-      - name: Rename
-        run: mv docs stable
+      - name: Copy
+        run: cp -rt docs/* stable
 
       - name: Commit Changes
         uses: EndBug/add-and-commit@v7
