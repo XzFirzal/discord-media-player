@@ -18,11 +18,13 @@ jobs:
         with:
           ref: gh-pages
           path: docs
-        
-      - name: Checkout Development Docs
-        uses: actions/checkout@v2
-        with:
-          ref: main
+
+      - name: Pull Docs From Main
+        run: |
+          git init
+          git remote add origin https://www.github.com/XzFirzal/discord-media-player.git
+          git fetch
+          git checkout -m origin/main -- docs
 
       - name: Commit Changes
         uses: EndBug/add-and-commit@v7
