@@ -19,9 +19,10 @@ import { CacheWriter } from "../cache/CacheWriter"
 import { downloadMedia } from "../soundcloudUtil/downloadMedia"
 import { AudioPlayer as DiscordPlayer, AudioResource, AudioPlayerStatus, VoiceConnectionStatus } from "@discordjs/voice"
 import { getVideoID, getInfo, downloadFromInfo } from "ytdl-core"
+import { PassThrough, pipeline } from "stream"
 import { open as fsOpen } from "fs/promises"
 import { createReadStream } from "fs"
-import { PassThrough, pipeline } from "stream"
+import { EventEmitter } from "events"
 
 const FFMPEG_ARGS = [
   "-f",
@@ -266,16 +267,16 @@ export class AudioPlayerImpl implements AudioPlayer {
   /**
    * @internal
    */
-  pause(): boolean {
+  pause(pauseOrUnpause?: boolean): boolean {
     this._checkPlaying()
 
-    if (this.status === AudioPlayerStatus.Paused) {
+    if ((typeof pauseOrUnpause === "boolean" && pauseOrUnpause === false) ||
+      ([AudioPlayerStatus.Paused, AudioPlayerStatus.AutoPaused].includes(this.status) && pauseOrUnpause !== true)) {
       this._player.unpause()
       return false
     }
 
-    this._player.pause()
-    return true
+    return this._player.pause()
   }
 
   /**
@@ -490,7 +491,7 @@ export class AudioPlayerImpl implements AudioPlayer {
       return filteredFormat || formats[0]
     }
 
-    const options = { highWaterMark: 11 * 1024 * 1024 , ...this.manager.youtube }
+    const options = { highWaterMark: 1 << 22, ...this.manager.youtube }
 
     let info = this._info as videoInfo
 
@@ -518,6 +519,33 @@ export class AudioPlayerImpl implements AudioPlayer {
 
     if (!this.manager.cache && !info.videoDetails.isLiveContent) this._info = info
 
+    async function onPipeAndUnpipe(resource: Resource) {
+      const commander = new EventEmitter()
+      let contentLength = 0, downloaded = 0
+
+      await new Promise((resolve) => resource.source.once("pipe", resolve))
+
+      resource.source.on("progress", (_: number, audioDownloaded: number, audioLength: number) => {
+        downloaded = audioDownloaded
+        contentLength = audioLength
+      })
+      
+      resource.source.on("unpipe", async () => {
+        if (downloaded >= contentLength) return
+
+        resource.autoPaused = true
+        setImmediate(commander.emit.bind(commander, "unpipe"))
+      })
+
+      resource.source.on("pipe", async () => {
+        await new Promise((resolve) => commander.once("unpipe", resolve))
+        
+        if (!resource.source.readable || !resource.source.readableFlowing) await new Promise((resolve) => resource.source.once("readable", resolve))
+
+        resource.autoPaused = false
+      })
+    }
+
     let format = info.formats.find(getOpusFormat)
 
     const canDemux = format && !info.videoDetails.isLiveContent
@@ -540,6 +568,7 @@ export class AudioPlayerImpl implements AudioPlayer {
       })
 
       pipeline(resource.source, resource.demuxer, resource.decoder, resource.cacheWriter, noop)
+      onPipeAndUnpipe(resource)
 
       resource.cacheWriter.once("close", () => {
         resource.source.destroy()
@@ -573,6 +602,7 @@ export class AudioPlayerImpl implements AudioPlayer {
     if (!resource.isLive) lines.push(resource.cacheWriter)
 
     pipeline(lines, noop)
+    onPipeAndUnpipe(resource)
 
     lines[lines.length-1].once("close", () => lines.forEach((line) => {
       if (!line.destroyed) line.destroy()

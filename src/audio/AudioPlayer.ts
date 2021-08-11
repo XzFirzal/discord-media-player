@@ -1,7 +1,7 @@
 import type { Filters } from "../util/Filters"
 import type { AudioManager } from "./AudioManager"
 import type { SourceType } from "../util/SourceType"
-import type { VoiceConnection } from "@discordjs/voice"
+import type { VoiceConnection, AudioPlayerStatus } from "@discordjs/voice"
 
 /**
  * The instance to manage and playing audio to discord
@@ -11,6 +11,10 @@ export interface AudioPlayer {
    * The manager of the audio player
    */
   manager: AudioManager
+  /**
+   * The discord player status
+   */
+  status: AudioPlayerStatus
   
   /**
    * Set the manager of the audio player
@@ -47,7 +51,7 @@ export interface AudioPlayer {
   /**
    * Pause the audio
    */
-  pause(): boolean
+  pause(forcePauseUnpause?: boolean): boolean
   /**
    * Filter the audio
    */

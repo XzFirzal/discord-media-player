@@ -2,6 +2,7 @@ import type { Cache } from "../cache/Cache"
 import type { CacheWriter } from "../cache/CacheWriter"
 import type { AudioPlayer } from "../audio/AudioPlayer"
 import type { Readable, Transform, Duplex } from "stream"
+import { AudioPlayerStatus } from "@discordjs/voice"
 
 /**
  * Options for making audio resource
@@ -49,11 +50,15 @@ export class Resource {
    * true if all audio is cached, otherwise false
    */
   public allCached = false
+
   /**
    * The audio player that currently use the audio resource
    */
-  public player: AudioPlayer
-
+  private _player: AudioPlayer
+  /**
+   * If audio source is from youtube, it will auto paused when ytdl-core getting next chunk
+   */
+  private _autoPaused = false
   /**
    * true if the audio source is livestream, otherwise false
    */
@@ -105,5 +110,28 @@ export class Resource {
     } else this.audio = this.decoder as Duplex
 
     this.isLive = !cacheWriter
+  }
+
+  set player(player: AudioPlayer) {
+    this._player = player
+
+    setImmediate(() => {
+      if (this.autoPaused && ![AudioPlayerStatus.Paused, AudioPlayerStatus.AutoPaused].includes(player?.status)) player?.pause(true)
+    })
+  }
+
+  get player(): AudioPlayer {
+    return this._player
+  }
+
+  set autoPaused(paused: boolean) {
+    this._autoPaused = paused
+
+    if (paused && ![AudioPlayerStatus.Paused, AudioPlayerStatus.AutoPaused].includes(this.player?.status)) this.player?.pause(true)
+    else if (!paused && [AudioPlayerStatus.Paused, AudioPlayerStatus.AutoPaused].includes(this.player?.status)) this.player?.pause(false)
+  }
+
+  get autoPaused(): boolean {
+    return this._autoPaused
   }
 }

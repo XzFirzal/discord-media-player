@@ -42,6 +42,7 @@ export class CacheWriter extends Transform {
       this._cache.on("drain", () => {
         this._awaitDrain?.()
       })
+
       this._cache.once("close", () => {
         if (resource.cache.hasCache(resource.identifier)) this.emit("stop")
         this.destroy()
@@ -61,8 +62,8 @@ export class CacheWriter extends Transform {
    * @internal
    */
   _transform(chunk: Buffer, _: BufferEncoding, cb: TransformCallback): void {
-    this.push(chunk)
     this._addSecond(chunk.length / Bps)
+    this.push(chunk)
 
     if (this._cache && !this._cache.write(chunk)) {
       this._awaitDrain = cb
@@ -73,8 +74,13 @@ export class CacheWriter extends Transform {
    * @internal
    */
   _flush(cb: TransformCallback): void {
-    this._resource.allCached = true
-    this._cache.end()
+    this.once("end", () => {
+      this._resource.allCached = true
+      
+      if (this._cache) this._cache?.end()
+      else this.destroy()
+    })
+
     cb()
   }
 
