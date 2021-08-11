@@ -16,6 +16,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Copy
+        run: cp -r docs/* .
+
       - name: Commit Changes
         uses: EndBug/add-and-commit@v7
         with:
