@@ -253,11 +253,8 @@ class AudioPlayerImpl {
             await new Promise((res) => skipper.once("close", res));
             this._playResource();
         }
-        else {
-            if (!this._resource.allCached)
-                this._playResourceOnEnd = true;
+        else
             this._playCache(seconds);
-        }
     }
     /**
      * @internal
@@ -298,6 +295,8 @@ class AudioPlayerImpl {
         this._audio = cacheStream;
         this._player.play(audioResource);
         this._audio.pipe(audioResource.metadata);
+        if (!this._resource.allCached)
+            this._playResourceOnEnd = true;
     }
     /**
      * @internal
@@ -582,10 +581,14 @@ class AudioPlayerImpl {
      * @internal
      */
     async _onAudioChange(oldState, newState) {
-        if (oldState.status !== voice_1.AudioPlayerStatus.Idle && !newState.resource) {
+        if (oldState.status === voice_1.AudioPlayerStatus.Paused && newState.status === voice_1.AudioPlayerStatus.Playing && this._switchToCache) {
+            this._playCache(this._switchToCache);
+            this._switchToCache = 0;
+        }
+        else if (oldState.status !== voice_1.AudioPlayerStatus.Idle && !newState.resource) {
             if (!(this._aborting || this._stopping) && this._playResourceOnEnd && !this._resource.allCached) {
                 this._playResourceOnEnd = false;
-                if (this._resource.player && this._resource.player === this)
+                if (this._resource.player && this._resource.player !== this)
                     this._resource.player._switchCache();
                 this._playResource();
                 return;
@@ -622,8 +625,6 @@ class AudioPlayerImpl {
                                 this._cleanup();
                                 return;
                             }
-                            if (!this._resource.allCached)
-                                this._playResourceOnEnd = true;
                             this._playCache();
                         }
                         else {
@@ -663,9 +664,15 @@ class AudioPlayerImpl {
      * @internal
      */
     _switchCache() {
-        this._abort();
+        const isPaused = this.status === voice_1.AudioPlayerStatus.Paused;
+        this._audio.unpipe();
         const seconds = this._resource.cachedSecond;
-        setImmediate(() => this._playCache(seconds));
+        setImmediate(() => {
+            if (!isPaused)
+                this._playCache(seconds);
+            else
+                this._switchToCache = seconds;
+        });
     }
 }
 exports.AudioPlayerImpl = AudioPlayerImpl;

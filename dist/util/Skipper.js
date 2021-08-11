@@ -31,6 +31,7 @@ class Skipper extends stream_1.Writable {
      * @internal
      */
     _final(cb) {
+        this._cacheWriter.unpipe();
         this.destroy();
         cb();
     }
