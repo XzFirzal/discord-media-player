@@ -66,6 +66,12 @@
 				</a>
 				<ul>
 					<li><a href="#about">About</a></li>
+					<li><a href="#dependencies">Dependencies</a><ul>
+							<li><a href="#opus-libraries">Opus</a> (Required)</li>
+							<li><a href="#encryption-libraries">Encryption</a> (Required)</li>
+							<li><a href="#ffmpeg">FFmpeg</a> (Optional)</li>
+						</ul>
+					</li>
 					<li><a href="#example">Example</a></li>
 					<li><a href="#links">Links</a></li>
 					<li><a href="#contributing">Contributing</a></li>
@@ -84,24 +90,33 @@
 				<a href="#dependencies" id="dependencies" style="color: inherit; text-decoration: none;">
 					<h2>Dependencies</h2>
 				</a>
-				<p>Opus (Required), install one of the following:</p>
+				<a href="#opus-libraries" id="opus-libraries" style="color: inherit; text-decoration: none;">
+					<h3>Opus Libraries</h3>
+				</a>
+				<p>Required, install one of the following:</p>
 				<ul>
 					<li>@discordjs/opus (Recommended)</li>
 					<li>node-opus</li>
 					<li>opusscript</li>
 				</ul>
-				<p>Encryption (Required), install one of the following:</p>
+				<a href="#encryption-libraries" id="encryption-libraries" style="color: inherit; text-decoration: none;">
+					<h3>Encryption Libraries</h3>
+				</a>
+				<p>Required, install one of the following:</p>
 				<ul>
 					<li>sodium</li>
 					<li>libsodium-wrappers</li>
 					<li>tweetnacl</li>
 				</ul>
-				<p>FFmpeg (Optional), choose one of the following:</p>
+				<a href="#ffmpeg" id="ffmpeg" style="color: inherit; text-decoration: none;">
+					<h3>FFmpeg</h3>
+				</a>
+				<p>Optional, choose one of the following:</p>
 				<ul>
 					<li><a href="https://www.ffmpeg.org/download.html">FFmpeg</a> (Install manually on the machine)</li>
 					<li>npm install ffmpeg-static</li>
 				</ul>
-				<p>FFmpeg is used for audio filters, arbitrary source, and fallback when no opus format found</p>
+				<p>FFmpeg is used for audio filters, arbitrary source, and fallback when no opus format found.</p>
 				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
 					<h2>Example</h2>
 				</a>
