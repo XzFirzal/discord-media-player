@@ -42,8 +42,8 @@ class CacheWriter extends stream_1.Transform {
      * @internal
      */
     _transform(chunk, _, cb) {
-        this.push(chunk);
         this._addSecond(chunk.length / Bps);
+        this.push(chunk);
         if (this._cache && !this._cache.write(chunk)) {
             this._awaitDrain = cb;
         }
@@ -54,8 +54,13 @@ class CacheWriter extends stream_1.Transform {
      * @internal
      */
     _flush(cb) {
-        this._resource.allCached = true;
-        this._cache.end();
+        this.once("end", () => {
+            this._resource.allCached = true;
+            if (this._cache)
+                this._cache?.end();
+            else
+                this.destroy();
+        });
         cb();
     }
     /**

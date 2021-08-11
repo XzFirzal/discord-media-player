@@ -183,7 +183,7 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
     import type { Filters } from "discord-media-player/dist/util/Filters";
     import type { AudioManager } from "discord-media-player/dist/audio/AudioManager";
     import type { SourceType } from "discord-media-player/dist/util/SourceType";
-    import type { VoiceConnection } from "@discordjs/voice";
+    import type { VoiceConnection, AudioPlayerStatus } from "@discordjs/voice";
     /**
         * The instance to manage and playing audio to discord
         */
@@ -192,6 +192,10 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
                 * The manager of the audio player
                 */
             manager: AudioManager;
+            /**
+                * The discord player status
+                */
+            status: AudioPlayerStatus;
             /**
                 * Set the manager of the audio player
                 * @param manager The audio manager
@@ -227,7 +231,7 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
             /**
                 * Pause the audio
                 */
-            pause(): boolean;
+            pause(forcePauseUnpause?: boolean): boolean;
             /**
                 * Filter the audio
                 */
@@ -304,7 +308,7 @@ declare module 'discord-media-player/dist/audio/AudioPlayerImpl' {
             /**
                 * @internal
                 */
-            pause(): boolean;
+            pause(pauseOrUnpause?: boolean): boolean;
             /**
                 * @internal
                 */
@@ -627,10 +631,6 @@ declare module 'discord-media-player/dist/util/Resource' {
                 */
             allCached: boolean;
             /**
-                * The audio player that currently use the audio resource
-                */
-            player: AudioPlayer;
-            /**
                 * true if the audio source is livestream, otherwise false
                 */
             readonly isLive: boolean;
@@ -666,6 +666,10 @@ declare module 'discord-media-player/dist/util/Resource' {
                 * @param param0 The options to create audio resource
                 */
             constructor({ player, identifier, decoder, source, cache, demuxer, cacheWriter }: ResourceOptions);
+            set player(player: AudioPlayer);
+            get player(): AudioPlayer;
+            set autoPaused(paused: boolean);
+            get autoPaused(): boolean;
     }
 }
 
