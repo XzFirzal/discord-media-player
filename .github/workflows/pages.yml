@@ -49,8 +49,10 @@ jobs:
           git fetch
           git checkout origin/stable -- docs
 
-      - name: Copy
-        run: cp -rt docs/* stable
+      - name: Delete And Rename
+        run: |
+          rm -rf stable
+          mv docs stable
 
       - name: Commit Changes
         uses: EndBug/add-and-commit@v7
