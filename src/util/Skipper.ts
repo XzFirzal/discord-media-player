@@ -40,6 +40,7 @@ export class Skipper extends Writable {
    * @internal
    */
   _final(cb: () => void): void {
+    this._cacheWriter.unpipe()
     this.destroy()
 
     cb()

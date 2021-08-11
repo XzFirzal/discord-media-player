@@ -82,6 +82,10 @@ export class AudioPlayerImpl implements AudioPlayer {
   /**
    * @internal
    */
+  private _switchToCache?: number
+  /**
+   * @internal
+   */
   private _resource?: Resource
   /**
    * @internal
@@ -335,11 +339,7 @@ export class AudioPlayerImpl implements AudioPlayer {
       await new Promise((res) => skipper.once("close", res))
 
       this._playResource()
-    } else {
-      if (!this._resource.allCached) this._playResourceOnEnd = true
-
-      this._playCache(seconds)
-    }
+    } else this._playCache(seconds)
   }
 
   /**
@@ -386,6 +386,8 @@ export class AudioPlayerImpl implements AudioPlayer {
     this._audio = cacheStream
     this._player.play(audioResource)
     this._audio.pipe(audioResource.metadata)
+
+    if (!this._resource.allCached) this._playResourceOnEnd = true
   }
 
   /**
@@ -732,11 +734,14 @@ export class AudioPlayerImpl implements AudioPlayer {
    * @internal
    */
   private async _onAudioChange(oldState: AudioPlayerState, newState: AudioPlayerState): Promise<void> {
-    if (oldState.status !== AudioPlayerStatus.Idle && !(newState as AudioPlayerPlayingState).resource) {
+    if (oldState.status === AudioPlayerStatus.Paused && newState.status === AudioPlayerStatus.Playing && this._switchToCache) {
+      this._playCache(this._switchToCache)
+      this._switchToCache = 0
+    } else if (oldState.status !== AudioPlayerStatus.Idle && !(newState as AudioPlayerPlayingState).resource) {
       if (!(this._aborting || this._stopping) && this._playResourceOnEnd && !this._resource.allCached) {
         this._playResourceOnEnd = false
 
-        if (this._resource.player && this._resource.player === this) (this._resource.player as AudioPlayerImpl)._switchCache()
+        if (this._resource.player && this._resource.player !== this) (this._resource.player as AudioPlayerImpl)._switchCache()
 
         this._playResource()
         return
@@ -780,8 +785,6 @@ export class AudioPlayerImpl implements AudioPlayer {
                 return
               }
 
-              if (!this._resource.allCached) this._playResourceOnEnd = true
-
               this._playCache()
             } else {
               await this._getResource(this._urlOrLocation, this._sourceType)
@@ -824,10 +827,15 @@ export class AudioPlayerImpl implements AudioPlayer {
   /**
    * @internal
    */
-  private _switchCache(): void {
-    this._abort()
+  public _switchCache(): void {
+    const isPaused = this.status === AudioPlayerStatus.Paused
+
+    this._audio.unpipe()
 
     const seconds = this._resource.cachedSecond
-    setImmediate(() => this._playCache(seconds))
+    setImmediate(() => {
+      if (!isPaused) this._playCache(seconds)
+      else this._switchToCache = seconds
+    })
   }
 }

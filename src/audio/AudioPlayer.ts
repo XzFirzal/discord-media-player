@@ -67,4 +67,12 @@ export interface AudioPlayer {
    * @param sourceType The source type to identify the source
    */
   play(urlOrLocation: string, sourceType: SourceType): Promise<void>
+  /**
+   * Switch to playing cache instead of resource
+   * 
+   * This method must not be used by user directly,
+   * it is used for custom player implementation to work
+   * with cache
+   */
+  _switchCache(): void
 }
