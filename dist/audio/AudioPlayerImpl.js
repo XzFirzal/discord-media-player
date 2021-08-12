@@ -477,7 +477,7 @@ class AudioPlayerImpl {
             lines.push(resource.cacheWriter);
         stream_1.pipeline(lines, noop_1.noop);
         onPipeAndUnpipe(resource);
-        resource.audio.once(resource.isLive ? "error" : "close", () => lines.forEach((line) => {
+        resource.audio.once("close", () => lines.forEach((line) => {
             if (!line.destroyed)
                 line.destroy();
         }));
