@@ -123,8 +123,8 @@ class AudioPlayerImpl {
                 const subscription = player._connection.state.subscription;
                 subscription?.unsubscribe();
                 if (player._playing) {
-                    if (player._resource.player === player && player.manager.cache)
-                        player._resource.cacheWriter.unpipe();
+                    if (player._resource.player === player && player.manager.cache && !player._resource.isLive)
+                        player._resource.audio.unpipe();
                     player._disconnected = true;
                     player._player.stop();
                 }
@@ -146,8 +146,8 @@ class AudioPlayerImpl {
         const subscription = this._connection.state.subscription;
         subscription?.unsubscribe();
         if (this._playing) {
-            if (this._resource.player === this && this.manager.cache)
-                this._resource.cacheWriter.unpipe();
+            if (this._resource.player === this && this.manager.cache && !this._resource.isLive)
+                this._resource.audio.unpipe();
             this._disconnected = true;
             this._player.stop();
         }
@@ -180,8 +180,8 @@ class AudioPlayerImpl {
      */
     stop() {
         this._checkPlaying();
-        if (this._resource.player === this && this.manager.cache)
-            this._resource.cacheWriter.unpipe();
+        if (this._resource.player === this && this.manager.cache && !this._resource.isLive)
+            this._resource.audio.unpipe();
         this._stopping = true;
         const stopped = this._player.stop();
         this._stopping = false;
@@ -215,8 +215,10 @@ class AudioPlayerImpl {
         const player = this._resource.player;
         this._abort();
         const audioResource = this._createAudioResource();
-        if (this._filters && player !== this && !this._resource.allCached)
+        if (player !== this && !this._resource.allCached)
             this._playResourceOnEnd = true;
+        if (player === this)
+            this._resource.player = this;
         this._player.play(audioResource);
         this._audio.pipe(audioResource.metadata);
     }
@@ -475,7 +477,7 @@ class AudioPlayerImpl {
             lines.push(resource.cacheWriter);
         stream_1.pipeline(lines, noop_1.noop);
         onPipeAndUnpipe(resource);
-        lines[lines.length - 1].once("close", () => lines.forEach((line) => {
+        resource.audio.once("close", () => lines.forEach((line) => {
             if (!line.destroyed)
                 line.destroy();
         }));
@@ -603,6 +605,11 @@ class AudioPlayerImpl {
             if (!this._aborting) {
                 this._playing = false;
                 this._playResourceOnEnd = false;
+                if (!this.manager.cache || this._resource.isLive) {
+                    this._resource.audio.destroy();
+                    if (this._resource.isLive)
+                        this._resource.audio.emit("close");
+                }
                 if (!this._disconnected) {
                     if (this._resource.isLive) {
                         const stopping = this._stopping;
