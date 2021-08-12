@@ -184,7 +184,7 @@ export class AudioPlayerImpl implements AudioPlayer {
         subscription?.unsubscribe()
 
         if (player._playing) {
-          if (player._resource.player === player && player.manager.cache) player._resource.cacheWriter.unpipe()
+          if (player._resource.player === player && player.manager.cache && !player._resource.isLive) player._resource.audio.unpipe()
 
           player._disconnected = true
           player._player.stop()
@@ -211,7 +211,7 @@ export class AudioPlayerImpl implements AudioPlayer {
     subscription?.unsubscribe()
 
     if (this._playing) {
-      if (this._resource.player === this && this.manager.cache) this._resource.cacheWriter.unpipe()
+      if (this._resource.player === this && this.manager.cache && !this._resource.isLive) this._resource.audio.unpipe()
 
       this._disconnected = true
       this._player.stop()
@@ -249,7 +249,7 @@ export class AudioPlayerImpl implements AudioPlayer {
   stop(): boolean {
     this._checkPlaying()
 
-    if (this._resource.player === this && this.manager.cache) this._resource.cacheWriter.unpipe()
+    if (this._resource.player === this && this.manager.cache && !this._resource.isLive) this._resource.audio.unpipe()
 
     this._stopping = true
     const stopped = this._player.stop()
@@ -607,7 +607,7 @@ export class AudioPlayerImpl implements AudioPlayer {
     pipeline(lines, noop)
     onPipeAndUnpipe(resource)
 
-    lines[lines.length-1].once("close", () => lines.forEach((line) => {
+    resource.audio.once(resource.isLive ? "error" : "close", () => lines.forEach((line) => {
       if (!line.destroyed) line.destroy()
     }))
   }
@@ -757,6 +757,11 @@ export class AudioPlayerImpl implements AudioPlayer {
       if (!this._aborting) {
         this._playing = false
         this._playResourceOnEnd = false
+
+        if (!this.manager.cache || this._resource.isLive) {
+          this._resource.audio.destroy()
+          if (this._resource.isLive) this._resource.audio.emit("close")
+        }
 
         if (!this._disconnected) {
           if (this._resource.isLive) {
