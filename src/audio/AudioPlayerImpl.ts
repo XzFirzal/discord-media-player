@@ -607,7 +607,7 @@ export class AudioPlayerImpl implements AudioPlayer {
     pipeline(lines, noop)
     onPipeAndUnpipe(resource)
 
-    resource.audio.once(resource.isLive ? "error" : "close", () => lines.forEach((line) => {
+    resource.audio.once("close", () => lines.forEach((line) => {
       if (!line.destroyed) line.destroy()
     }))
   }
