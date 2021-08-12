@@ -182,7 +182,6 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
 declare module 'discord-media-player/dist/audio/AudioPlayer' {
     import type { Filters } from "discord-media-player/dist/util/Filters";
     import type { AudioManager } from "discord-media-player/dist/audio/AudioManager";
-    import type { SourceType } from "discord-media-player/dist/util/SourceType";
     import type { VoiceConnection, AudioPlayerStatus } from "@discordjs/voice";
     /**
         * The instance to manage and playing audio to discord
@@ -240,13 +239,13 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
                 * Seek the audio
                 * @param seconds The seconds of where to seek
                 */
-            seek(seconds?: number): Promise<void>;
+            seek(seconds: number): Promise<void>;
             /**
                 * Play an audio
                 * @param urlOrLocation The url or location of the audio source
                 * @param sourceType The source type to identify the source
                 */
-            play(urlOrLocation: string, sourceType: SourceType): Promise<void>;
+            play(urlOrLocation: string, sourceType: number): Promise<void>;
             /**
                 * Switch to playing cache instead of resource
                 *
