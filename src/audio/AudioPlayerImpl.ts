@@ -294,7 +294,8 @@ export class AudioPlayerImpl implements AudioPlayer {
 
     const audioResource = this._createAudioResource()
 
-    if (this._filters && player !== this && !this._resource.allCached) this._playResourceOnEnd = true
+    if (player !== this && !this._resource.allCached) this._playResourceOnEnd = true
+    if (player === this) this._resource.player = this
 
     this._player.play(audioResource)
     this._audio.pipe(audioResource.metadata)

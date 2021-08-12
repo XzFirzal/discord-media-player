@@ -1,6 +1,5 @@
 import type { Filters } from "../util/Filters"
 import type { AudioManager } from "./AudioManager"
-import type { SourceType } from "../util/SourceType"
 import type { VoiceConnection, AudioPlayerStatus } from "@discordjs/voice"
 
 /**
