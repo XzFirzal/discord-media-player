@@ -5,7 +5,6 @@ const promises_1 = require("fs/promises");
 const path_1 = require("path");
 const fs_1 = require("fs");
 const Bps = 192000;
-const Extension = ".tmp";
 const CacheDeletedAfter = 1000 * 60 * 10;
 function stableCalculate(seconds) {
     if (!seconds)
@@ -78,7 +77,7 @@ class Cache {
     create(identifier, resource) {
         if (this._resources.has(identifier))
             throw new Error(`Cache with identifier '${identifier}' already exist`);
-        const writeStream = fs_1.createWriteStream(path_1.join(this.path, identifier + Extension), { emitClose: true });
+        const writeStream = fs_1.createWriteStream(path_1.join(this.path, identifier), { emitClose: true });
         this._resources.set(identifier, resource);
         this._timeouts.set(identifier, setTimeout(this._deleteCache.bind(this, identifier), CacheDeletedAfter));
         this._users.set(identifier, 0);
@@ -102,7 +101,7 @@ class Cache {
     read(identifier, startOnSeconds = 0) {
         if (!this._resources.has(identifier))
             throw new Error(`Cache with identifier '${identifier}' doesn't exist`);
-        const readStream = fs_1.createReadStream(path_1.join(this.path, identifier + Extension), { start: stableCalculate(startOnSeconds), emitClose: true });
+        const readStream = fs_1.createReadStream(path_1.join(this.path, identifier), { start: stableCalculate(startOnSeconds), emitClose: true });
         this._addUser(identifier);
         readStream.once("close", () => {
             this._removeUser(identifier);
@@ -138,7 +137,7 @@ class Cache {
         this._users.delete(identifier);
         if (!writeStream.destroyed)
             writeStream.destroy();
-        promises_1.unlink(path_1.join(this.path, identifier + Extension));
+        promises_1.unlink(path_1.join(this.path, identifier));
     }
     /**
      * @internal
