@@ -1,7 +1,7 @@
 import type { Resource } from "../util/Resource"
 import type { ReadStream, WriteStream} from "fs"
 
-import del from "del"
+import { unlink } from "fs/promises"
 import { join as pathJoin } from "path"
 import { mkdirSync, createWriteStream, createReadStream } from "fs"
 
@@ -159,7 +159,7 @@ export class Cache {
 
     if (!writeStream.destroyed) writeStream.destroy()
 
-    del(pathJoin(this.path, identifier + Extension))
+    unlink(pathJoin(this.path, identifier + Extension))
   }
 
   /**

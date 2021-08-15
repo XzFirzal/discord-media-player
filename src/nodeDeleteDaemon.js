@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { sync: delSync } = require("del")
+const { rmSync } = require("fs")
 
 let pid
 let cachePath
@@ -16,7 +16,7 @@ setInterval(() => {
   try {
     process.kill(pid, 0)
   } catch {
-    delSync(cachePath)
+    rmSync(cachePath, { recursive: true })
     process.exit()
   }
 }, 2500)
