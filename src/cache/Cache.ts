@@ -6,7 +6,6 @@ import { join as pathJoin } from "path"
 import { mkdirSync, createWriteStream, createReadStream } from "fs"
 
 const Bps = 192000
-const Extension = ".tmp"
 const CacheDeletedAfter = 1000 * 60 * 10
 
 function stableCalculate(seconds: number): number {
@@ -87,7 +86,7 @@ export class Cache {
   create(identifier: string, resource: Resource): WriteStream | never {
     if (this._resources.has(identifier)) throw new Error(`Cache with identifier '${identifier}' already exist`)
 
-    const writeStream = createWriteStream(pathJoin(this.path, identifier + Extension), { emitClose: true })
+    const writeStream = createWriteStream(pathJoin(this.path, identifier), { emitClose: true })
 
     this._resources.set(identifier, resource)
     this._timeouts.set(identifier, setTimeout(this._deleteCache.bind(this, identifier), CacheDeletedAfter))
@@ -115,7 +114,7 @@ export class Cache {
   read(identifier: string, startOnSeconds = 0): ReadStream | never {
     if (!this._resources.has(identifier)) throw new Error(`Cache with identifier '${identifier}' doesn't exist`)
 
-    const readStream = createReadStream(pathJoin(this.path, identifier + Extension), { start: stableCalculate(startOnSeconds), emitClose: true })
+    const readStream = createReadStream(pathJoin(this.path, identifier), { start: stableCalculate(startOnSeconds), emitClose: true })
 
     this._addUser(identifier)
 
@@ -159,7 +158,7 @@ export class Cache {
 
     if (!writeStream.destroyed) writeStream.destroy()
 
-    unlink(pathJoin(this.path, identifier + Extension))
+    unlink(pathJoin(this.path, identifier))
   }
 
   /**
