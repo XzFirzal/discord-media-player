@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cache = void 0;
-const del_1 = __importDefault(require("del"));
+const promises_1 = require("fs/promises");
 const path_1 = require("path");
 const fs_1 = require("fs");
 const Bps = 192000;
@@ -141,7 +138,7 @@ class Cache {
         this._users.delete(identifier);
         if (!writeStream.destroyed)
             writeStream.destroy();
-        del_1.default(path_1.join(this.path, identifier + Extension));
+        promises_1.unlink(path_1.join(this.path, identifier + Extension));
     }
     /**
      * @internal
