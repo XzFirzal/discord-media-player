@@ -56,6 +56,7 @@ declare module 'discord-media-player' {
             export import STREAMING_PROTOCOLS = _transcoding.STREAMING_PROTOCOLS;
             export import Transcoding = _transcoding.Transcoding;
     }
+    export * as ValidationUtil from "discord-media-player/dist/validation";
 }
 
 declare module 'discord-media-player/dist/audio/AudioManager' {
@@ -66,7 +67,7 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
     import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
     import SCDL from "soundcloud-downloader";
     import { EventEmitter } from "events";
-    type createAudioPlayerType = (manager: AudioManager) => AudioPlayer;
+    type createAudioPlayerType = () => AudioPlayer;
     /**
         * The options for AudioManager
         */
@@ -79,6 +80,10 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
                 * The directory where the audio cache is saved
                 */
             cacheDir?: string;
+            /**
+                * The timeout for cache deletion (in ms)
+                */
+            cacheTimeout?: number;
             /**
                 * The downloadOptions (ytdl-core) when getting audio source from youtube
                 */
@@ -156,9 +161,9 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
                 */
             readonly youtube: downloadOptions;
             /**
-                * @param param0 The options to create new audio player manager
+                * @param options The options to create new audio player manager
                 */
-            constructor({ cache, cacheDir, youtubeOptions, soundcloudClient, createAudioPlayer }: AudioManagerOptions);
+            constructor(options: AudioManagerOptions);
             /**
                 * Get player from list if exist, otherwise create new
                 * @param connection The voice connection
@@ -195,6 +200,10 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
                 * The discord player status
                 */
             status: AudioPlayerStatus;
+            /**
+                * The audio player is playing or not
+                */
+            playing: boolean;
             /**
                 * Set the manager of the audio player
                 * @param manager The audio manager
@@ -287,6 +296,10 @@ declare module 'discord-media-player/dist/audio/AudioPlayerImpl' {
             /**
                 * @internal
                 */
+            get playing(): boolean;
+            /**
+                * @internal
+                */
             setManager(manager: AudioManager): void;
             /**
                 * @internal
@@ -338,15 +351,21 @@ declare module 'discord-media-player/dist/audio/AudioPlayerImpl' {
 declare module 'discord-media-player/dist/cache/Cache' {
     import type { Resource } from "discord-media-player/dist/util/Resource";
     import type { ReadStream, WriteStream } from "fs";
+    /**
+        * The options for cache instance
+        */
+    export interface CacheOptions {
+            path?: string;
+            timeout?: number;
+    }
+    /**
+        * The cache instance to manage cache for a source
+        */
     export class Cache {
             /**
-                * The base directory of the cache
+                * The timeout for deleting cache after inactivity
                 */
-            basePath: string;
-            /**
-                * The directory of the cache
-                */
-            readonly dir: string;
+            timeout: number;
             /**
                 * @param dir The directory of the cache
                 */
@@ -356,10 +375,10 @@ declare module 'discord-media-player/dist/cache/Cache' {
                 */
             get path(): string;
             /**
-                * Set the base directory
-                * @param path The base directory path
+                * Set the options for cache
+                * @param options The cache options
                 */
-            setPath(path: string): void;
+            setOptions(options: CacheOptions): void;
             /**
                 * Create a new cache
                 * @param identifier The audio identifier
@@ -397,6 +416,10 @@ declare module 'discord-media-player/dist/cache/CacheManager' {
                 */
             path: string;
             /**
+                * The timeout for deleting cache after inactivity
+                */
+            timeout: number;
+            /**
                 * Audio cache from youtube source
                 */
             readonly youtube: Cache;
@@ -408,6 +431,11 @@ declare module 'discord-media-player/dist/cache/CacheManager' {
                 * Audio cache from local source
                 */
             readonly local: Cache;
+            /**
+                * Set the cache deletion timeout of the caches
+                * @param timeout The cache timeout
+                */
+            setTimeout(timeout: number): void;
             /**
                 * Set the base directory of the caches
                 * @param path The base directory
@@ -430,6 +458,10 @@ declare module 'discord-media-player/dist/cache/CacheManagerImpl' {
             /**
                 * @internal
                 */
+            timeout: number;
+            /**
+                * @internal
+                */
             readonly youtube: Cache;
             /**
                 * @internal
@@ -443,6 +475,10 @@ declare module 'discord-media-player/dist/cache/CacheManagerImpl' {
                 * @internal
                 */
             constructor();
+            /**
+                * @internal
+                */
+            setTimeout(timeout: number): void;
             /**
                 * @internal
                 */
@@ -674,9 +710,9 @@ declare module 'discord-media-player/dist/util/Resource' {
                 */
             readonly cacheWriter?: CacheWriter;
             /**
-                * @param param0 The options to create audio resource
+                * @param options The options to create audio resource
                 */
-            constructor({ player, identifier, decoder, source, cache, demuxer, cacheWriter }: ResourceOptions);
+            constructor(options: ResourceOptions);
             set player(player: AudioPlayer);
             get player(): AudioPlayer;
             set autoPaused(paused: boolean);
@@ -798,5 +834,243 @@ declare module 'discord-media-player/dist/soundcloudUtil/util' {
         * Copied from "https://www.npmjs.com/package/soundcloud-downloader"
         */
     export function validateMedia(media: Transcoding): boolean;
+}
+
+declare module 'discord-media-player/dist/validation' {
+    export * from "discord-media-player/dist/validation/PlayerError";
+    export * as AudioManagerValidation from "discord-media-player/dist/validation/ManagerValidation";
+    export * as AudioPlayerValidation from "discord-media-player/dist/validation/PlayerValidation";
+    export * as CacheValidation from "discord-media-player/dist/validation/CacheValidation";
+    export * as CacheManagerValidation from "discord-media-player/dist/validation/CacheManagerValidation";
+    export * as CacheWriterValidation from "discord-media-player/dist/validation/CacheWriterValidation";
+    export * as ResourceValidation from "discord-media-player/dist/validation/ResourceValidation";
+    export * as SkipperValidation from "discord-media-player/dist/validation/SkipperValidation";
+}
+
+declare module 'discord-media-player/dist/validation/PlayerError' {
+    /**
+        * Validate the error of PlayerError
+        * @param error The error
+        */
+    export function validateError(error: ErrorType): void;
+    /**
+        * THe error interface of PlayerError
+        */
+    export interface ErrorType {
+            /**
+                * The message of the error
+                */
+            message: string;
+            /**
+                * Error code of the error
+                *
+                * 0-99 For built-in player error
+                *
+                * 100-??? for custom player error
+                */
+            code: number;
+    }
+    /**
+        * Available built-in error messages for PlayerError
+        */
+    export namespace ErrorMessages {
+            /**
+                * Error when value is different than expected
+                * @param expecting THe expected value
+                * @param where Where does the error take place
+                * @param got The actual value
+                * @returns The error
+                */
+            function Expecting(expecting: string | string[], where: string, got: unknown): ErrorType;
+            /**
+                * Error when key is not exist in an object
+                * @param what The key that expected to exist in the object
+                * @param where Where does the error take place
+                * @returns The error
+                */
+            function NotProvided(what: string, where: string): ErrorType;
+            /**
+                * Error when value is a number but not an integer
+                * @param what The value that supposed to be integer
+                * @returns The error
+                */
+            function NotInteger(what: number): ErrorType;
+            /**
+                * Error when value doesn't have any of the thing
+                * @param what The value that must have the thing
+                * @param things Some thing that must be on the value atleast one of it
+                * @returns The error
+                */
+            function AtleastHave(what: string, things: string[]): ErrorType;
+            /**
+                * Error when value is not a valid source type
+                * @param sourceType The source type
+                * @returns The error
+                */
+            function NotValidSourceType(sourceType: number): ErrorType;
+            /**
+                * Error when player is already linked
+                */
+            const PlayerAlreadyLinked: ErrorType;
+            /**
+                * Error when player is not linked
+                */
+            const PlayerNotLinked: ErrorType;
+            /**
+                * Error when player is already playing
+                */
+            const PlayerAlreadyPlaying: ErrorType;
+            /**
+                * Error when player is not playing
+                */
+            const PlayerNotPlaying: ErrorType;
+            /**
+                * Error when cache with the provided identifier already exist
+                * @param identifier The cache identifier
+                * @returns The error
+                */
+            function CacheAlreadyExist(identifier: string): ErrorType;
+            /**
+                * Error when cache with the provided identifier doesn't exist
+                * @param identifier The cache identifier
+                * @returns The error
+                */
+            function CacheNotExist(identifier: string): ErrorType;
+    }
+    /**
+        * Custom error for discord-media-player
+        */
+    export class PlayerError extends Error {
+            /**
+                * @internal
+                */
+            errorCode: number;
+            /**
+                * @param error The error
+                */
+            constructor(error: ErrorType);
+            /**
+                * The error code
+                */
+            get code(): number;
+    }
+}
+
+declare module 'discord-media-player/dist/validation/ManagerValidation' {
+    import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
+    import type { AudioManagerOptions } from "discord-media-player/dist/audio/AudioManager";
+    import { VoiceConnection } from "@discordjs/voice";
+    /**
+        * Validate the audio manager options
+        * @param options The audio manager options
+        */
+    export function validateOptions(options: AudioManagerOptions): void;
+    /**
+        * Validate the voice connection
+        * @param connection The voice connection
+        */
+    export function validateConnection(connection: VoiceConnection): void;
+    /**
+        * Validate the audio player
+        * @param player The audio player
+        */
+    export function validatePlayer(player: AudioPlayer): void;
+}
+
+declare module 'discord-media-player/dist/validation/PlayerValidation' {
+    import type { Filters } from "discord-media-player/dist/util/Filters";
+    import { AudioManager } from "discord-media-player/dist/audio/AudioManager";
+    import { VoiceConnection } from "@discordjs/voice";
+    /**
+        * Validate the audio manager
+        * @param manager The audio manager
+        */
+    export function validateManager(manager: AudioManager): void;
+    /**
+        * Validate the voice connection
+        * @param connection The voice connection
+        */
+    export function validateConnection(connection: VoiceConnection): void;
+    /**
+        * Validate the audio filters
+        * @param filter The audio filters
+        */
+    export function validateFilters(filter?: Filters): void;
+    /**
+        * Validate the volume
+        * @param volume The volume
+        */
+    export function validateVolume(volume: number): void;
+    /**
+        * Validate the seconds
+        * @param seconds The seconds
+        */
+    export function validateSeconds(seconds: number): void;
+    /**
+        * Validate the url or location
+        * @param urlOrLocation The url or location
+        */
+    export function validateUrlOrLocation(urlOrLocation: string): void;
+    /**
+        * Validate the source type
+        * @param sourceType The source type
+        */
+    export function validateSourceType(sourceType: number): void;
+}
+
+declare module 'discord-media-player/dist/validation/CacheValidation' {
+    import type { CacheOptions } from "discord-media-player/dist/cache/Cache";
+    import { Resource } from "discord-media-player/dist/util/Resource";
+    /**
+        * Validate the cache directory
+        * @param dir The cache directory
+        */
+    export function validateDir(dir: string): void;
+    /**
+        * Validate the cache options
+        * @param options The cache options
+        */
+    export function validateOptions(options: CacheOptions): void;
+    /**
+        * Validate the cache identifier
+        * @param identifier The cache identifier
+        */
+    export function validateIdentifier(identifier: string): void;
+    /**
+        * Validate the cache resource
+        * @param resource The cache resource
+        */
+    export function validateResource(resource: Resource): void;
+    /**
+        * Validate the seconds
+        * @param seconds Where to start the audio (in seconds)
+        */
+    export function validateSeconds(seconds: number): void;
+}
+
+declare module 'discord-media-player/dist/validation/CacheManagerValidation' {
+    export function validatePath(path: string): void;
+    export function validateTimeout(timeout: number): void;
+}
+
+declare module 'discord-media-player/dist/validation/CacheWriterValidation' {
+    import { Resource } from "discord-media-player/dist/util/Resource";
+    import { Cache } from "discord-media-player/dist/cache/Cache";
+    export function validateResource(resource: Resource): void;
+    export function validateCache(cache: Cache): void;
+}
+
+declare module 'discord-media-player/dist/validation/ResourceValidation' {
+    import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
+    import { ResourceOptions } from "discord-media-player/dist/util/Resource";
+    export function validateOptions(options: ResourceOptions): void;
+    export function validatePlayer(player: AudioPlayer): void;
+    export function validatePaused(paused: boolean): void;
+}
+
+declare module 'discord-media-player/dist/validation/SkipperValidation' {
+    import { CacheWriter } from "discord-media-player/dist/cache/CacheWriter";
+    export function validateSeconds(seconds: number): void;
+    export function validateCacheWriter(cacheWriter: CacheWriter): void;
 }
 

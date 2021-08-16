@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Skipper = void 0;
+const validation_1 = require("../validation");
 const stream_1 = require("stream");
 const Bps = 192000;
 /**
@@ -14,6 +15,8 @@ class Skipper extends stream_1.Writable {
     constructor(seconds, _cacheWriter) {
         super();
         this._cacheWriter = _cacheWriter;
+        validation_1.SkipperValidation.validateSeconds(seconds);
+        validation_1.SkipperValidation.validateCacheWriter(_cacheWriter);
         this._bytes = Bps * seconds;
     }
     /**

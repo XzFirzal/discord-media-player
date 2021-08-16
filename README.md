@@ -47,6 +47,7 @@ This is an example of simple music bot using discord.js v13 with discord-media-p
 ```js
 const { AudioManager, CacheManagerImpl } = require("discord-media-player")
 const audioManager = new AudioManager({
+  //cache is optional
   cache: new CacheManagerImpl()
 })
 

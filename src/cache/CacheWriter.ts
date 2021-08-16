@@ -2,6 +2,7 @@ import type { WriteStream } from "fs"
 import type { Resource } from "../util/Resource"
 import type { TransformCallback } from "stream"
 
+import { CacheWriterValidation as validation } from "../validation"
 import { Transform } from "stream"
 
 const Bps = 192000
@@ -35,9 +36,12 @@ export class CacheWriter extends Transform {
    * @param resource The audio resource
    */
   setResource(resource: Resource): void {
+    validation.validateResource(resource)
     this._resource = resource
 
     if (resource.cache) {
+      validation.validateCache(resource.cache)
+
       this._cache = resource.cache.create(resource.identifier, resource)
       this._cache.on("drain", () => {
         this._awaitDrain?.()

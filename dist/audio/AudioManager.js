@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AudioManager = void 0;
 const soundcloud_downloader_1 = __importDefault(require("soundcloud-downloader"));
+const validation_1 = require("../validation");
 const fs_1 = require("fs");
 const AudioPlayerImpl_1 = require("./AudioPlayerImpl");
 const path_1 = require("path");
@@ -15,31 +16,33 @@ function initCache(dir) {
     if (!fs_1.existsSync(dir))
         fs_1.mkdirSync(dir);
 }
-function defaultCreateAudioPlayerType(manager) {
-    const player = new AudioPlayerImpl_1.AudioPlayerImpl();
-    player.setManager(manager);
-    return player;
+function defaultCreateAudioPlayerType() {
+    return new AudioPlayerImpl_1.AudioPlayerImpl();
 }
 /**
  * The manager of the audio players
  */
 class AudioManager extends events_1.EventEmitter {
     /**
-     * @param param0 The options to create new audio player manager
+     * @param options The options to create new audio player manager
      */
-    constructor({ cache, cacheDir, youtubeOptions, soundcloudClient, createAudioPlayer }) {
+    constructor(options) {
         super();
         /**
          * @internal
          */
         this._players = new Map();
+        validation_1.AudioManagerValidation.validateOptions(options);
+        const { cache, cacheDir, cacheTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options;
         this.cache = cache;
         this.youtube = youtubeOptions ?? {};
         this.soundcloud = soundcloudClient ?? soundcloud_downloader_1.default;
         this._createAudioPlayer = createAudioPlayer || defaultCreateAudioPlayerType;
         if (cache) {
             const path = cacheDir ?? os_1.tmpdir();
+            const timeout = cacheTimeout ?? 1000 * 60 * 10;
             initCache(path);
+            cache.setTimeout(timeout);
             cache.setPath(fs_1.mkdtempSync(path_1.join(path, "node-discord-media-player-")));
             const daemon = child_process_1.fork(require.resolve("../nodeDeleteDaemon"), { detached: true });
             daemon.send(process.pid);
@@ -53,10 +56,13 @@ class AudioManager extends events_1.EventEmitter {
      * @returns The audio player
      */
     getPlayer(connection) {
+        validation_1.AudioManagerValidation.validateConnection(connection);
         const guildID = connection.joinConfig.guildId;
         let player = this._players.get(guildID);
         if (!player) {
-            player = this._createAudioPlayer(this);
+            player = this._createAudioPlayer();
+            validation_1.AudioManagerValidation.validatePlayer(player);
+            player.setManager(this);
             player.link(connection);
             this._players.set(guildID, player);
         }
@@ -68,6 +74,7 @@ class AudioManager extends events_1.EventEmitter {
      * @returns false if failed or doesn't exist, true if deleted
      */
     deletePlayer(connection) {
+        validation_1.AudioManagerValidation.validateConnection(connection);
         const guildID = connection.joinConfig.guildId;
         if (!this._players.has(guildID))
             return false;

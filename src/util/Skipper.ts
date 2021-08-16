@@ -1,4 +1,5 @@
 import type { CacheWriter } from "../cache/CacheWriter"
+import { SkipperValidation as validation } from "../validation"
 import { Writable } from "stream"
 
 const Bps = 192000
@@ -18,6 +19,9 @@ export class Skipper extends Writable {
    */
   constructor(seconds: number, private readonly _cacheWriter: CacheWriter) {
     super()
+    
+    validation.validateSeconds(seconds)
+    validation.validateCacheWriter(_cacheWriter)
 
     this._bytes = Bps * seconds
   }

@@ -1,13 +1,12 @@
 import type { Resource } from "../util/Resource"
 import type { ReadStream, WriteStream} from "fs"
 
-import del from "del"
+import { unlink } from "fs/promises"
 import { join as pathJoin } from "path"
+import { PlayerError, ErrorMessages, CacheValidation as validation } from "../validation"
 import { mkdirSync, createWriteStream, createReadStream } from "fs"
 
 const Bps = 192000
-const Extension = ".tmp"
-const CacheDeletedAfter = 1000 * 60 * 10
 
 function stableCalculate(seconds: number): number {
   if (!seconds) return 0
@@ -30,17 +29,31 @@ function stableCalculate(seconds: number): number {
   return Math.floor((Number(result) * Bps) / 10)
 }
 
+/**
+ * The options for cache instance
+ */
+export interface CacheOptions {
+  path?: string
+  timeout?: number
+}
+
+/**
+ * The cache instance to manage cache for a source
+ */
 export class Cache {
+  /**
+   * The timeout for deleting cache after inactivity
+   */
+  public timeout: number
   /**
    * The base directory of the cache
    */
-  public basePath: string
+  private basePath: string
 
   /**
    * The directory of the cache
    */
-  public readonly dir: string
-
+  private readonly dir: string
   /**
    * @internal
    */
@@ -58,6 +71,7 @@ export class Cache {
    * @param dir The directory of the cache
    */
   constructor(dir: string) {
+    validation.validateDir(dir)
     this.dir = dir
   }
 
@@ -69,13 +83,18 @@ export class Cache {
   }
 
   /**
-   * Set the base directory
-   * @param path The base directory path
+   * Set the options for cache
+   * @param options The cache options
    */
-  setPath(path: string): void {
-    this.basePath = path
+  setOptions(options: CacheOptions): void {
+    validation.validateOptions(options)
 
-    mkdirSync(this.path)
+    if (options.timeout) this.timeout = options.timeout
+    if (options.path) {
+      this.basePath = options.path
+
+      mkdirSync(this.path)
+    }
   }
 
   /**
@@ -85,12 +104,15 @@ export class Cache {
    * @returns The writable stream to write cache
    */
   create(identifier: string, resource: Resource): WriteStream | never {
-    if (this._resources.has(identifier)) throw new Error(`Cache with identifier '${identifier}' already exist`)
+    validation.validateIdentifier(identifier)
+    validation.validateResource(resource)
 
-    const writeStream = createWriteStream(pathJoin(this.path, identifier + Extension), { emitClose: true })
+    this._checkNotExist(identifier)
+
+    const writeStream = createWriteStream(pathJoin(this.path, identifier), { emitClose: true })
 
     this._resources.set(identifier, resource)
-    this._timeouts.set(identifier, setTimeout(this._deleteCache.bind(this, identifier), CacheDeletedAfter))
+    this._timeouts.set(identifier, setTimeout(this._deleteCache.bind(this, identifier), this.timeout))
     this._users.set(identifier, 0)
 
     resource.cacheWriter.on("play", this._addUser.bind(this, identifier))
@@ -113,9 +135,12 @@ export class Cache {
    * @returns The readable stream of audio
    */
   read(identifier: string, startOnSeconds = 0): ReadStream | never {
-    if (!this._resources.has(identifier)) throw new Error(`Cache with identifier '${identifier}' doesn't exist`)
+    validation.validateIdentifier(identifier)
+    validation.validateSeconds(startOnSeconds)
 
-    const readStream = createReadStream(pathJoin(this.path, identifier + Extension), { start: stableCalculate(startOnSeconds), emitClose: true })
+    this._checkExist(identifier)
+
+    const readStream = createReadStream(pathJoin(this.path, identifier), { start: stableCalculate(startOnSeconds), emitClose: true })
 
     this._addUser(identifier)
 
@@ -133,6 +158,7 @@ export class Cache {
    * @returns true if exist, otherwise false
    */
   hasCache(identifier: string): boolean {
+    validation.validateIdentifier(identifier)
     return this._resources.has(identifier)
   }
 
@@ -142,7 +168,8 @@ export class Cache {
    * @returns The audio resource
    */
   getResource(identifier: string): Resource | never {
-    if (!this._resources.has(identifier)) throw new Error(`Cache with identifier '${identifier}' doesn't exist`)
+    validation.validateIdentifier(identifier)
+    this._checkExist(identifier)
 
     return this._resources.get(identifier)
   }
@@ -159,7 +186,7 @@ export class Cache {
 
     if (!writeStream.destroyed) writeStream.destroy()
 
-    del(pathJoin(this.path, identifier + Extension))
+    unlink(pathJoin(this.path, identifier))
   }
 
   /**
@@ -168,7 +195,7 @@ export class Cache {
   private _removeUser(identifier: string): void {
     this._users.set(identifier, this._users.get(identifier)-1)
 
-    if (this._users.get(identifier) <= 0 && !this._timeouts.has(identifier)) this._timeouts.set(identifier, setTimeout(this._deleteCache.bind(this, identifier), CacheDeletedAfter))
+    if (this._users.get(identifier) <= 0 && !this._timeouts.has(identifier)) this._timeouts.set(identifier, setTimeout(this._deleteCache.bind(this, identifier), this.timeout))
   }
 
   /**
@@ -181,5 +208,19 @@ export class Cache {
       clearTimeout(this._timeouts.get(identifier))
       this._timeouts.delete(identifier)
     }
+  }
+
+  /**
+   * @internal
+   */
+  private _checkExist(identifier: string): void {
+    if (!this.hasCache(identifier)) throw new PlayerError(ErrorMessages.CacheNotExist(identifier))
+  }
+
+  /**
+   * @internal
+   */
+  private _checkNotExist(identifier: string): void {
+    if (this.hasCache(identifier)) throw new PlayerError(ErrorMessages.CacheAlreadyExist(identifier))
   }
 }

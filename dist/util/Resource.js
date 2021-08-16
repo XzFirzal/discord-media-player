@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Resource = void 0;
+const validation_1 = require("../validation");
 const voice_1 = require("@discordjs/voice");
 /**
  * The audio resource instance
  */
 class Resource {
     /**
-     * @param param0 The options to create audio resource
+     * @param options The options to create audio resource
      */
-    constructor({ player, identifier, decoder, source, cache, demuxer, cacheWriter }) {
+    constructor(options) {
         /**
          * The audio cached in seconds
          */
@@ -22,6 +23,8 @@ class Resource {
          * If audio source is from youtube, it will auto paused when ytdl-core getting next chunk
          */
         this._autoPaused = false;
+        validation_1.ResourceValidation.validateOptions(options);
+        const { player, identifier, decoder, source, cache, demuxer, cacheWriter } = options;
         this.player = player;
         this.identifier = identifier;
         this.cache = cache;
@@ -38,6 +41,8 @@ class Resource {
         this.isLive = !cacheWriter;
     }
     set player(player) {
+        if (player != null)
+            validation_1.ResourceValidation.validatePlayer(player);
         this._player = player;
         setImmediate(() => {
             if (this.autoPaused && ![voice_1.AudioPlayerStatus.Paused, voice_1.AudioPlayerStatus.AutoPaused].includes(player?.status))
@@ -48,6 +53,7 @@ class Resource {
         return this._player;
     }
     set autoPaused(paused) {
+        validation_1.ResourceValidation.validatePaused(paused);
         this._autoPaused = paused;
         if (paused && ![voice_1.AudioPlayerStatus.Paused, voice_1.AudioPlayerStatus.AutoPaused].includes(this.player?.status))
             this.player?.pause(true);

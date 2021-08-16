@@ -53,3 +53,5 @@ export namespace SoundcloudUtil {
   export import STREAMING_PROTOCOLS = _transcoding.STREAMING_PROTOCOLS
   export import Transcoding = _transcoding.Transcoding
 }
+
+export * as ValidationUtil from "./validation"

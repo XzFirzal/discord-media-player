@@ -14,6 +14,10 @@ export interface AudioPlayer {
    * The discord player status
    */
   status: AudioPlayerStatus
+  /**
+   * The audio player is playing or not
+   */
+  playing: boolean
   
   /**
    * Set the manager of the audio player
