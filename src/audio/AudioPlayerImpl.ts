@@ -17,7 +17,7 @@ import { Resource } from "../util/Resource"
 import { ErrorCode } from "../util/ErrorCode"
 import { CacheWriter } from "../cache/CacheWriter"
 import { downloadMedia } from "../soundcloudUtil/downloadMedia"
-import { AudioPlayer as DiscordPlayer, AudioResource, AudioPlayerStatus, VoiceConnectionStatus } from "@discordjs/voice"
+import { demuxProbe, StreamType, AudioPlayer as DiscordPlayer, AudioResource, AudioPlayerStatus, VoiceConnectionStatus } from "@discordjs/voice"
 import { PlayerError, ErrorMessages, AudioPlayerValidation as playerValidation } from "../validation"
 import { getVideoID, getInfo, downloadFromInfo } from "ytdl-core"
 import { PassThrough, pipeline } from "stream"
@@ -267,6 +267,12 @@ export class AudioPlayerImpl implements AudioPlayer {
     this._stopping = true
     const stopped = this._player.stop()
     this._stopping = false
+    
+    if (!stopped) {
+      if (this._resource.player === this) this._resource.player = null
+
+      this._cleanup()
+    }
 
     return stopped
   }
@@ -751,16 +757,25 @@ export class AudioPlayerImpl implements AudioPlayer {
       return
     }
 
+    const { stream, type } = await demuxProbe(createReadStream(location))
     const resource = this._resource = new Resource({
       identifier,
       player: this,
-      source: createReadStream(location),
-      decoder: new prism.FFmpeg({ args: FFMPEG_ARGS }),
+      source: stream,
+      demuxer: type === StreamType.WebmOpus
+        ? new prism.opus.WebmDemuxer()
+        : type === StreamType.OggOpus
+        ? new prism.opus.OggDemuxer()
+        : undefined,
+      decoder: [StreamType.WebmOpus, StreamType.OggOpus].includes(type)
+        ? new prism.opus.Decoder({ rate: 48000, channels: 2, frameSize: 960 })
+        : new prism.FFmpeg({ args: FFMPEG_ARGS }),
       cacheWriter: new CacheWriter(),
       cache: this.manager.cache?.local
     })
-
-    pipeline(resource.source, resource.decoder, resource.cacheWriter, noop)
+    
+    if ([StreamType.WebmOpus, StreamType.OggOpus].includes(type)) pipeline(resource.source, resource.demuxer, resource.decoder, resource.cacheWriter, noop)
+    else pipeline(resource.source, resource.decoder, resource.cacheWriter, noop)
 
     resource.cacheWriter.once("close", () => {
       resource.source.destroy()
