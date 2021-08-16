@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheWriter = void 0;
+const validation_1 = require("../validation");
 const stream_1 = require("stream");
 const Bps = 192000;
 /**
@@ -18,8 +19,10 @@ class CacheWriter extends stream_1.Transform {
      * @param resource The audio resource
      */
     setResource(resource) {
+        validation_1.CacheWriterValidation.validateResource(resource);
         this._resource = resource;
         if (resource.cache) {
+            validation_1.CacheWriterValidation.validateCache(resource.cache);
             this._cache = resource.cache.create(resource.identifier, resource);
             this._cache.on("drain", () => {
                 this._awaitDrain?.();

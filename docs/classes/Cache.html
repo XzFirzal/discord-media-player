@@ -63,6 +63,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The cache instance to manage cache for a source</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -84,8 +91,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="Cache.html#basePath" class="tsd-kind-icon">base<wbr>Path</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="Cache.html#dir" class="tsd-kind-icon">dir</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Cache.html#basePath" class="tsd-kind-icon">base<wbr>Path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Cache.html#dir" class="tsd-kind-icon">dir</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="Cache.html#timeout" class="tsd-kind-icon">timeout</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -101,7 +109,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Cache.html#getResource" class="tsd-kind-icon">get<wbr>Resource</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Cache.html#hasCache" class="tsd-kind-icon">has<wbr>Cache</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Cache.html#read" class="tsd-kind-icon">read</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Cache.html#setPath" class="tsd-kind-icon">set<wbr>Path</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Cache.html#setOptions" class="tsd-kind-icon">set<wbr>Options</a></li>
 							</ul>
 						</section>
 					</div>
@@ -119,7 +127,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L59">src/cache/Cache.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L73">src/cache/Cache.ts:73</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -140,13 +148,13 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="basePath" class="tsd-anchor"></a>
-					<h3>base<wbr>Path</h3>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> base<wbr>Path</h3>
 					<div class="tsd-signature tsd-kind-icon">base<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L36">src/cache/Cache.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L51">src/cache/Cache.ts:51</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -155,18 +163,33 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="dir" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> dir</h3>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> dir</h3>
 					<div class="tsd-signature tsd-kind-icon">dir<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L41">src/cache/Cache.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L56">src/cache/Cache.ts:56</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The directory of the cache</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="timeout" class="tsd-anchor"></a>
+					<h3>timeout</h3>
+					<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L47">src/cache/Cache.ts:47</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The timeout for deleting cache after inactivity</p>
 						</div>
 					</div>
 				</section>
@@ -183,7 +206,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L66">src/cache/Cache.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L81">src/cache/Cache.ts:81</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -208,7 +231,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L86">src/cache/Cache.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L106">src/cache/Cache.ts:106</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -246,7 +269,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L143">src/cache/Cache.ts:143</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L170">src/cache/Cache.ts:170</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -278,7 +301,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L134">src/cache/Cache.ts:134</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L160">src/cache/Cache.ts:160</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -310,7 +333,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L114">src/cache/Cache.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L137">src/cache/Cache.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -339,29 +362,29 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="setPath" class="tsd-anchor"></a>
-					<h3>set<wbr>Path</h3>
+					<a name="setOptions" class="tsd-anchor"></a>
+					<h3>set<wbr>Options</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Path<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Options<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/CacheOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CacheOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L74">src/cache/Cache.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L89">src/cache/Cache.ts:89</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Set the base directory</p>
+									<p>Set the options for cache</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<h5>options: <a href="../interfaces/CacheOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CacheOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The base directory path</p>
+										<p>The cache options</p>
 									</div>
 								</li>
 							</ul>
@@ -395,11 +418,14 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="Cache.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="Cache.html#basePath" class="tsd-kind-icon">base<wbr>Path</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="Cache.html#dir" class="tsd-kind-icon">dir</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="Cache.html#timeout" class="tsd-kind-icon">timeout</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="Cache.html#path" class="tsd-kind-icon">path</a>
@@ -417,7 +443,7 @@
 								<a href="Cache.html#read" class="tsd-kind-icon">read</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="Cache.html#setPath" class="tsd-kind-icon">set<wbr>Path</a>
+								<a href="Cache.html#setOptions" class="tsd-kind-icon">set<wbr>Options</a>
 							</li>
 						</ul>
 					</li>
@@ -440,6 +466,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/CacheManager.html" class="tsd-kind-icon">Cache<wbr>Manager</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../modules.html#version" class="tsd-kind-icon">version</a>
@@ -464,6 +493,9 @@
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
 			</ul>
 		</div>
 	</div>

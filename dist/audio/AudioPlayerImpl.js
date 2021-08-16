@@ -12,6 +12,7 @@ const ErrorCode_1 = require("../util/ErrorCode");
 const CacheWriter_1 = require("../cache/CacheWriter");
 const downloadMedia_1 = require("../soundcloudUtil/downloadMedia");
 const voice_1 = require("@discordjs/voice");
+const validation_1 = require("../validation");
 const ytdl_core_1 = require("ytdl-core");
 const stream_1 = require("stream");
 const promises_1 = require("fs/promises");
@@ -53,6 +54,10 @@ class AudioPlayerImpl {
      * @internal
      */
     constructor() {
+        /**
+         * @internal
+         */
+        this.manager = null;
         /**
          * @internal
          */
@@ -102,15 +107,22 @@ class AudioPlayerImpl {
     /**
      * @internal
      */
+    get playing() {
+        return this._playing;
+    }
+    /**
+     * @internal
+     */
     setManager(manager) {
+        validation_1.AudioPlayerValidation.validateManager(manager);
         this.manager = manager;
     }
     /**
      * @internal
      */
     link(connection) {
-        if (this._connection)
-            throw new Error("Player is already linked");
+        validation_1.AudioPlayerValidation.validateConnection(connection);
+        this._checkNotLinked();
         connection.subscribe(this._player);
         this._connection = connection;
         // eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -141,8 +153,7 @@ class AudioPlayerImpl {
      * @internal
      */
     unlink() {
-        if (!this._connection)
-            throw new Error("Player is not linked");
+        this._checkLinked();
         const subscription = this._connection.state.subscription;
         subscription?.unsubscribe();
         if (this._playing) {
@@ -158,6 +169,7 @@ class AudioPlayerImpl {
      * @internal
      */
     setFilter(filter) {
+        validation_1.AudioPlayerValidation.validateFilters(filter);
         if (!filter || !Object.keys(filter).length)
             this._filters = null;
         else
@@ -167,8 +179,7 @@ class AudioPlayerImpl {
      * @internal
      */
     setVolume(volume) {
-        if (typeof volume !== "number")
-            throw new Error(`Expecting 'volume' as number, get '${typeof volume}' instead`);
+        validation_1.AudioPlayerValidation.validateVolume(volume);
         this._checkPlaying();
         this._volume = volume;
         const audioResource = this._player.state.resource;
@@ -185,6 +196,11 @@ class AudioPlayerImpl {
         this._stopping = true;
         const stopped = this._player.stop();
         this._stopping = false;
+        if (!stopped) {
+            if (this._resource.player === this)
+                this._resource.player = null;
+            this._cleanup();
+        }
         return stopped;
     }
     /**
@@ -226,7 +242,7 @@ class AudioPlayerImpl {
      * @internal
      */
     async seek(seconds) {
-        seconds = Math.floor(seconds);
+        validation_1.AudioPlayerValidation.validateSeconds(seconds);
         this._checkPlaying();
         if (this._resource.isLive)
             throw new Error("Livestream cannot be seekened");
@@ -262,10 +278,9 @@ class AudioPlayerImpl {
      * @internal
      */
     async play(urlOrLocation, sourceType) {
-        if (!this._connection)
-            throw new Error("Player is not linked");
-        if (this._playing)
-            throw new Error("Player is already playing");
+        validation_1.AudioPlayerValidation.validateUrlOrLocation(urlOrLocation);
+        validation_1.AudioPlayerValidation.validateSourceType(sourceType);
+        this._checkNotPlaying();
         await this._getResource(urlOrLocation, sourceType);
         if (!this._resource)
             return;
@@ -339,11 +354,32 @@ class AudioPlayerImpl {
     /**
      * @internal
      */
-    _checkPlaying() {
+    _checkNotLinked() {
+        if (this._connection)
+            throw new validation_1.PlayerError(validation_1.ErrorMessages.PlayerAlreadyLinked);
+    }
+    /**
+     * @internal
+     */
+    _checkLinked() {
         if (!this._connection)
-            throw new Error("Player is not linked");
+            throw new validation_1.PlayerError(validation_1.ErrorMessages.PlayerNotLinked);
+    }
+    /**
+     * @internal
+     */
+    _checkNotPlaying() {
+        this._checkLinked();
+        if (this._playing)
+            throw new validation_1.PlayerError(validation_1.ErrorMessages.PlayerAlreadyPlaying);
+    }
+    /**
+     * @internal
+     */
+    _checkPlaying() {
+        this._checkLinked();
         if (!this._playing)
-            throw new Error("Player is not playing");
+            throw new validation_1.PlayerError(validation_1.ErrorMessages.PlayerNotPlaying);
     }
     /**
      * @internal
@@ -360,7 +396,7 @@ class AudioPlayerImpl {
                 await this._getLocalResource(urlOrLocation);
                 break;
             default:
-                throw new Error(`Invalid source type '${sourceType}'`);
+                throw new validation_1.PlayerError(validation_1.ErrorMessages.NotValidSourceType(sourceType));
         }
     }
     /**
@@ -565,15 +601,26 @@ class AudioPlayerImpl {
             this._resource = this.manager.cache.local.getResource(identifier);
             return;
         }
+        const { stream, type } = await voice_1.demuxProbe(fs_1.createReadStream(location));
         const resource = this._resource = new Resource_1.Resource({
             identifier,
             player: this,
-            source: fs_1.createReadStream(location),
-            decoder: new prism_media_1.default.FFmpeg({ args: FFMPEG_ARGS }),
+            source: stream,
+            demuxer: type === voice_1.StreamType.WebmOpus
+                ? new prism_media_1.default.opus.WebmDemuxer()
+                : type === voice_1.StreamType.OggOpus
+                    ? new prism_media_1.default.opus.OggDemuxer()
+                    : undefined,
+            decoder: [voice_1.StreamType.WebmOpus, voice_1.StreamType.OggOpus].includes(type)
+                ? new prism_media_1.default.opus.Decoder({ rate: 48000, channels: 2, frameSize: 960 })
+                : new prism_media_1.default.FFmpeg({ args: FFMPEG_ARGS }),
             cacheWriter: new CacheWriter_1.CacheWriter(),
             cache: this.manager.cache?.local
         });
-        stream_1.pipeline(resource.source, resource.decoder, resource.cacheWriter, noop_1.noop);
+        if ([voice_1.StreamType.WebmOpus, voice_1.StreamType.OggOpus].includes(type))
+            stream_1.pipeline(resource.source, resource.demuxer, resource.decoder, resource.cacheWriter, noop_1.noop);
+        else
+            stream_1.pipeline(resource.source, resource.decoder, resource.cacheWriter, noop_1.noop);
         resource.cacheWriter.once("close", () => {
             resource.source.destroy();
             resource.decoder.destroy();

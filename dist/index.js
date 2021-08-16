@@ -22,7 +22,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SoundcloudUtil = exports.Util = exports.version = void 0;
+exports.ValidationUtil = exports.SoundcloudUtil = exports.Util = exports.version = void 0;
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-namespace */
 const fs_1 = require("fs");
@@ -70,3 +70,4 @@ var SoundcloudUtil;
     SoundcloudUtil.FORMATS = _transcoding.FORMATS;
     SoundcloudUtil.STREAMING_PROTOCOLS = _transcoding.STREAMING_PROTOCOLS;
 })(SoundcloudUtil = exports.SoundcloudUtil || (exports.SoundcloudUtil = {}));
+exports.ValidationUtil = __importStar(require("./validation"));

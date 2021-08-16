@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Skipper | discord-media-player</title>
+	<title>PlayerError | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -53,13 +53,13 @@
 					<a href="../modules.html">discord-media-player</a>
 				</li>
 				<li>
-					<a href="../modules/Util.html">Util</a>
+					<a href="../modules/ValidationUtil.html">ValidationUtil</a>
 				</li>
 				<li>
-					<a href="Util.Skipper.html">Skipper</a>
+					<a href="ValidationUtil.PlayerError.html">PlayerError</a>
 				</li>
 			</ul>
-			<h1>Class Skipper</h1>
+			<h1>Class PlayerError</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The instance for skipping the audio</p>
+						<p>Custom error for discord-media-player</p>
 					</div>
 				</div>
 			</section>
@@ -77,10 +77,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Writable</span>
+						<span class="tsd-signature-type">Error</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">Skipper</span>
+								<span class="target">PlayerError</span>
 							</li>
 						</ul>
 					</li>
@@ -93,7 +93,13 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="Util.Skipper.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="ValidationUtil.PlayerError.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="ValidationUtil.PlayerError.html#code" class="tsd-kind-icon">code</a></li>
 							</ul>
 						</section>
 					</div>
@@ -105,36 +111,53 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Skipper<span class="tsd-signature-symbol">(</span>seconds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, _cacheWriter<span class="tsd-signature-symbol">: </span><a href="CacheWriter.html" class="tsd-signature-type" data-tsd-kind="Class">CacheWriter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Util.Skipper.html" class="tsd-signature-type" data-tsd-kind="Class">Skipper</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Player<wbr>Error<span class="tsd-signature-symbol">(</span>error<span class="tsd-signature-symbol">: </span><a href="../interfaces/ValidationUtil.ErrorType.html" class="tsd-signature-type" data-tsd-kind="Interface">ErrorType</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="ValidationUtil.PlayerError.html" class="tsd-signature-type" data-tsd-kind="Class">PlayerError</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides Writable.constructor</p>
+								<p>Overrides Error.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/util/Skipper.ts#L20">src/util/Skipper.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/PlayerError.ts#L178">src/validation/PlayerError.ts:178</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>seconds: <span class="tsd-signature-type">number</span></h5>
+									<h5>error: <a href="../interfaces/ValidationUtil.ErrorType.html" class="tsd-signature-type" data-tsd-kind="Interface">ErrorType</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The amount to skip in second</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>_cacheWriter: <a href="CacheWriter.html" class="tsd-signature-type" data-tsd-kind="Class">CacheWriter</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The audio cache writer</p>
+											<p>The error</p>
 										</div>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="Util.Skipper.html" class="tsd-signature-type" data-tsd-kind="Class">Skipper</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="ValidationUtil.PlayerError.html" class="tsd-signature-type" data-tsd-kind="Class">PlayerError</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="code" class="tsd-anchor"></a>
+					<h3>code</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> code<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/PlayerError.ts#L190">src/validation/PlayerError.ts:190</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The error code</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -149,45 +172,62 @@
 					<li class=" tsd-kind-namespace">
 						<a href="../modules/SoundcloudUtil.html">Soundcloud<wbr>Util</a>
 					</li>
-					<li class="current tsd-kind-namespace">
+					<li class=" tsd-kind-namespace">
 						<a href="../modules/Util.html">Util</a>
 					</li>
-					<li class=" tsd-kind-namespace">
+					<li class="current tsd-kind-namespace">
 						<a href="../modules/ValidationUtil.html">Validation<wbr>Util</a>
+						<ul>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="../modules/ValidationUtil.AudioManagerValidation.html">Audio<wbr>Manager<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="../modules/ValidationUtil.AudioPlayerValidation.html">Audio<wbr>Player<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="../modules/ValidationUtil.CacheManagerValidation.html">Cache<wbr>Manager<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="../modules/ValidationUtil.CacheValidation.html">Cache<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="../modules/ValidationUtil.CacheWriterValidation.html">Cache<wbr>Writer<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="../modules/ValidationUtil.ErrorMessages.html">Error<wbr>Messages</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="../modules/ValidationUtil.ResourceValidation.html">Resource<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="../modules/ValidationUtil.SkipperValidation.html">Skipper<wbr>Validation</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
-						<a href="../enums/Util.ErrorCode.html" class="tsd-kind-icon">Error<wbr>Code</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
-						<a href="../enums/Util.SourceType.html" class="tsd-kind-icon">Source<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-namespace">
-						<a href="Util.Resource.html" class="tsd-kind-icon">Resource</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-namespace">
-						<a href="Util.Skipper.html" class="tsd-kind-icon">Skipper</a>
+						<a href="ValidationUtil.PlayerError.html" class="tsd-kind-icon">Player<wbr>Error</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="Util.Skipper.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="ValidationUtil.PlayerError.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="ValidationUtil.PlayerError.html#code" class="tsd-kind-icon">code</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="../interfaces/Util.Filters.html" class="tsd-kind-icon">Filters</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="../interfaces/Util.ResourceOptions.html" class="tsd-kind-icon">Resource<wbr>Options</a>
+						<a href="../interfaces/ValidationUtil.ErrorType.html" class="tsd-kind-icon">Error<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="../modules/Util.html#noop" class="tsd-kind-icon">noop</a>
+						<a href="../modules/ValidationUtil.html#validateError" class="tsd-kind-icon">validate<wbr>Error</a>
 					</li>
 				</ul>
 			</nav>
