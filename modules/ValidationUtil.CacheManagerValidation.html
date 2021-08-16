@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Util | discord-media-player</title>
+	<title>CacheManagerValidation | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -53,52 +53,28 @@
 					<a href="../modules.html">discord-media-player</a>
 				</li>
 				<li>
-					<a href="Util.html">Util</a>
+					<a href="ValidationUtil.html">ValidationUtil</a>
+				</li>
+				<li>
+					<a href="ValidationUtil.CacheManagerValidation.html">CacheManagerValidation</a>
 				</li>
 			</ul>
-			<h1>Namespace Util</h1>
+			<h1>Namespace CacheManagerValidation</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Package helper utility</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Enumerations</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum tsd-parent-kind-namespace"><a href="../enums/Util.ErrorCode.html" class="tsd-kind-icon">Error<wbr>Code</a></li>
-								<li class="tsd-kind-enum tsd-parent-kind-namespace"><a href="../enums/Util.SourceType.html" class="tsd-kind-icon">Source<wbr>Type</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Classes</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-namespace"><a href="../classes/Util.Resource.html" class="tsd-kind-icon">Resource</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-namespace"><a href="../classes/Util.Skipper.html" class="tsd-kind-icon">Skipper</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/Util.Filters.html" class="tsd-kind-icon">Filters</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/Util.ResourceOptions.html" class="tsd-kind-icon">Resource<wbr>Options</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="Util.html#noop" class="tsd-kind-icon">noop</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.CacheManagerValidation.html#validatePath" class="tsd-kind-icon">validate<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.CacheManagerValidation.html#validateTimeout" class="tsd-kind-icon">validate<wbr>Timeout</a></li>
 							</ul>
 						</section>
 					</div>
@@ -107,23 +83,47 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="noop" class="tsd-anchor"></a>
-					<h3>noop</h3>
+					<a name="validatePath" class="tsd-anchor"></a>
+					<h3>validate<wbr>Path</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">noop<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Path<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/util/noop.ts#L7">src/util/noop.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/CacheManagerValidation.ts#L3">src/validation/CacheManagerValidation.ts:3</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Empty function (NO-OP)</p>
-								</div>
-							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>path: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
+					<a name="validateTimeout" class="tsd-anchor"></a>
+					<h3>validate<wbr>Timeout</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Timeout<span class="tsd-signature-symbol">(</span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/CacheManagerValidation.ts#L7">src/validation/CacheManagerValidation.ts:7</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -139,36 +139,47 @@
 					<li class=" tsd-kind-namespace">
 						<a href="SoundcloudUtil.html">Soundcloud<wbr>Util</a>
 					</li>
-					<li class="current tsd-kind-namespace">
+					<li class=" tsd-kind-namespace">
 						<a href="Util.html">Util</a>
 					</li>
-					<li class=" tsd-kind-namespace">
+					<li class="current tsd-kind-namespace">
 						<a href="ValidationUtil.html">Validation<wbr>Util</a>
+						<ul>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="ValidationUtil.AudioManagerValidation.html">Audio<wbr>Manager<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="ValidationUtil.AudioPlayerValidation.html">Audio<wbr>Player<wbr>Validation</a>
+							</li>
+							<li class="current tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="ValidationUtil.CacheManagerValidation.html">Cache<wbr>Manager<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="ValidationUtil.CacheValidation.html">Cache<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="ValidationUtil.CacheWriterValidation.html">Cache<wbr>Writer<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="ValidationUtil.ErrorMessages.html">Error<wbr>Messages</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="ValidationUtil.ResourceValidation.html">Resource<wbr>Validation</a>
+							</li>
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+								<a href="ValidationUtil.SkipperValidation.html">Skipper<wbr>Validation</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
-						<a href="../enums/Util.ErrorCode.html" class="tsd-kind-icon">Error<wbr>Code</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
-						<a href="../enums/Util.SourceType.html" class="tsd-kind-icon">Source<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-namespace">
-						<a href="../classes/Util.Resource.html" class="tsd-kind-icon">Resource</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-namespace">
-						<a href="../classes/Util.Skipper.html" class="tsd-kind-icon">Skipper</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="../interfaces/Util.Filters.html" class="tsd-kind-icon">Filters</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="../interfaces/Util.ResourceOptions.html" class="tsd-kind-icon">Resource<wbr>Options</a>
+					<li class=" tsd-kind-function tsd-parent-kind-namespace">
+						<a href="ValidationUtil.CacheManagerValidation.html#validatePath" class="tsd-kind-icon">validate<wbr>Path</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="Util.html#noop" class="tsd-kind-icon">noop</a>
+						<a href="ValidationUtil.CacheManagerValidation.html#validateTimeout" class="tsd-kind-icon">validate<wbr>Timeout</a>
 					</li>
 				</ul>
 			</nav>

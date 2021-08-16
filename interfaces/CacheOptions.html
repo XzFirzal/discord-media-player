@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Skipper | discord-media-player</title>
+	<title>CacheOptions | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -53,13 +53,10 @@
 					<a href="../modules.html">discord-media-player</a>
 				</li>
 				<li>
-					<a href="../modules/Util.html">Util</a>
-				</li>
-				<li>
-					<a href="Util.Skipper.html">Skipper</a>
+					<a href="CacheOptions.html">CacheOptions</a>
 				</li>
 			</ul>
-			<h1>Class Skipper</h1>
+			<h1>Interface CacheOptions</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +66,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The instance for skipping the audio</p>
+						<p>The options for cache instance</p>
 					</div>
 				</div>
 			</section>
@@ -77,12 +74,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Writable</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">Skipper</span>
-							</li>
-						</ul>
+						<span class="target">CacheOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -91,52 +83,36 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Constructors</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="Util.Skipper.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="CacheOptions.html#path" class="tsd-kind-icon">path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="CacheOptions.html#timeout" class="tsd-kind-icon">timeout</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Skipper<span class="tsd-signature-symbol">(</span>seconds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, _cacheWriter<span class="tsd-signature-symbol">: </span><a href="CacheWriter.html" class="tsd-signature-type" data-tsd-kind="Class">CacheWriter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="Util.Skipper.html" class="tsd-signature-type" data-tsd-kind="Class">Skipper</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Overrides Writable.constructor</p>
-								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/util/Skipper.ts#L20">src/util/Skipper.ts:20</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>seconds: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The amount to skip in second</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>_cacheWriter: <a href="CacheWriter.html" class="tsd-signature-type" data-tsd-kind="Class">CacheWriter</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>The audio cache writer</p>
-										</div>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="Util.Skipper.html" class="tsd-signature-type" data-tsd-kind="Class">Skipper</a></h4>
-						</li>
-					</ul>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="path" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> path</h3>
+					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L36">src/cache/Cache.ts:36</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="timeout" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> timeout</h3>
+					<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/Cache.ts#L37">src/cache/Cache.ts:37</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -146,48 +122,54 @@
 					<li class=" ">
 						<a href="../modules.html">Exports</a>
 					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="../modules/SoundcloudUtil.html">Soundcloud<wbr>Util</a>
-					</li>
-					<li class="current tsd-kind-namespace">
-						<a href="../modules/Util.html">Util</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="../modules/ValidationUtil.html">Validation<wbr>Util</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
-						<a href="../enums/Util.ErrorCode.html" class="tsd-kind-icon">Error<wbr>Code</a>
+					<li class=" tsd-kind-class">
+						<a href="../classes/AudioManager.html" class="tsd-kind-icon">Audio<wbr>Manager</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
-						<a href="../enums/Util.SourceType.html" class="tsd-kind-icon">Source<wbr>Type</a>
+					<li class=" tsd-kind-class">
+						<a href="../classes/AudioPlayerImpl.html" class="tsd-kind-icon">Audio<wbr>Player<wbr>Impl</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-namespace">
-						<a href="Util.Resource.html" class="tsd-kind-icon">Resource</a>
+					<li class=" tsd-kind-class">
+						<a href="../classes/Cache.html" class="tsd-kind-icon">Cache</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/CacheManagerImpl.html" class="tsd-kind-icon">Cache<wbr>Manager<wbr>Impl</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/CacheWriter.html" class="tsd-kind-icon">Cache<wbr>Writer</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="AudioManagerEvents.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="AudioManagerOptions.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="AudioPlayer.html" class="tsd-kind-icon">Audio<wbr>Player</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="CacheManager.html" class="tsd-kind-icon">Cache<wbr>Manager</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-namespace">
-						<a href="Util.Skipper.html" class="tsd-kind-icon">Skipper</a>
+					<li class="current tsd-kind-interface">
+						<a href="CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="Util.Skipper.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="CacheOptions.html#path" class="tsd-kind-icon">path</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="CacheOptions.html#timeout" class="tsd-kind-icon">timeout</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="../interfaces/Util.Filters.html" class="tsd-kind-icon">Filters</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="../interfaces/Util.ResourceOptions.html" class="tsd-kind-icon">Resource<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="../modules/Util.html#noop" class="tsd-kind-icon">noop</a>
+					<li class=" tsd-kind-variable">
+						<a href="../modules.html#version" class="tsd-kind-icon">version</a>
 					</li>
 				</ul>
 			</nav>
