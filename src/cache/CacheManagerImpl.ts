@@ -1,4 +1,5 @@
 import type { CacheManager } from "./CacheManager"
+import { CacheManagerValidation as validation } from "../validation"
 import { Cache } from "./Cache"
 
 /**
@@ -9,6 +10,10 @@ export class CacheManagerImpl implements CacheManager {
    * @internal
    */
   public path: string
+  /**
+   * @internal
+   */
+  public timeout: number
 
   /**
    * @internal
@@ -32,11 +37,24 @@ export class CacheManagerImpl implements CacheManager {
   /**
    * @internal
    */
+  setTimeout(timeout: number): void {
+    validation.validateTimeout(timeout)
+    this.timeout = timeout
+
+    this.youtube.setOptions({ timeout })
+    this.soundcloud.setOptions({ timeout })
+    this.local.setOptions({ timeout })
+  }
+
+  /**
+   * @internal
+   */
   setPath(path: string): void {
+    validation.validatePath(path)
     this.path = path
 
-    this.youtube.setPath(path)
-    this.soundcloud.setPath(path)
-    this.local.setPath(path)
+    this.youtube.setOptions({ path })
+    this.soundcloud.setOptions({ path })
+    this.local.setOptions({ path })
   }
 }

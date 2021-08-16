@@ -2,6 +2,7 @@ import type { Cache } from "../cache/Cache"
 import type { CacheWriter } from "../cache/CacheWriter"
 import type { AudioPlayer } from "../audio/AudioPlayer"
 import type { Readable, Transform, Duplex } from "stream"
+import { ResourceValidation as validation } from "../validation"
 import { AudioPlayerStatus } from "@discordjs/voice"
 
 /**
@@ -93,9 +94,12 @@ export class Resource {
   public readonly cacheWriter?: CacheWriter
 
   /**
-   * @param param0 The options to create audio resource
+   * @param options The options to create audio resource
    */
-  constructor({ player, identifier, decoder, source, cache, demuxer, cacheWriter }: ResourceOptions) {
+  constructor(options: ResourceOptions) {
+    validation.validateOptions(options)
+    const { player, identifier, decoder, source, cache, demuxer, cacheWriter } = options
+
     this.player = player
     this.identifier = identifier
     this.cache = cache
@@ -113,6 +117,7 @@ export class Resource {
   }
 
   set player(player: AudioPlayer) {
+    if (player != null) validation.validatePlayer(player)
     this._player = player
 
     setImmediate(() => {
@@ -125,6 +130,7 @@ export class Resource {
   }
 
   set autoPaused(paused: boolean) {
+    validation.validatePaused(paused)
     this._autoPaused = paused
 
     if (paused && ![AudioPlayerStatus.Paused, AudioPlayerStatus.AutoPaused].includes(this.player?.status)) this.player?.pause(true)

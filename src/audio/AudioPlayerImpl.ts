@@ -18,6 +18,7 @@ import { ErrorCode } from "../util/ErrorCode"
 import { CacheWriter } from "../cache/CacheWriter"
 import { downloadMedia } from "../soundcloudUtil/downloadMedia"
 import { AudioPlayer as DiscordPlayer, AudioResource, AudioPlayerStatus, VoiceConnectionStatus } from "@discordjs/voice"
+import { PlayerError, ErrorMessages, AudioPlayerValidation as playerValidation } from "../validation"
 import { getVideoID, getInfo, downloadFromInfo } from "ytdl-core"
 import { PassThrough, pipeline } from "stream"
 import { open as fsOpen } from "fs/promises"
@@ -61,7 +62,7 @@ export class AudioPlayerImpl implements AudioPlayer {
   /**
    * @internal
    */
-  public manager: AudioManager
+  public manager: AudioManager = null
   
   /**
    * @internal
@@ -154,7 +155,15 @@ export class AudioPlayerImpl implements AudioPlayer {
   /**
    * @internal
    */
+  get playing(): boolean {
+    return this._playing
+  }
+
+  /**
+   * @internal
+   */
   setManager(manager: AudioManager): void {
+    playerValidation.validateManager(manager)
     this.manager = manager
   }
 
@@ -162,7 +171,9 @@ export class AudioPlayerImpl implements AudioPlayer {
    * @internal
    */
   link(connection: VoiceConnection): void {
-    if (this._connection) throw new Error("Player is already linked")
+    playerValidation.validateConnection(connection)
+
+    this._checkNotLinked()
 
     connection.subscribe(this._player)
 
@@ -204,7 +215,7 @@ export class AudioPlayerImpl implements AudioPlayer {
    * @internal
    */
   unlink(): void {
-    if (!this._connection) throw new Error("Player is not linked")
+    this._checkLinked()
 
     const subscription = (this._connection.state as VoiceConnectionReadyState).subscription
 
@@ -225,6 +236,8 @@ export class AudioPlayerImpl implements AudioPlayer {
    * @internal
    */
   setFilter(filter: Filters): void {
+    playerValidation.validateFilters(filter)
+
     if (!filter || !Object.keys(filter).length) this._filters = null
     else this._filters = filter
   }
@@ -233,7 +246,7 @@ export class AudioPlayerImpl implements AudioPlayer {
    * @internal
    */
   setVolume(volume: number): void {
-    if (typeof volume !== "number") throw new Error(`Expecting 'volume' as number, get '${typeof volume}' instead`)
+    playerValidation.validateVolume(volume)
 
     this._checkPlaying()
     this._volume = volume
@@ -305,7 +318,7 @@ export class AudioPlayerImpl implements AudioPlayer {
    * @internal
    */
   async seek(seconds: number): Promise<void> {
-    seconds = Math.floor(seconds)
+    playerValidation.validateSeconds(seconds)
 
     this._checkPlaying()
     if (this._resource.isLive) throw new Error("Livestream cannot be seekened")
@@ -347,8 +360,10 @@ export class AudioPlayerImpl implements AudioPlayer {
    * @internal
    */
   async play(urlOrLocation: string, sourceType: SourceType): Promise<void> {
-    if (!this._connection) throw new Error("Player is not linked")
-    if (this._playing) throw new Error("Player is already playing")
+    playerValidation.validateUrlOrLocation(urlOrLocation)
+    playerValidation.validateSourceType(sourceType)
+
+    this._checkNotPlaying()
 
     await this._getResource(urlOrLocation, sourceType)
 
@@ -438,9 +453,31 @@ export class AudioPlayerImpl implements AudioPlayer {
   /**
    * @internal
    */
+  private _checkNotLinked(): void {
+    if (this._connection) throw new PlayerError(ErrorMessages.PlayerAlreadyLinked)
+  }
+
+  /**
+   * @internal
+   */
+  private _checkLinked(): void {
+    if (!this._connection) throw new PlayerError(ErrorMessages.PlayerNotLinked)
+  }
+
+  /**
+   * @internal
+   */
+  private _checkNotPlaying(): void {
+    this._checkLinked()
+    if (this._playing) throw new PlayerError(ErrorMessages.PlayerAlreadyPlaying)
+  }
+
+  /**
+   * @internal
+   */
   private _checkPlaying(): void {
-    if (!this._connection) throw new Error("Player is not linked")
-    if (!this._playing) throw new Error("Player is not playing")
+    this._checkLinked()
+    if (!this._playing) throw new PlayerError(ErrorMessages.PlayerNotPlaying)
   }
 
   /**
@@ -458,7 +495,7 @@ export class AudioPlayerImpl implements AudioPlayer {
         await this._getLocalResource(urlOrLocation)
         break
       default:
-        throw new Error(`Invalid source type '${sourceType}'`)
+        throw new PlayerError(ErrorMessages.NotValidSourceType(sourceType))
     }
   }
 
@@ -839,6 +876,7 @@ export class AudioPlayerImpl implements AudioPlayer {
     this._audio.unpipe()
 
     const seconds = this._resource.cachedSecond
+
     setImmediate(() => {
       if (!isPaused) this._playCache(seconds)
       else this._switchToCache = seconds

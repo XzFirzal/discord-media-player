@@ -5,6 +5,7 @@ import type { downloadOptions } from "ytdl-core"
 import type { AudioPlayer } from "./AudioPlayer"
 
 import SCDL from "soundcloud-downloader"
+import { AudioManagerValidation as validation } from "../validation"
 import { mkdirSync, mkdtempSync, existsSync } from "fs"
 import { AudioPlayerImpl } from "./AudioPlayerImpl"
 import { join as pathJoin } from "path"
@@ -16,13 +17,10 @@ function initCache(dir: string): void {
   if (!existsSync(dir)) mkdirSync(dir)
 }
 
-type createAudioPlayerType = (manager: AudioManager) => AudioPlayer
+type createAudioPlayerType = () => AudioPlayer
 
-function defaultCreateAudioPlayerType(manager: AudioManager): AudioPlayer {
-  const player = new AudioPlayerImpl()
-  player.setManager(manager)
-
-  return player
+function defaultCreateAudioPlayerType(): AudioPlayer {
+  return new AudioPlayerImpl()
 }
 
 /**
@@ -37,6 +35,10 @@ export interface AudioManagerOptions {
    * The directory where the audio cache is saved
    */
   cacheDir?: string
+  /**
+   * The timeout for cache deletion (in ms)
+   */
+  cacheTimeout?: number
   /**
    * The downloadOptions (ytdl-core) when getting audio source from youtube
    */
@@ -144,10 +146,13 @@ export class AudioManager extends EventEmitter {
   private readonly _createAudioPlayer: createAudioPlayerType
 
   /**
-   * @param param0 The options to create new audio player manager
+   * @param options The options to create new audio player manager
    */
-  constructor({ cache, cacheDir, youtubeOptions, soundcloudClient, createAudioPlayer }: AudioManagerOptions) {
+  constructor(options: AudioManagerOptions) {
     super()
+    validation.validateOptions(options)
+
+    const { cache, cacheDir, cacheTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options
 
     this.cache = cache
     this.youtube = youtubeOptions ?? {}
@@ -157,8 +162,10 @@ export class AudioManager extends EventEmitter {
 
     if (cache) {
       const path = cacheDir ?? tmpdir()
+      const timeout = cacheTimeout ?? 1000 * 60 * 10
 
       initCache(path)
+      cache.setTimeout(timeout)
       cache.setPath(mkdtempSync(pathJoin(path, "node-discord-media-player-")))
 
       const daemon = fork(require.resolve("../nodeDeleteDaemon"), { detached: true })
@@ -174,13 +181,17 @@ export class AudioManager extends EventEmitter {
    * @returns The audio player
    */
   getPlayer(connection: VoiceConnection): AudioPlayer {
+    validation.validateConnection(connection)
+
     const guildID = connection.joinConfig.guildId
 
     let player = this._players.get(guildID)
 
     if (!player) {
-      player = this._createAudioPlayer(this)
+      player = this._createAudioPlayer()
+      validation.validatePlayer(player)
 
+      player.setManager(this)
       player.link(connection)
 
       this._players.set(guildID, player)
@@ -195,6 +206,8 @@ export class AudioManager extends EventEmitter {
    * @returns false if failed or doesn't exist, true if deleted
    */
   deletePlayer(connection: VoiceConnection): boolean {
+    validation.validateConnection(connection)
+
     const guildID = connection.joinConfig.guildId
 
     if (!this._players.has(guildID)) return false
