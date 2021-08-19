@@ -75,6 +75,10 @@
 								<li class="tsd-kind-class"><a href="classes/Cache.html" class="tsd-kind-icon">Cache</a></li>
 								<li class="tsd-kind-class"><a href="classes/CacheManagerImpl.html" class="tsd-kind-icon">Cache<wbr>Manager<wbr>Impl</a></li>
 								<li class="tsd-kind-class"><a href="classes/CacheWriter.html" class="tsd-kind-icon">Cache<wbr>Writer</a></li>
+								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/Queue.html" class="tsd-kind-icon">Queue</a></li>
+								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/QueueHandler.html" class="tsd-kind-icon">Queue<wbr>Handler</a></li>
+								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/QueueManager.html" class="tsd-kind-icon">Queue<wbr>Manager</a></li>
+								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/Track.html" class="tsd-kind-icon">Track</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -85,6 +89,22 @@
 								<li class="tsd-kind-interface"><a href="interfaces/AudioPlayer.html" class="tsd-kind-icon">Audio<wbr>Player</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/CacheManager.html" class="tsd-kind-icon">Cache<wbr>Manager</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/TrackResolvable.html" class="tsd-kind-icon">Track<wbr>Resolvable</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/soundcloudSearchOptions.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/soundcloudSearchResult.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/youtubeSearchOptions.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias"><a href="modules.html#AudioManagerResolvable" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#soundcloudMetadata" class="tsd-kind-icon">soundcloud<wbr>Metadata</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#soundcloudSearchResultType" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result<wbr>Type</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#youtubeMetadata" class="tsd-kind-icon">youtube<wbr>Metadata</a></li>
+								<li class="tsd-kind-type-alias"><a href="modules.html#youtubeSearchResultType" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result<wbr>Type</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -93,6 +113,84 @@
 								<li class="tsd-kind-variable"><a href="modules.html#version" class="tsd-kind-icon">version</a></li>
 							</ul>
 						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="AudioManagerResolvable" class="tsd-anchor"></a>
+					<h3>Audio<wbr>Manager<wbr>Resolvable</h3>
+					<div class="tsd-signature tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable<span class="tsd-signature-symbol">:</span> <a href="classes/AudioManager.html" class="tsd-signature-type" data-tsd-kind="Class">AudioManager</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/AudioManagerOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">AudioManagerOptions</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L71">src/queue/QueueManager.ts:71</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The AudioManager-like that can be passed to queue manager</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="soundcloudMetadata" class="tsd-anchor"></a>
+					<h3>soundcloud<wbr>Metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">soundcloud<wbr>Metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SCDLTrackInfo</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L22">src/queue/QueueManager.ts:22</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Track metadata of soundcloud search result</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="soundcloudSearchResultType" class="tsd-anchor"></a>
+					<h3>soundcloud<wbr>Search<wbr>Result<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">soundcloud<wbr>Search<wbr>Result<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;track&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;set&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;search&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L31">src/queue/QueueManager.ts:31</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The soundcloud search result type</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="youtubeMetadata" class="tsd-anchor"></a>
+					<h3>youtube<wbr>Metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">youtube<wbr>Metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">YoutubeSRVideo</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L18">src/queue/QueueManager.ts:18</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Track metadata of youtube search result</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias">
+					<a name="youtubeSearchResultType" class="tsd-anchor"></a>
+					<h3>youtube<wbr>Search<wbr>Result<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">youtube<wbr>Search<wbr>Result<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;video&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;playlist&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;search&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L27">src/queue/QueueManager.ts:27</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The youtube search result type</p>
+						</div>
 					</div>
 				</section>
 			</section>
@@ -149,6 +247,18 @@
 					<li class=" tsd-kind-class">
 						<a href="classes/CacheWriter.html" class="tsd-kind-icon">Cache<wbr>Writer</a>
 					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/Queue.html" class="tsd-kind-icon">Queue</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/QueueHandler.html" class="tsd-kind-icon">Queue<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/QueueManager.html" class="tsd-kind-icon">Queue<wbr>Manager</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/Track.html" class="tsd-kind-icon">Track</a>
+					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/AudioManagerEvents.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Events</a>
 					</li>
@@ -163,6 +273,39 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/TrackResolvable.html" class="tsd-kind-icon">Track<wbr>Resolvable</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/soundcloudSearchOptions.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/soundcloudSearchResult.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/youtubeSearchOptions.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#AudioManagerResolvable" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#soundcloudMetadata" class="tsd-kind-icon">soundcloud<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#soundcloudSearchResultType" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#youtubeMetadata" class="tsd-kind-icon">youtube<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#youtubeSearchResultType" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="modules.html#version" class="tsd-kind-icon">version</a>
