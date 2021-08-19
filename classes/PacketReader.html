@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>QueueManagerEvents | discord-media-player</title>
+	<title>PacketReader | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -53,21 +53,33 @@
 					<a href="../modules.html">discord-media-player</a>
 				</li>
 				<li>
-					<a href="QueueManagerEvents.html">QueueManagerEvents</a>
+					<a href="PacketReader.html">PacketReader</a>
 				</li>
 			</ul>
-			<h1>Interface QueueManagerEvents</h1>
+			<h1>Class PacketReader</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>An instance to mark the packet size and frames in packet</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">QueueManagerEvents</span>
+						<span class="tsd-signature-type">Transform</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">PacketReader</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -76,66 +88,42 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Methods</h3>
+							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="QueueManagerEvents.html#queueEnd" class="tsd-kind-icon">queue<wbr>End</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="QueueManagerEvents.html#queueStart" class="tsd-kind-icon">queue<wbr>Start</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="PacketReader.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="queueEnd" class="tsd-anchor"></a>
-					<h3>queue<wbr>End</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">queue<wbr>End<span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Packet<wbr>Reader<span class="tsd-signature-symbol">(</span>packets<span class="tsd-signature-symbol">: </span><a href="../interfaces/Packet.html" class="tsd-signature-type" data-tsd-kind="Interface">Packet</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="PacketReader.html" class="tsd-signature-type" data-tsd-kind="Class">PacketReader</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides Transform.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L93">src/queue/QueueManager.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/PacketReader.ts#L24">src/cache/PacketReader.ts:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>guildID: <span class="tsd-signature-type">string</span></h5>
+									<h5>packets: <a href="../interfaces/Packet.html" class="tsd-signature-type" data-tsd-kind="Interface">Packet</a><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The guildID of the linked connection in queue player</p>
+										<div class="lead">
+											<p>The allocated array of packets</p>
+										</div>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="queueStart" class="tsd-anchor"></a>
-					<h3>queue<wbr>Start</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">queue<wbr>Start<span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L89">src/queue/QueueManager.ts:89</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>guildID: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The guildID of the linked connection in queue player</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="PacketReader.html" class="tsd-signature-type" data-tsd-kind="Class">PacketReader</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -152,85 +140,82 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class">
-						<a href="../classes/AudioManager.html" class="tsd-kind-icon">Audio<wbr>Manager</a>
+						<a href="AudioManager.html" class="tsd-kind-icon">Audio<wbr>Manager</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/AudioPlayerImpl.html" class="tsd-kind-icon">Audio<wbr>Player<wbr>Impl</a>
+						<a href="AudioPlayerImpl.html" class="tsd-kind-icon">Audio<wbr>Player<wbr>Impl</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/Cache.html" class="tsd-kind-icon">Cache</a>
+						<a href="Cache.html" class="tsd-kind-icon">Cache</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/CacheManagerImpl.html" class="tsd-kind-icon">Cache<wbr>Manager<wbr>Impl</a>
+						<a href="CacheManagerImpl.html" class="tsd-kind-icon">Cache<wbr>Manager<wbr>Impl</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/CacheReader.html" class="tsd-kind-icon">Cache<wbr>Reader</a>
+						<a href="CacheReader.html" class="tsd-kind-icon">Cache<wbr>Reader</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="../classes/CacheWriter.html" class="tsd-kind-icon">Cache<wbr>Writer</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="../classes/PacketReader.html" class="tsd-kind-icon">Packet<wbr>Reader</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="../classes/Queue.html" class="tsd-kind-icon">Queue</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="../classes/QueueHandler.html" class="tsd-kind-icon">Queue<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="../classes/QueueManager.html" class="tsd-kind-icon">Queue<wbr>Manager</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="../classes/Track.html" class="tsd-kind-icon">Track</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="AudioManagerEvents.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Events</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="AudioManagerOptions.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="AudioPlayer.html" class="tsd-kind-icon">Audio<wbr>Player</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="CacheManager.html" class="tsd-kind-icon">Cache<wbr>Manager</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="Packet.html" class="tsd-kind-icon">Packet</a>
+						<a href="CacheWriter.html" class="tsd-kind-icon">Cache<wbr>Writer</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
+					<li class="current tsd-kind-class">
+						<a href="PacketReader.html" class="tsd-kind-icon">Packet<wbr>Reader</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="QueueManagerEvents.html#queueEnd" class="tsd-kind-icon">queue<wbr>End</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="QueueManagerEvents.html#queueStart" class="tsd-kind-icon">queue<wbr>Start</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+								<a href="PacketReader.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="Queue.html" class="tsd-kind-icon">Queue</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="QueueHandler.html" class="tsd-kind-icon">Queue<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="QueueManager.html" class="tsd-kind-icon">Queue<wbr>Manager</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="Track.html" class="tsd-kind-icon">Track</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/AudioManagerEvents.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/AudioManagerOptions.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/AudioPlayer.html" class="tsd-kind-icon">Audio<wbr>Player</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/CacheManager.html" class="tsd-kind-icon">Cache<wbr>Manager</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/Packet.html" class="tsd-kind-icon">Packet</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="TrackResolvable.html" class="tsd-kind-icon">Track<wbr>Resolvable</a>
+						<a href="../interfaces/TrackResolvable.html" class="tsd-kind-icon">Track<wbr>Resolvable</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="soundcloudSearchOptions.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Options</a>
+						<a href="../interfaces/soundcloudSearchOptions.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="soundcloudSearchResult.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result</a>
+						<a href="../interfaces/soundcloudSearchResult.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="youtubeSearchOptions.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Options</a>
+						<a href="../interfaces/youtubeSearchOptions.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a>
+						<a href="../interfaces/youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="../modules.html#AudioManagerResolvable" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable</a>
