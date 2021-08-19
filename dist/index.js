@@ -37,6 +37,8 @@ __exportStar(require("./cache/Cache"), exports);
 __exportStar(require("./cache/CacheManager"), exports);
 __exportStar(require("./cache/CacheManagerImpl"), exports);
 __exportStar(require("./cache/CacheWriter"), exports);
+__exportStar(require("./cache/CacheReader"), exports);
+__exportStar(require("./cache/PacketReader"), exports);
 const _ErrorCode = __importStar(require("./util/ErrorCode"));
 const _noop = __importStar(require("./util/noop"));
 const _Resource = __importStar(require("./util/Resource"));

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>QueueManagerEvents | discord-media-player</title>
+	<title>Packet | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -53,21 +53,28 @@
 					<a href="../modules.html">discord-media-player</a>
 				</li>
 				<li>
-					<a href="QueueManagerEvents.html">QueueManagerEvents</a>
+					<a href="Packet.html">Packet</a>
 				</li>
 			</ul>
-			<h1>Interface QueueManagerEvents</h1>
+			<h1>Interface Packet</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The metadata of packets including packet size and packet frames count</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">QueueManagerEvents</span>
+						<span class="target">Packet</span>
 					</li>
 				</ul>
 			</section>
@@ -76,68 +83,36 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Methods</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="QueueManagerEvents.html#queueEnd" class="tsd-kind-icon">queue<wbr>End</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="QueueManagerEvents.html#queueStart" class="tsd-kind-icon">queue<wbr>Start</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Packet.html#frames" class="tsd-kind-icon">frames</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Packet.html#size" class="tsd-kind-icon">size</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="queueEnd" class="tsd-anchor"></a>
-					<h3>queue<wbr>End</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">queue<wbr>End<span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L93">src/queue/QueueManager.ts:93</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>guildID: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The guildID of the linked connection in queue player</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="frames" class="tsd-anchor"></a>
+					<h3>frames</h3>
+					<div class="tsd-signature tsd-kind-icon">frames<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/PacketReader.ts#L9">src/cache/PacketReader.ts:9</a></li>
+						</ul>
+					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="queueStart" class="tsd-anchor"></a>
-					<h3>queue<wbr>Start</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">queue<wbr>Start<span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L89">src/queue/QueueManager.ts:89</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>guildID: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The guildID of the linked connection in queue player</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="size" class="tsd-anchor"></a>
+					<h3>size</h3>
+					<div class="tsd-signature tsd-kind-icon">size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/PacketReader.ts#L8">src/cache/PacketReader.ts:8</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -199,24 +174,24 @@
 					<li class=" tsd-kind-interface">
 						<a href="CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-interface">
-						<a href="Packet.html" class="tsd-kind-icon">Packet</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
+						<a href="Packet.html" class="tsd-kind-icon">Packet</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="QueueManagerEvents.html#queueEnd" class="tsd-kind-icon">queue<wbr>End</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="Packet.html#frames" class="tsd-kind-icon">frames</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="QueueManagerEvents.html#queueStart" class="tsd-kind-icon">queue<wbr>Start</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="Packet.html#size" class="tsd-kind-icon">size</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface">
+						<a href="QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="TrackResolvable.html" class="tsd-kind-icon">Track<wbr>Resolvable</a>
 					</li>

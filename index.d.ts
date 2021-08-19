@@ -6,6 +6,7 @@
 //   events
 //   prism-media
 //   stream
+//   fs/promises
 //   axios
 //   m3u8stream
 //   youtube-sr
@@ -23,6 +24,8 @@ declare module 'discord-media-player' {
     export * from "discord-media-player/dist/cache/CacheManager";
     export * from "discord-media-player/dist/cache/CacheManagerImpl";
     export * from "discord-media-player/dist/cache/CacheWriter";
+    export * from "discord-media-player/dist/cache/CacheReader";
+    export * from "discord-media-player/dist/cache/PacketReader";
     import * as _ErrorCode from "discord-media-player/dist/util/ErrorCode";
     import * as _Filters from "discord-media-player/dist/util/Filters";
     import * as _noop from "discord-media-player/dist/util/noop";
@@ -601,6 +604,52 @@ declare module 'discord-media-player/dist/cache/CacheWriter' {
                 * @internal
                 */
             unpipe<T extends NodeJS.WritableStream>(destination?: T): this;
+    }
+}
+
+declare module 'discord-media-player/dist/cache/CacheReader' {
+    import type { Packet } from "discord-media-player/dist/cache/PacketReader";
+    import type { FileHandle } from "fs/promises";
+    import { Readable } from "stream";
+    /**
+        * An instance to appropriately read opus packet
+        */
+    export class CacheReader extends Readable {
+            /**
+                * @param packets The array of packets
+                * @param file The file to read
+                * @param ms Where to start reading (in ms)
+                */
+            constructor(packets: Array<Packet>, file: Promise<FileHandle>, ms: number);
+            /**
+                * @internal
+                */
+            _read(): Promise<void>;
+    }
+}
+
+declare module 'discord-media-player/dist/cache/PacketReader' {
+    import type { TransformCallback } from "stream";
+    import { Transform } from "stream";
+    /**
+        * The metadata of packets including packet size and packet frames count
+        */
+    export interface Packet {
+            size: number;
+            frames: number;
+    }
+    /**
+        * An instance to mark the packet size and frames in packet
+        */
+    export class PacketReader extends Transform {
+            /**
+                * @param packets The allocated array of packets
+                */
+            constructor(packets: Array<Packet>);
+            /**
+                * @internal
+                */
+            _transform(packet: Buffer, _: BufferEncoding, cb: TransformCallback): void;
     }
 }
 
