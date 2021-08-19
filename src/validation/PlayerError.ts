@@ -161,6 +161,14 @@ export namespace ErrorMessages {
       code: 31
     }
   }
+
+  /**
+   * Error when queue is empty while trying to start queue cycle
+   */
+  export const QueueEmpty: ErrorType = {
+    message: "Queue is empty",
+    code: 40
+  }
 }
 
 /**

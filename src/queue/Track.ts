@@ -1,0 +1,140 @@
+/* eslint-disable @typescript-eslint/ban-types */
+import { TrackValidation as validation } from "../validation"
+
+const kTrack = Symbol("kTrack")
+const kStart = Symbol("kStart")
+const kPauses = Symbol("kPauses")
+const kUnpauses = Symbol("kUnpauses")
+
+/**
+ * Raw object of the track
+ */
+export interface TrackResolvable<TM extends object> {
+  sourceType: number,
+  urlOrLocation: string,
+  metadata?: TM
+}
+
+/**
+ * Track instance of the raw track
+ */
+export class Track<TM extends object> {
+  /**
+   * @internal
+   */
+  private [kStart]?: number
+  /**
+   * @internal
+   */
+  private [kTrack]: TrackResolvable<TM>
+  /**
+   * @internal
+   */
+  private [kPauses]: number[] = []
+  /**
+   * @internal
+   */
+  private [kUnpauses]: number[] = []
+
+  /**
+   * @param track The raw track object
+   */
+  constructor(track: TrackResolvable<TM>) {
+    validation.validateTrack(track)
+    this[kTrack] = track
+  }
+
+  /**
+   * The track source type
+   */
+  get sourceType(): number {
+    return this[kTrack].sourceType
+  }
+
+  /**
+   * The track url or location
+   */
+  get urlOrLocation(): string {
+    return this[kTrack].urlOrLocation
+  }
+
+  /**
+   * The playback duration of the track (if playing)
+   */
+  get playbackDuration(): number {
+    const now = Date.now()
+    const start = this[kStart] ?? now
+
+    return now - start - this.pausedDuration
+  }
+
+  /**
+   * The paused duration of the track (if playing and paused atleast once)
+   */
+  get pausedDuration(): number {
+    let duration = 0
+
+    for (let index = 0; index < this[kPauses].length; ++index) {
+      const pausedStamp = this[kPauses][index]
+      const unpausedStamp = this[kUnpauses][index] ?? Date.now()
+
+      duration += unpausedStamp - pausedStamp
+    }
+
+    return duration
+  }
+
+  /**
+   * Get value of a track metadata property
+   * @param key The metadata property key
+   * @returns The metadata property value
+   */
+  get<K extends keyof TM>(key: K): TM[K] {
+    return this[kTrack].metadata[key]
+  }
+
+  /**
+   * Set a value to a track metadata property
+   * @param key The metadata property key
+   * @param value The metadata property value to set
+   */
+  set<K extends keyof TM, V extends TM[K]>(key: K, value: V): void {
+    this[kTrack].metadata[key] = value
+  }
+
+  /**
+   * Set the starting timestamp if track is started to playing
+   * @param start The starting timestamp
+   */
+  setStart(start: number): void {
+    validation.validateNumber("start", start)
+    this[kStart] = start
+  }
+
+  /**
+   * Add a pause timestamp when track is paused
+   * @param timestamp The timestamp when the track is paused
+   */
+  addPausedTimestamp(timestamp: number): void {
+    validation.validateNumber("pausedTimestamp", timestamp)
+    this[kPauses].push(timestamp)
+  }
+
+  /**
+   * Add a unpause timestamp when track is unpaused
+   * @param timestamp The timestamp when the track is unpaused
+   */
+  addUnpausedTimestamp(timestamp: number): void {
+    validation.validateNumber("unpausedTimestamp", timestamp)
+    this[kUnpauses].push(timestamp)
+  }
+
+  /**
+   * Cleanup timestamps after track is stopped playing
+   */
+  cleanup(): void {
+    this[kStart] = null
+    this[kPauses].length = 0
+    this[kUnpauses].length = 0
+  }
+}

@@ -1,15 +1,68 @@
+import type { EventEmitter } from "events"
 import type { Filters } from "../util/Filters"
 import type { AudioManager } from "./AudioManager"
 import type { VoiceConnection, AudioPlayerStatus } from "@discordjs/voice"
 
+type NOOP = () => void
+
+interface PlayerEvents {
+  unlink: NOOP
+  pause: NOOP,
+  unpause: NOOP,
+  end: NOOP
+}
+
 /**
  * The instance to manage and playing audio to discord
  */
-export interface AudioPlayer {
+export interface AudioPlayer extends EventEmitter {
+  /**
+   * @internal
+   */
+   on<E extends keyof PlayerEvents>(
+    event: E, listener: PlayerEvents[E]
+  ): this
+  /**
+   * @internal
+   */
+  once<E extends keyof PlayerEvents>(
+    event: E, listener: PlayerEvents[E]
+  ): this
+  /**
+   * @internal
+   */
+  addListener<E extends keyof PlayerEvents>(
+    event: E, listener: PlayerEvents[E]
+  ): this
+
+  /**
+   * @internal
+   */
+  off<E extends keyof PlayerEvents>(
+    event: E, listener: PlayerEvents[E]
+  ): this
+  /**
+   * @internal
+   */
+  removeListener<E extends keyof PlayerEvents>(
+    event: E, listener: PlayerEvents[E]
+  ): this
+
+  /**
+   * @internal
+   */
+  emit<E extends keyof PlayerEvents>(
+    event: E, ...args: never
+  ): boolean
+
   /**
    * The manager of the audio player
    */
   manager: AudioManager
+  /**
+   * The linked connection guild id
+   */
+  guildID: string
   /**
    * The discord player status
    */

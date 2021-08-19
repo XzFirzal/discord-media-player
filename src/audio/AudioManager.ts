@@ -73,23 +73,41 @@ export interface AudioManagerEvents {
 }
 
 export interface AudioManager extends EventEmitter {
+  /**
+   * @internal
+   */
   on<E extends keyof AudioManagerEvents>(
     event: E, listener: AudioManagerEvents[E]
   ): this
+  /**
+   * @internal
+   */
   once<E extends keyof AudioManagerEvents>(
     event: E, listener: AudioManagerEvents[E]
   ): this
+  /**
+   * @internal
+   */
   addListener<E extends keyof AudioManagerEvents>(
     event: E, listener: AudioManagerEvents[E]
   ): this
 
+  /**
+   * @internal
+   */
   off<E extends keyof AudioManagerEvents>(
     event: E, listener: AudioManagerEvents[E]
   ): this
+  /**
+   * @internal
+   */
   removeListener<E extends keyof AudioManagerEvents>(
     event: E, listener: AudioManagerEvents[E]
   ): this
 
+  /**
+   * @internal
+   */
   emit<E extends keyof AudioManagerEvents>(
     event: E, ...args: Parameters<AudioManagerEvents[E]>
   ): boolean

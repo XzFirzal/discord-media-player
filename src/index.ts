@@ -55,3 +55,4 @@ export namespace SoundcloudUtil {
 }
 
 export * as ValidationUtil from "./validation"
+export * from "./queue"

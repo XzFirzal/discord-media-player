@@ -58,7 +58,28 @@ const FILTER_FFMPEG_ARGS = [
 /**
  * The default implementation of {@link AudioPlayer | AudioPlayer}
  */
-export class AudioPlayerImpl implements AudioPlayer {
+export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
+  /**
+   * Emitted when player is unlinked from connection
+   * @event
+   */
+  static UNLINK = "unlink"
+  /**
+   * Emitted whenever player is paused
+   * @event
+   */
+  static PAUSE = "pause"
+  /**
+   * Emitted whenever player is unpaused
+   * @event
+   */
+  static UNPAUSE = "unpause"
+  /**
+   * Emitted whenever an audio is ended
+   * @event
+   */
+  static END = "end"
+
   /**
    * @internal
    */
@@ -135,6 +156,7 @@ export class AudioPlayerImpl implements AudioPlayer {
    * @internal
    */
   constructor() {
+    super()
     this._player.on("stateChange", this._onAudioChange.bind(this))
   }
 
@@ -180,29 +202,29 @@ export class AudioPlayerImpl implements AudioPlayer {
     this._connection = connection
 
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const player = this
+    const self = this
 
     function onConnectionChange(oldState: VoiceConnectionState, newState: VoiceConnectionState) {
-      const closeOrDestroyed = [VoiceConnectionStatus.Disconnected, VoiceConnectionStatus.Destroyed]
-
-      if (!closeOrDestroyed.includes(oldState.status) && closeOrDestroyed.includes(newState.status)) {
+      if (oldState.status !== VoiceConnectionStatus.Destroyed && newState.status === VoiceConnectionStatus.Destroyed) {
         connection.off("stateChange", onConnectionChange)
 
-        player.manager._deletePlayerIfExist(player.guildID)
+        self.manager._deletePlayerIfExist(self.guildID)
 
-        const subscription = (player._connection.state as VoiceConnectionReadyState).subscription
+        const subscription = (self._connection.state as VoiceConnectionReadyState).subscription
 
         subscription?.unsubscribe()
 
-        if (player._playing) {
-          if (player._resource.player === player && player.manager.cache && !player._resource.isLive) player._resource.audio.unpipe()
+        if (self._playing) {
+          if (self._resource.player === self && self.manager.cache && !self._resource.isLive) self._resource.audio.unpipe()
 
-          player._disconnected = true
-          player._player.stop()
+          self._disconnected = true
+          self._player.stop()
         }
 
-        player._connection = null
-        player._cleanup()
+        self.emit("unlink")
+
+        self._connection = null
+        self._cleanup()
       } else if ((oldState as VoiceConnectionReadyState).subscription && !(newState as VoiceConnectionReadyState).subscription) {
         connection.off("stateChange", onConnectionChange)
       }
@@ -227,6 +249,8 @@ export class AudioPlayerImpl implements AudioPlayer {
       this._disconnected = true
       this._player.stop()
     }
+
+    this.emit("unlink")
 
     this._connection = null
     this._cleanup()
@@ -294,7 +318,7 @@ export class AudioPlayerImpl implements AudioPlayer {
     this._checkPlaying()
 
     if ((typeof pauseOrUnpause === "boolean" && pauseOrUnpause === false) ||
-      ([AudioPlayerStatus.Paused, AudioPlayerStatus.AutoPaused].includes(this.status) && pauseOrUnpause !== true)) {
+      ([AudioPlayerStatus.Paused].includes(this.status) && pauseOrUnpause !== true)) {
       this._player.unpause()
       return false
     }
@@ -373,7 +397,10 @@ export class AudioPlayerImpl implements AudioPlayer {
 
     await this._getResource(urlOrLocation, sourceType)
 
-    if (!this._resource) return
+    if (!this._resource) {
+      this.emit("end")
+      return
+    }
 
     this._playing = true
     this._sourceType = sourceType
@@ -512,7 +539,7 @@ export class AudioPlayerImpl implements AudioPlayer {
     const identifier = getVideoID(url)
 
     if (this.manager.cache?.youtube.hasCache(identifier)) {
-      this._resource = this.manager.cache.youtube.getResource(identifier)
+      this._resource = await this.manager.cache.youtube.getResource(identifier)
       return
     }
 
@@ -679,7 +706,7 @@ export class AudioPlayerImpl implements AudioPlayer {
     const identifier = String(info.id)
 
     if (this.manager.cache?.soundcloud.hasCache(identifier)) {
-      this._resource = this.manager.cache.soundcloud.getResource(identifier)
+      this._resource = await this.manager.cache.soundcloud.getResource(identifier)
       return
     }
 
@@ -753,7 +780,7 @@ export class AudioPlayerImpl implements AudioPlayer {
     await fileHandle.close()
 
     if (this.manager.cache?.local.hasCache(identifier)) {
-      this._resource = this.manager.cache.local.getResource(identifier)
+      this._resource = await this.manager.cache.local.getResource(identifier)
       return
     }
 
@@ -787,6 +814,11 @@ export class AudioPlayerImpl implements AudioPlayer {
    * @internal
    */
   private async _onAudioChange(oldState: AudioPlayerState, newState: AudioPlayerState): Promise<void> {
+    const paused = [AudioPlayerStatus.Paused, AudioPlayerStatus.AutoPaused]
+
+    if (!paused.includes(oldState.status) && paused.includes(newState.status)) this.emit("pause")
+    else if (paused.includes(oldState.status) && !paused.includes(newState.status)) this.emit("unpause")
+
     if (oldState.status === AudioPlayerStatus.Paused && newState.status === AudioPlayerStatus.Playing && this._switchToCache) {
       this._playCache(this._switchToCache)
       this._switchToCache = 0
@@ -823,6 +855,7 @@ export class AudioPlayerImpl implements AudioPlayer {
 
             if (this._looping || (this._resource.isLive && !stopping)) {
               if (this._looping && !(this._resource.isLive && !stopping)) {
+                this.emit("end")
                 this.manager.emit("audioStart", this.guildID, this._urlOrLocation)
                 this.manager.emit("audioEnd", this.guildID, this._urlOrLocation)
               }
@@ -833,12 +866,14 @@ export class AudioPlayerImpl implements AudioPlayer {
               return
             }
           } else if (this._looping) {
+            this.emit("end")
             this.manager.emit("audioEnd", this.guildID, this._urlOrLocation)
 
             if (this.manager.cache) {
               if (this._resource.cacheWriter.destroyed && !this._resource.allCached) {
                 this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode.noResource)
                 this._cleanup()
+                this.emit("end")
 
                 return
               }
@@ -862,6 +897,7 @@ export class AudioPlayerImpl implements AudioPlayer {
           }
         }
 
+        this.emit("end")
         this.manager.emit("audioEnd", this.guildID, this._urlOrLocation)
         this._cleanup()
       } else this._playResourceOnEnd = false
