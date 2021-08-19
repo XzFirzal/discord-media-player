@@ -14,6 +14,8 @@ export * from "./cache/Cache"
 export * from "./cache/CacheManager"
 export * from "./cache/CacheManagerImpl"
 export * from "./cache/CacheWriter"
+export * from "./cache/CacheReader"
+export * from "./cache/PacketReader"
 
 import * as _ErrorCode from "./util/ErrorCode"
 import * as _Filters from "./util/Filters"
