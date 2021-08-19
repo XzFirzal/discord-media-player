@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ResourceValidation | discord-media-player</title>
+	<title>QueueHandlerValidation | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="ValidationUtil.html">ValidationUtil</a>
 				</li>
 				<li>
-					<a href="ValidationUtil.ResourceValidation.html">ResourceValidation</a>
+					<a href="ValidationUtil.QueueHandlerValidation.html">QueueHandlerValidation</a>
 				</li>
 			</ul>
-			<h1>Namespace ResourceValidation</h1>
+			<h1>Namespace QueueHandlerValidation</h1>
 		</div>
 	</div>
 </header>
@@ -73,9 +73,8 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.ResourceValidation.html#validateOptions" class="tsd-kind-icon">validate<wbr>Options</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.ResourceValidation.html#validatePaused" class="tsd-kind-icon">validate<wbr>Paused</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.ResourceValidation.html#validatePlayer" class="tsd-kind-icon">validate<wbr>Player</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter"><a href="ValidationUtil.QueueHandlerValidation.html#validateManager" class="tsd-kind-icon">validate<wbr>Manager</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.QueueHandlerValidation.html#validatePlayer" class="tsd-kind-icon">validate<wbr>Player</a></li>
 							</ul>
 						</section>
 					</div>
@@ -83,46 +82,29 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="validateOptions" class="tsd-anchor"></a>
-					<h3>validate<wbr>Options</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">validate<wbr>Options<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/Util.ResourceOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ResourceOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
+					<a name="validateManager" class="tsd-anchor"></a>
+					<h3>validate<wbr>Manager</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Manager&lt;TM&gt;<span class="tsd-signature-symbol">(</span>manager<span class="tsd-signature-symbol">: </span><a href="../classes/QueueManager.html" class="tsd-signature-type" data-tsd-kind="Class">QueueManager</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TM</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/ResourceValidation.ts#L57">src/validation/ResourceValidation.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/QueueHandlerValidation.ts#L6">src/validation/QueueHandlerValidation.ts:6</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
 								<li>
-									<h5>options: <a href="../interfaces/Util.ResourceOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ResourceOptions</a></h5>
+									<h4>TM<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></h4>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="validatePaused" class="tsd-anchor"></a>
-					<h3>validate<wbr>Paused</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">validate<wbr>Paused<span class="tsd-signature-symbol">(</span>paused<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/ResourceValidation.ts#L139">src/validation/ResourceValidation.ts:139</a></li>
-								</ul>
-							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>paused: <span class="tsd-signature-type">boolean</span></h5>
+									<h5>manager: <a href="../classes/QueueManager.html" class="tsd-signature-type" data-tsd-kind="Class">QueueManager</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TM</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -139,7 +121,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/ResourceValidation.ts#L90">src/validation/ResourceValidation.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/QueueHandlerValidation.ts#L11">src/validation/QueueHandlerValidation.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -187,7 +169,7 @@
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.ErrorMessages.html">Error<wbr>Messages</a>
 							</li>
-							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+							<li class="current tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.QueueHandlerValidation.html">Queue<wbr>Handler<wbr>Validation</a>
 							</li>
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
@@ -196,7 +178,7 @@
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.QueueValidation.html">Queue<wbr>Validation</a>
 							</li>
-							<li class="current tsd-kind-namespace tsd-parent-kind-namespace">
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.ResourceValidation.html">Resource<wbr>Validation</a>
 							</li>
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
@@ -211,14 +193,11 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.ResourceValidation.html#validateOptions" class="tsd-kind-icon">validate<wbr>Options</a>
+					<li class=" tsd-kind-function tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="ValidationUtil.QueueHandlerValidation.html#validateManager" class="tsd-kind-icon">validate<wbr>Manager</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.ResourceValidation.html#validatePaused" class="tsd-kind-icon">validate<wbr>Paused</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.ResourceValidation.html#validatePlayer" class="tsd-kind-icon">validate<wbr>Player</a>
+						<a href="ValidationUtil.QueueHandlerValidation.html#validatePlayer" class="tsd-kind-icon">validate<wbr>Player</a>
 					</li>
 				</ul>
 			</nav>

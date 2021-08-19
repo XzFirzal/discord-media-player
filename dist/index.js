@@ -71,3 +71,4 @@ var SoundcloudUtil;
     SoundcloudUtil.STREAMING_PROTOCOLS = _transcoding.STREAMING_PROTOCOLS;
 })(SoundcloudUtil = exports.SoundcloudUtil || (exports.SoundcloudUtil = {}));
 exports.ValidationUtil = __importStar(require("./validation"));
+__exportStar(require("./queue"), exports);

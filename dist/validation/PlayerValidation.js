@@ -122,8 +122,6 @@ exports.validateFilters = validateFilters;
 function validateVolume(volume) {
     if (typeof volume !== "number")
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("number", "AudioPlayer.volume", typeof volume));
-    if (!Number.isInteger(volume))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotInteger(volume));
 }
 exports.validateVolume = validateVolume;
 /**

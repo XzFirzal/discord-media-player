@@ -72,6 +72,8 @@ function validatePlayer(player) {
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("object", "AudioManager.createAudioPlayer()", player === null ? "null" : typeof player));
     if (!("manager" in player))
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("manager", "AudioManager.createAudioPlayer()"));
+    if (!("guildID" in player))
+        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("guildID", "AudioManager.createAudioPlayer()"));
     if (!("status" in player))
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("status", "AudioManager.createAudioPlayer()"));
     else if (typeof player.status !== "string")

@@ -6,8 +6,6 @@ const CacheWriter_1 = require("../cache/CacheWriter");
 function validateSeconds(seconds) {
     if (typeof seconds !== "number")
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("number", "Skipper.seconds", typeof seconds));
-    else if (!Number.isInteger(seconds))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotInteger(seconds));
 }
 exports.validateSeconds = validateSeconds;
 function validateCacheWriter(cacheWriter) {

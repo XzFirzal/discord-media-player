@@ -8,6 +8,8 @@
 //   stream
 //   axios
 //   m3u8stream
+//   youtube-sr
+//   soundcloud-downloader/src/info
 
 declare module 'discord-media-player' {
     /**
@@ -57,6 +59,7 @@ declare module 'discord-media-player' {
             export import Transcoding = _transcoding.Transcoding;
     }
     export * as ValidationUtil from "discord-media-player/dist/validation";
+    export * from "discord-media-player/dist/queue";
 }
 
 declare module 'discord-media-player/dist/audio/AudioManager' {
@@ -116,11 +119,29 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
             audioError(guildID: string, urlOrLocation: string, errorCode: ErrorCode): void;
     }
     export interface AudioManager extends EventEmitter {
+            /**
+                * @internal
+                */
             on<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
+            /**
+                * @internal
+                */
             once<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
+            /**
+                * @internal
+                */
             addListener<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
+            /**
+                * @internal
+                */
             off<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
+            /**
+                * @internal
+                */
             removeListener<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
+            /**
+                * @internal
+                */
             emit<E extends keyof AudioManagerEvents>(event: E, ...args: Parameters<AudioManagerEvents[E]>): boolean;
     }
     /**
@@ -185,17 +206,53 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
 }
 
 declare module 'discord-media-player/dist/audio/AudioPlayer' {
+    import type { EventEmitter } from "events";
     import type { Filters } from "discord-media-player/dist/util/Filters";
     import type { AudioManager } from "discord-media-player/dist/audio/AudioManager";
     import type { VoiceConnection, AudioPlayerStatus } from "@discordjs/voice";
+    type NOOP = () => void;
+    interface PlayerEvents {
+            unlink: NOOP;
+            pause: NOOP;
+            unpause: NOOP;
+            end: NOOP;
+    }
     /**
         * The instance to manage and playing audio to discord
         */
-    export interface AudioPlayer {
+    export interface AudioPlayer extends EventEmitter {
+            /**
+                * @internal
+                */
+            on<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
+            /**
+                * @internal
+                */
+            once<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
+            /**
+                * @internal
+                */
+            addListener<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
+            /**
+                * @internal
+                */
+            off<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
+            /**
+                * @internal
+                */
+            removeListener<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
+            /**
+                * @internal
+                */
+            emit<E extends keyof PlayerEvents>(event: E, ...args: never): boolean;
             /**
                 * The manager of the audio player
                 */
             manager: AudioManager;
+            /**
+                * The linked connection guild id
+                */
+            guildID: string;
             /**
                 * The discord player status
                 */
@@ -264,6 +321,7 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
                 */
             _switchCache(): void;
     }
+    export {};
 }
 
 declare module 'discord-media-player/dist/audio/AudioPlayerImpl' {
@@ -273,10 +331,31 @@ declare module 'discord-media-player/dist/audio/AudioPlayerImpl' {
     import type { SourceType } from "discord-media-player/dist/util/SourceType";
     import type { VoiceConnection } from "@discordjs/voice";
     import { AudioPlayerStatus } from "@discordjs/voice";
+    import { EventEmitter } from "events";
     /**
         * The default implementation of {@link AudioPlayer | AudioPlayer}
         */
-    export class AudioPlayerImpl implements AudioPlayer {
+    export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
+            /**
+                * Emitted when player is unlinked from connection
+                * @event
+                */
+            static UNLINK: string;
+            /**
+                * Emitted whenever player is paused
+                * @event
+                */
+            static PAUSE: string;
+            /**
+                * Emitted whenever player is unpaused
+                * @event
+                */
+            static UNPAUSE: string;
+            /**
+                * Emitted whenever an audio is ended
+                * @event
+                */
+            static END: string;
             /**
                 * @internal
                 */
@@ -845,6 +924,17 @@ declare module 'discord-media-player/dist/validation' {
     export * as CacheWriterValidation from "discord-media-player/dist/validation/CacheWriterValidation";
     export * as ResourceValidation from "discord-media-player/dist/validation/ResourceValidation";
     export * as SkipperValidation from "discord-media-player/dist/validation/SkipperValidation";
+    export * as QueueManagerValidation from "discord-media-player/dist/validation/QueueManagerValidation";
+    export * as QueueHandlerValidation from "discord-media-player/dist/validation/QueueHandlerValidation";
+    export * as QueueValidation from "discord-media-player/dist/validation/QueueValidation";
+    export * as TrackValidation from "discord-media-player/dist/validation/TrackValidation";
+}
+
+declare module 'discord-media-player/dist/queue' {
+    export * from "discord-media-player/dist/queue/QueueManager";
+    export * from "discord-media-player/dist/queue/QueueHandler";
+    export * from "discord-media-player/dist/queue/Queue";
+    export * from "discord-media-player/dist/queue/Track";
 }
 
 declare module 'discord-media-player/dist/validation/PlayerError' {
@@ -936,6 +1026,10 @@ declare module 'discord-media-player/dist/validation/PlayerError' {
                 * @returns The error
                 */
             function CacheNotExist(identifier: string): ErrorType;
+            /**
+                * Error when queue is empty while trying to start queue cycle
+                */
+            const QueueEmpty: ErrorType;
     }
     /**
         * Custom error for discord-media-player
@@ -1072,5 +1166,447 @@ declare module 'discord-media-player/dist/validation/SkipperValidation' {
     import { CacheWriter } from "discord-media-player/dist/cache/CacheWriter";
     export function validateSeconds(seconds: number): void;
     export function validateCacheWriter(cacheWriter: CacheWriter): void;
+}
+
+declare module 'discord-media-player/dist/validation/QueueManagerValidation' {
+    import type { AudioManager } from "discord-media-player/dist/audio/AudioManager";
+    import type { youtubeSearchOptions, soundcloudSearchOptions } from "discord-media-player/dist/queue";
+    import { VoiceConnection } from "@discordjs/voice";
+    export function validateAudioManager(audioManager: AudioManager): void;
+    export function validateConnection(connection: VoiceConnection): void;
+    export function validateYoutubeSearchOptions(options: youtubeSearchOptions): void;
+    export function validateSoundcloudSearchOptions(options: soundcloudSearchOptions): void;
+}
+
+declare module 'discord-media-player/dist/validation/QueueHandlerValidation' {
+    import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
+    import { QueueManager } from "discord-media-player/dist/queue";
+    export function validateManager<TM extends object>(manager: QueueManager<TM>): void;
+    export function validatePlayer(player: AudioPlayer): void;
+}
+
+declare module 'discord-media-player/dist/validation/QueueValidation' {
+    import { Track } from "discord-media-player/dist/queue";
+    export function validateTrack<TM extends object>(track: Track<TM>): void;
+    export function validateRemove(what: string, value: number): void;
+}
+
+declare module 'discord-media-player/dist/validation/TrackValidation' {
+    import type { TrackResolvable } from "discord-media-player/dist/queue";
+    export function validateTrack<TM extends object>(track: TrackResolvable<TM>): void;
+    export function validateNumber(where: string, value: number): void;
+}
+
+declare module 'discord-media-player/dist/queue/QueueManager' {
+    import type { VoiceConnection } from "@discordjs/voice";
+    import type { Video as YoutubeSRVideo } from "youtube-sr";
+    import type { TrackInfo as SCDLTrackInfo } from "soundcloud-downloader/src/info";
+    import type { AudioManagerOptions, AudioManagerEvents } from "discord-media-player/dist/audio/AudioManager";
+    import { Track } from "discord-media-player/dist/queue/Track";
+    import { EventEmitter } from "events";
+    import { QueueHandler } from "discord-media-player/dist/queue/QueueHandler";
+    import { AudioManager } from "discord-media-player/dist/audio/AudioManager";
+    /**
+        * Track metadata of youtube search result
+        */
+    export type youtubeMetadata = YoutubeSRVideo;
+    /**
+        * Track metadata of soundcloud search result
+        */
+    export type soundcloudMetadata = SCDLTrackInfo;
+    /**
+        * The youtube search result type
+        */
+    export type youtubeSearchResultType = "video" | "playlist" | "search";
+    /**
+        * The soundcloud search result type
+        */
+    export type soundcloudSearchResultType = "track" | "set" | "search";
+    /**
+        * The youtube search options
+        */
+    export interface youtubeSearchOptions {
+            query: string;
+            searchLimit?: number;
+            playlistLimit?: number;
+    }
+    /**
+        * The soundcloud search options
+        */
+    export interface soundcloudSearchOptions {
+            query: string;
+            searchLimit?: number;
+            searchOffset?: number;
+            setLimit?: number;
+    }
+    /**
+        * The youtube search result
+        */
+    export interface youtubeSearchResult {
+            type: youtubeSearchResultType;
+            tracks: Track<youtubeMetadata>[];
+    }
+    /**
+        * The soundcloud search result
+        */
+    export interface soundcloudSearchResult {
+            type: soundcloudSearchResultType;
+            tracks: Track<soundcloudMetadata>[];
+    }
+    /**
+        * The AudioManager-like that can be passed to queue manager
+        */
+    export type AudioManagerResolvable = AudioManager | AudioManagerOptions;
+    export interface QueueManagerEvents {
+            /**
+                * @internal
+                */
+            audioStart: AudioManagerEvents["audioStart"];
+            /**
+                * @internal
+                */
+            audioEnd: AudioManagerEvents["audioEnd"];
+            /**
+                * @internal
+                */
+            audioError: AudioManagerEvents["audioError"];
+            /**
+                * @param guildID The guildID of the linked connection in queue player
+                */
+            queueStart(guildID: string): void;
+            /**
+                * @param guildID The guildID of the linked connection in queue player
+                */
+            queueEnd(guildID: string): void;
+    }
+    export interface QueueManager<TM extends object> {
+            /**
+                * @internal
+                */
+            on<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
+            /**
+                * @internal
+                */
+            once<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
+            /**
+                * @internal
+                */
+            addListener<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
+            /**
+                * @internal
+                */
+            off<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
+            /**
+                * @internal
+                */
+            removeListener<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
+            /**
+                * @internal
+                */
+            emit<E extends keyof QueueManagerEvents>(event: E, ...args: Parameters<QueueManagerEvents[E]>): boolean;
+    }
+    /**
+        * The manager of queue handler
+        *
+        * Example:
+        * ```ts
+        * import { QueueManager, CacheManagerImpl, youtubeMetadata, soundcloudMetadata } from "discord-media-player"
+        * const manager = new QueueManager<youtubeMetadata | soundcloudMetadata>({
+        *   //cache is optional
+        *   cache: new CacheManagerImpl()
+        * })
+        * ...
+        * ```
+        */
+    export class QueueManager<TM extends object> extends EventEmitter {
+            /**
+                * Emitted whenever an audio is started playing
+                *
+                * Listener must implement {@link AudioManagerEvents.audioStart | AudioStartCallback}
+                * @event
+                */
+            static AUDIO_START: string;
+            /**
+                * Emitted whenever an audio is ended after playing
+                *
+                * Listener must implement {@link AudioManagerEvents.audioEnd | AudioEndCallback}
+                * @event
+                */
+            static AUDIO_END: string;
+            /**
+                * Emitted whenever an error is thrown while getting audio source before playing
+                *
+                * Listener must implement {@link AudioManagerEvents.audioError | AudioErrorCallback}
+                * @event
+                */
+            static AUDIO_ERROR: string;
+            /**
+                * Emitted whenever a queue is starting to play audio
+                *
+                * Listener must implement {@link QueueManagerEvents.queueStart | QueueStartCallback}
+                * @event
+                */
+            static QUEUE_START: string;
+            /**
+                * Emitted whenever a queue is ended
+                *
+                * Listener must implement {@link QueueManagerEvents.queueEnd | QueueEndCallback}
+                * @event
+                */
+            static QUEUE_END: string;
+            /**
+                * The audio manager of the queue
+                */
+            readonly audioManager: AudioManager;
+            /**
+                * @param manager The audio manager resolvable
+                */
+            constructor(manager: AudioManagerResolvable);
+            /**
+                * Get queue handler from list if exist, otherwise create new
+                * @param connection The voice connection
+                * @returns The queue handler
+                */
+            getHandler(connection: VoiceConnection): QueueHandler<TM>;
+            /**
+                * Delete queue handler from list
+                * @param connection The voice connection
+                * @returns false if failed or doesn't exist, true if deleted
+                */
+            deleteHandler(connection: VoiceConnection): boolean;
+            /**
+                * @internal
+                */
+            _deleteHandlerIfExist(guildID: string): void;
+            /**
+                * Search for a youtube track
+                * @param options The youtube search options
+                * @returns The youtube search result
+                */
+            youtubeSearch(options: youtubeSearchOptions): Promise<youtubeSearchResult>;
+            /**
+                * Search for a soundcloud track
+                * @param options The soundcloud search options
+                * @returns The soundcloud search result
+                */
+            soundcloudSearch(options: soundcloudSearchOptions): Promise<soundcloudSearchResult>;
+    }
+}
+
+declare module 'discord-media-player/dist/queue/QueueHandler' {
+    import type { Filters } from "discord-media-player/dist/util/Filters";
+    import type { QueueManager } from "discord-media-player/dist/queue/QueueManager";
+    import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
+    import type { AudioPlayerStatus } from "@discordjs/voice";
+    import { Queue } from "discord-media-player/dist/queue/Queue";
+    /**
+        * The instance to handle audio player and queue
+        */
+    export class QueueHandler<TM extends object> {
+            /**
+                * The manager of the queue handler
+                */
+            readonly manager: QueueManager<TM>;
+            /**
+                * The handled queue
+                */
+            readonly queue: Queue<TM>;
+            /**
+                * @param manager The queue manager
+                * @param player The handled audio player
+                */
+            constructor(manager: QueueManager<TM>, player: AudioPlayer);
+            /**
+                * The player linked connection guildID
+                */
+            get guildID(): string;
+            /**
+                * The audio player status
+                */
+            get status(): AudioPlayerStatus;
+            /**
+                * The audio player is playing or not
+                */
+            get playing(): boolean;
+            /**
+                * The audio volume
+                */
+            get volume(): number;
+            /**
+                * The audio player is looping the current audio or not
+                */
+            get looping(): boolean;
+            /**
+                * The queue is looped or not
+                */
+            get queueLooping(): boolean;
+            /**
+                * The current track is paused or not
+                */
+            get paused(): boolean;
+            /**
+                * The audio is filtered or not
+                */
+            get filtered(): boolean;
+            /**
+                * Set the volume of the audio
+                * @param volume The volume
+                */
+            setVolume(volume: number): void;
+            /**
+                * Loop the current audio
+                * @returns true if looping, otherwise false
+                */
+            loop(): boolean;
+            /**
+                * Loop the queue
+                * @returns true if looping, otherwise false
+                */
+            loopQueue(): boolean;
+            /**
+                * Pause the current track
+                * @returns true if paused, otherwise false
+                */
+            pause(): boolean;
+            /**
+                * Filter the audio
+                * @param filters The filters (ffmpeg-audiofilters)
+                */
+            filter(filters: Filters): void;
+            /**
+                * If the audio is filtered, unfilter the audio
+                */
+            unfilter(): void;
+            /**
+                * Stop the current track
+                */
+            stop(): void;
+            /**
+                * Seek into specific duration of the current track
+                * @param seconds Where to seek (in seconds)
+                */
+            seek(seconds: number): Promise<void>;
+            /**
+                * Start the queue cycle
+                */
+            play(): Promise<void>;
+    }
+}
+
+declare module 'discord-media-player/dist/queue/Queue' {
+    import type { Track } from "discord-media-player/dist/queue/Track";
+    /**
+        * Queue instance of tracks to play
+        *
+        * The current playing track is provided in
+        * ```js
+        * Queue.current
+        * ```
+        * and not in
+        * ```js
+        * Queue[0]
+        * ```
+        */
+    export class Queue<TM extends object> extends Array<Track<TM>> {
+            /**
+                * The current playing track
+                */
+            current?: Track<TM>;
+            /**
+                * Add some tracks into the queue
+                * @param tracks The tracks
+                * @returns The queue
+                */
+            add(tracks: Track<TM> | Track<TM>[]): this;
+            /**
+                * Remove tracks by position in queue (excluding current)
+                * @param position Starting position to delete
+                * @param howMany How many to delete starting from position
+                * @returns The queue
+                */
+            remove(position: number, howMany?: number): this;
+            /**
+                * Progress the first track as current track
+                * @returns The queue
+                */
+            progress(): this;
+            /**
+                * Clear the tracks in the queue
+                * @returns The queue
+                */
+            clear(): this;
+    }
+}
+
+declare module 'discord-media-player/dist/queue/Track' {
+    const kTrack: unique symbol;
+    const kStart: unique symbol;
+    const kPauses: unique symbol;
+    const kUnpauses: unique symbol;
+    /**
+        * Raw object of the track
+        */
+    export interface TrackResolvable<TM extends object> {
+            sourceType: number;
+            urlOrLocation: string;
+            metadata?: TM;
+    }
+    /**
+        * Track instance of the raw track
+        */
+    export class Track<TM extends object> {
+            /**
+                * @param track The raw track object
+                */
+            constructor(track: TrackResolvable<TM>);
+            /**
+                * The track source type
+                */
+            get sourceType(): number;
+            /**
+                * The track url or location
+                */
+            get urlOrLocation(): string;
+            /**
+                * The playback duration of the track (if playing)
+                */
+            get playbackDuration(): number;
+            /**
+                * The paused duration of the track (if playing and paused atleast once)
+                */
+            get pausedDuration(): number;
+            /**
+                * Get value of a track metadata property
+                * @param key The metadata property key
+                * @returns The metadata property value
+                */
+            get<K extends keyof TM>(key: K): TM[K];
+            /**
+                * Set a value to a track metadata property
+                * @param key The metadata property key
+                * @param value The metadata property value to set
+                */
+            set<K extends keyof TM, V extends TM[K]>(key: K, value: V): void;
+            /**
+                * Set the starting timestamp if track is started to playing
+                * @param start The starting timestamp
+                */
+            setStart(start: number): void;
+            /**
+                * Add a pause timestamp when track is paused
+                * @param timestamp The timestamp when the track is paused
+                */
+            addPausedTimestamp(timestamp: number): void;
+            /**
+                * Add a unpause timestamp when track is unpaused
+                * @param timestamp The timestamp when the track is unpaused
+                */
+            addUnpausedTimestamp(timestamp: number): void;
+            /**
+                * Cleanup timestamps after track is stopped playing
+                */
+            cleanup(): void;
+    }
+    export {};
 }
 
