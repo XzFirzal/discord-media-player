@@ -72,7 +72,7 @@
 							<li><a href="#ffmpeg">FFmpeg</a> (Optional)</li>
 						</ul>
 					</li>
-					<li><a href="#example">Example</a></li>
+					<li><a href="#examples">Examples</a></li>
 					<li><a href="#links">Links</a></li>
 					<li><a href="#contributing">Contributing</a></li>
 				</ul>
@@ -117,76 +117,13 @@
 					<li>npm install ffmpeg-static</li>
 				</ul>
 				<p>FFmpeg is used for audio filters, arbitrary source, and fallback when no opus format found.</p>
-				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
-					<h2>Example</h2>
+				<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+					<h2>Examples</h2>
 				</a>
-				<p>This is an example of simple music bot using discord.js v13 with discord-media-player</p>
-				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">AudioManager</span><span style="color: #000000">, </span><span style="color: #0070C1">CacheManagerImpl</span><span style="color: #000000"> } = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;discord-media-player&quot;</span><span style="color: #000000">)</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">audioManager</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">AudioManager</span><span style="color: #000000">({</span>
-<span style="color: #000000">  </span><span style="color: #008000">//cache is optional</span>
-<span style="color: #000000">  </span><span style="color: #001080">cache:</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">CacheManagerImpl</span><span style="color: #000000">()</span>
-<span style="color: #000000">})</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">Client</span><span style="color: #000000">, </span><span style="color: #0070C1">Intents</span><span style="color: #000000"> } = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;discord.js&quot;</span><span style="color: #000000">)</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">client</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Client</span><span style="color: #000000">({</span>
-<span style="color: #000000">  </span><span style="color: #001080">intents:</span><span style="color: #000000"> [</span><span style="color: #001080">Intents</span><span style="color: #000000">.</span><span style="color: #0070C1">FLAGS</span><span style="color: #000000">.</span><span style="color: #0070C1">GUILDS</span><span style="color: #000000">, </span><span style="color: #001080">Intents</span><span style="color: #000000">.</span><span style="color: #0070C1">FLAGS</span><span style="color: #000000">.</span><span style="color: #0070C1">GUILD_MESSAGES</span><span style="color: #000000">, </span><span style="color: #001080">Intents</span><span style="color: #000000">.</span><span style="color: #0070C1">FLAGS</span><span style="color: #000000">.</span><span style="color: #0070C1">GUILD_VOICE_STATES</span><span style="color: #000000">]</span>
-<span style="color: #000000">})</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">joinVoiceChannel</span><span style="color: #000000">, </span><span style="color: #0070C1">getVoiceConnection</span><span style="color: #000000">, </span><span style="color: #0070C1">VoiceConnectionStatus</span><span style="color: #000000"> } = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;@discordjs/voice&quot;</span><span style="color: #000000">)</span>
-
-<span style="color: #001080">client</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;messageCreate&quot;</span><span style="color: #000000">, </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #001080">message</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #008000">/**</span>
-<span style="color: #008000">   * You need to make your queue implementation to use queue</span>
-<span style="color: #008000">   */</span>
-
-<span style="color: #000000">  </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #001080">content</span><span style="color: #000000">.</span><span style="color: #795E26">startsWith</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;!play&quot;</span><span style="color: #000000">)) {</span>
-<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">url</span><span style="color: #000000"> = </span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #001080">content</span><span style="color: #000000">.</span><span style="color: #795E26">replace</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;!play&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;&quot;</span><span style="color: #000000">)</span>
-
-<span style="color: #000000">    </span><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">connection</span><span style="color: #000000"> = </span><span style="color: #795E26">getVoiceConnection</span><span style="color: #000000">(</span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #001080">guild</span><span style="color: #000000">.</span><span style="color: #001080">id</span><span style="color: #000000">)</span>
-
-<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (!</span><span style="color: #001080">connection</span><span style="color: #000000"> || [</span><span style="color: #001080">VoiceConnectionStatus</span><span style="color: #000000">.</span><span style="color: #001080">Disconnected</span><span style="color: #000000">, </span><span style="color: #001080">VoiceConnectionStatus</span><span style="color: #000000">.</span><span style="color: #001080">Destroyed</span><span style="color: #000000">].</span><span style="color: #795E26">includes</span><span style="color: #000000">(</span><span style="color: #001080">connection</span><span style="color: #000000">.</span><span style="color: #001080">_state</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000">)) {</span>
-<span style="color: #000000">      </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (!</span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #001080">member</span><span style="color: #000000">.</span><span style="color: #001080">voice</span><span style="color: #000000">.</span><span style="color: #001080">channel</span><span style="color: #000000">) {</span>
-<span style="color: #000000">        </span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #795E26">reply</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;You must be in a voice channel&quot;</span><span style="color: #000000">)</span>
-<span style="color: #000000">        </span><span style="color: #AF00DB">return</span>
-<span style="color: #000000">      }</span>
-
-<span style="color: #000000">      </span><span style="color: #001080">connection</span><span style="color: #000000"> = </span><span style="color: #795E26">joinVoiceChannel</span><span style="color: #000000">({</span>
-<span style="color: #000000">        </span><span style="color: #001080">channelId:</span><span style="color: #000000"> </span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #001080">member</span><span style="color: #000000">.</span><span style="color: #001080">voice</span><span style="color: #000000">.</span><span style="color: #001080">channel</span><span style="color: #000000">.</span><span style="color: #001080">id</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #001080">guildId:</span><span style="color: #000000"> </span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #001080">guild</span><span style="color: #000000">.</span><span style="color: #001080">id</span><span style="color: #000000">,</span>
-<span style="color: #000000">        </span><span style="color: #001080">adapterCreator:</span><span style="color: #000000"> </span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #001080">guild</span><span style="color: #000000">.</span><span style="color: #001080">voiceAdapterCreator</span>
-<span style="color: #000000">      })</span>
-<span style="color: #000000">    }</span>
-
-<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">player</span><span style="color: #000000"> = </span><span style="color: #001080">audioManager</span><span style="color: #000000">.</span><span style="color: #795E26">getPlayer</span><span style="color: #000000">(</span><span style="color: #001080">connection</span><span style="color: #000000">)</span>
-
-<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">player</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000"> === </span><span style="color: #A31515">&quot;playing&quot;</span><span style="color: #000000">) </span><span style="color: #001080">player</span><span style="color: #000000">.</span><span style="color: #795E26">stop</span><span style="color: #000000">()</span>
-
-<span style="color: #000000">    </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">player</span><span style="color: #000000">.</span><span style="color: #795E26">play</span><span style="color: #000000">(</span><span style="color: #001080">url</span><span style="color: #000000">, </span><span style="color: #098658">0</span><span style="color: #000000">)</span>
-
-<span style="color: #000000">    </span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #795E26">reply</span><span style="color: #000000">(</span><span style="color: #A31515">`Playing </span><span style="color: #0000FF">${</span><span style="color: #001080">url</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
-<span style="color: #000000">  } </span><span style="color: #AF00DB">else</span><span style="color: #000000"> </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #001080">content</span><span style="color: #000000">.</span><span style="color: #795E26">startsWith</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;!stop&quot;</span><span style="color: #000000">)) {</span>
-<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">connection</span><span style="color: #000000"> = </span><span style="color: #795E26">getVoiceConnection</span><span style="color: #000000">(</span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #001080">guild</span><span style="color: #000000">.</span><span style="color: #001080">id</span><span style="color: #000000">)</span>
-
-<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (!</span><span style="color: #001080">connection</span><span style="color: #000000">) {</span>
-<span style="color: #000000">      </span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #795E26">reply</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;Bot is not in any voice channel&quot;</span><span style="color: #000000">)</span>
-<span style="color: #000000">      </span><span style="color: #AF00DB">return</span>
-<span style="color: #000000">    }</span>
-
-<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">player</span><span style="color: #000000"> = </span><span style="color: #001080">audioManager</span><span style="color: #000000">.</span><span style="color: #795E26">getPlayer</span><span style="color: #000000">(</span><span style="color: #001080">connection</span><span style="color: #000000">)</span>
-
-<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (![</span><span style="color: #A31515">&quot;playing&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;buffering&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;paused&quot;</span><span style="color: #000000">].</span><span style="color: #795E26">includes</span><span style="color: #000000">(</span><span style="color: #001080">player</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000">)) {</span>
-<span style="color: #000000">      </span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #795E26">reply</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;Player is not playing&quot;</span><span style="color: #000000">)</span>
-<span style="color: #000000">      </span><span style="color: #AF00DB">return</span>
-<span style="color: #000000">    }</span>
-
-<span style="color: #000000">    </span><span style="color: #001080">player</span><span style="color: #000000">.</span><span style="color: #795E26">stop</span><span style="color: #000000">()</span>
-
-<span style="color: #000000">    </span><span style="color: #001080">message</span><span style="color: #000000">.</span><span style="color: #795E26">reply</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;Player stopped&quot;</span><span style="color: #000000">)</span>
-<span style="color: #000000">  }</span>
-<span style="color: #000000">})</span>
-
-<span style="color: #001080">client</span><span style="color: #000000">.</span><span style="color: #795E26">login</span><span style="color: #000000">(</span><span style="color: #001080">process</span><span style="color: #000000">.</span><span style="color: #001080">env</span><span style="color: #000000">.</span><span style="color: #0070C1">TOKEN</span><span style="color: #000000">)</span>
-</code></pre>
+				<ul>
+					<li><a href="https://github.com/XzFirzal/discord-media-player/blob/main/examples/simple_player.js">Simple Player</a></li>
+					<li><a href="https://github.com/XzFirzal/discord-media-player/blob/main/examples/simple_music_bot.js">Simple Music Bot</a></li>
+				</ul>
 				<a href="#links" id="links" style="color: inherit; text-decoration: none;">
 					<h2>Links</h2>
 				</a>
@@ -235,7 +172,25 @@
 						<a href="classes/CacheManagerImpl.html" class="tsd-kind-icon">Cache<wbr>Manager<wbr>Impl</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/CacheReader.html" class="tsd-kind-icon">Cache<wbr>Reader</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/CacheWriter.html" class="tsd-kind-icon">Cache<wbr>Writer</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/PacketReader.html" class="tsd-kind-icon">Packet<wbr>Reader</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/Queue.html" class="tsd-kind-icon">Queue</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/QueueHandler.html" class="tsd-kind-icon">Queue<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/QueueManager.html" class="tsd-kind-icon">Queue<wbr>Manager</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/Track.html" class="tsd-kind-icon">Track</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/AudioManagerEvents.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Events</a>
@@ -251,6 +206,42 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/Packet.html" class="tsd-kind-icon">Packet</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/TrackResolvable.html" class="tsd-kind-icon">Track<wbr>Resolvable</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/soundcloudSearchOptions.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/soundcloudSearchResult.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/youtubeSearchOptions.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#AudioManagerResolvable" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#soundcloudMetadata" class="tsd-kind-icon">soundcloud<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#soundcloudSearchResultType" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#youtubeMetadata" class="tsd-kind-icon">youtube<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#youtubeSearchResultType" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="modules.html#version" class="tsd-kind-icon">version</a>
