@@ -1,4 +1,4 @@
-import type { WriteStream } from "fs"
+import type { opus } from "prism-media"
 import type { Resource } from "../util/Resource"
 import type { TransformCallback } from "stream"
 
@@ -18,16 +18,16 @@ export class CacheWriter extends Transform {
   /**
    * @internal
    */
-  private _cache?: WriteStream
+  private _cache?: opus.Encoder
   /**
    * @internal
    */
   private _awaitDrain?: TransformCallback
 
   /**
-   * The cache writable stream
+   * The cache OpusEncoder stream
    */
-  get writeStream(): WriteStream {
+  get writeStream(): opus.Encoder {
     return this._cache
   }
 

@@ -333,7 +333,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
     this._checkPlaying()
     
     const player = this._resource.player
-    this._abort()
+    this._audio.unpipe()
 
     const audioResource = this._createAudioResource()
 

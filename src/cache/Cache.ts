@@ -1,33 +1,14 @@
 import type { Resource } from "../util/Resource"
-import type { ReadStream, WriteStream} from "fs"
 
-import { unlink } from "fs/promises"
+import { opus } from "prism-media"
+import { pipeline } from "stream"
+import { noop } from "../util/noop"
 import { join as pathJoin } from "path"
+import { unlink, open } from "fs/promises"
+import { CacheReader } from "./CacheReader"
+import { mkdirSync, createWriteStream} from "fs"
+import { Packet, PacketReader } from "./PacketReader"
 import { PlayerError, ErrorMessages, CacheValidation as validation } from "../validation"
-import { mkdirSync, createWriteStream, createReadStream } from "fs"
-
-const Bps = 192000
-
-function stableCalculate(seconds: number): number {
-  if (!seconds) return 0
-  if (Number.isInteger(seconds)) return seconds * Bps
-
-  const base = Math.floor(seconds)
-  let result = String(base)
-
-  if (seconds >= base + .9) result += "9"
-  else if (seconds >= base + .8) result += "8"
-  else if (seconds >= base + .7) result += "7"
-  else if (seconds >= base + .6) result += "6"
-  else if (seconds >= base + .5) result += "5"
-  else if (seconds >= base + .4) result += "4"
-  else if (seconds >= base + .3) result += "3"
-  else if (seconds >= base + .2) result += "2"
-  else if (seconds >= base + .1) result += "1"
-  else result += "0"
-
-  return Math.floor((Number(result) * Bps) / 10)
-}
 
 /**
  * The options for cache instance
@@ -51,13 +32,17 @@ export class Cache {
   private basePath: string
 
   /**
-   * The directory of the cache
+   * @internal
    */
-  private readonly dir: string
+  private readonly _dir: string
   /**
    * @internal
    */
   private readonly _timeouts = new Map<string, NodeJS.Timeout>()
+  /**
+   * @internal
+   */
+  private readonly _packets = new Map<string, Array<Packet>>()
   /**
    * @internal
    */
@@ -72,14 +57,14 @@ export class Cache {
    */
   constructor(dir: string) {
     validation.validateDir(dir)
-    this.dir = dir
+    this._dir = dir
   }
 
   /**
    * The full path of base directory and directory
    */
   get path(): string {
-    return pathJoin(this.basePath, this.dir)
+    return pathJoin(this.basePath, this._dir)
   }
 
   /**
@@ -101,18 +86,20 @@ export class Cache {
    * Create a new cache
    * @param identifier The audio identifier
    * @param resource The audio resource
-   * @returns The writable stream to write cache
+   * @returns The OpusEncoder stream to compress and write cache
    */
-  create(identifier: string, resource: Resource): WriteStream | never {
+  create(identifier: string, resource: Resource): opus.Encoder {
     validation.validateIdentifier(identifier)
     validation.validateResource(resource)
 
     this._checkNotExist(identifier)
 
+    const encoder = new opus.Encoder({ rate: 48000, channels: 2, frameSize: 960 })
     const writeStream = createWriteStream(pathJoin(this.path, identifier), { emitClose: true })
 
     this._resources.set(identifier, resource)
     this._timeouts.set(identifier, setTimeout(this._deleteCache.bind(this, identifier), this.timeout))
+    this._packets.set(identifier, [])
     this._users.set(identifier, 0)
 
     resource.cacheWriter.on("play", this._addUser.bind(this, identifier))
@@ -125,31 +112,39 @@ export class Cache {
       }
     })
 
-    return writeStream
+    pipeline(encoder, new PacketReader(this._packets.get(identifier)), writeStream, noop)
+
+    return encoder
   }
 
   /**
    * Read an existing cache
    * @param identifier The audio identifier
    * @param startOnSeconds Start reading cache on specific second of audio
-   * @returns The readable stream of audio
+   * @returns The OpusDecoder stream of audio
    */
-  read(identifier: string, startOnSeconds = 0): ReadStream | never {
+  read(identifier: string, startOnSeconds = 0): opus.Decoder {
     validation.validateIdentifier(identifier)
     validation.validateSeconds(startOnSeconds)
 
     this._checkExist(identifier)
 
-    const readStream = createReadStream(pathJoin(this.path, identifier), { start: stableCalculate(startOnSeconds), emitClose: true })
+    const file = open(pathJoin(this.path, identifier), "r")
+    const reader = new CacheReader(this._packets.get(identifier), file, Math.floor(startOnSeconds * 1000))
+    const decoder = new opus.Decoder({ rate: 48000, channels: 2, frameSize: 960 })
 
     this._addUser(identifier)
 
-    readStream.once("close", () => {
+    reader.once("close", async () => await (await file).close())
+
+    decoder.once("close", () => {
       this._removeUser(identifier)
-      readStream.destroy()
+      reader.destroy()
     })
 
-    return readStream
+    pipeline(reader, decoder, noop)
+
+    return decoder
   }
 
   /**
@@ -167,7 +162,7 @@ export class Cache {
    * @param identifier The audio identifier
    * @returns The audio resource
    */
-  getResource(identifier: string): Resource | never {
+  getResource(identifier: string): Resource {
     validation.validateIdentifier(identifier)
     this._checkExist(identifier)
 
