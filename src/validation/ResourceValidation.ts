@@ -9,6 +9,8 @@ function validatePlayerOption(player: AudioPlayer): void {
   if (typeof player !== "object" || player === null) throw new PlayerError(ErrorMessages.Expecting("object", "ResourceOptions.player", player === null ? "null" : typeof player))
 
   if (!("manager" in player)) throw new PlayerError(ErrorMessages.NotProvided("manager", "ResourceOptions.player"))
+  if (!("guildID" in player)) throw new PlayerError(ErrorMessages.NotProvided("guildID", "ResourceOptions.player"))
+  
   if (!("status" in player)) throw new PlayerError(ErrorMessages.NotProvided("status", "ResourceOptions.player"))
   else if (typeof player.status !== "string") throw new PlayerError(ErrorMessages.Expecting("string", "ResourceOptions.player.status", typeof player.status))
 
@@ -89,6 +91,8 @@ export function validatePlayer(player: AudioPlayer): void {
   if (typeof player !== "object" || player === null) throw new PlayerError(ErrorMessages.Expecting("object", "Resource.player", player === null ? "null" : typeof player))
 
   if (!("manager" in player)) throw new PlayerError(ErrorMessages.NotProvided("manager", "Resource.player"))
+  if (!("guildID" in player)) throw new PlayerError(ErrorMessages.NotProvided("guildID", "Resource.player"))
+
   if (!("status" in player)) throw new PlayerError(ErrorMessages.NotProvided("status", "Resource.player"))
   else if (typeof player.status !== "string") throw new PlayerError(ErrorMessages.Expecting("string", "Resource.player.status", typeof player.status))
 

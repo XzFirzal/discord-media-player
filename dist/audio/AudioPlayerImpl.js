@@ -49,11 +49,12 @@ const FILTER_FFMPEG_ARGS = [
 /**
  * The default implementation of {@link AudioPlayer | AudioPlayer}
  */
-class AudioPlayerImpl {
+class AudioPlayerImpl extends events_1.EventEmitter {
     /**
      * @internal
      */
     constructor() {
+        super();
         /**
          * @internal
          */
@@ -126,22 +127,22 @@ class AudioPlayerImpl {
         connection.subscribe(this._player);
         this._connection = connection;
         // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const player = this;
+        const self = this;
         function onConnectionChange(oldState, newState) {
-            const closeOrDestroyed = [voice_1.VoiceConnectionStatus.Disconnected, voice_1.VoiceConnectionStatus.Destroyed];
-            if (!closeOrDestroyed.includes(oldState.status) && closeOrDestroyed.includes(newState.status)) {
+            if (oldState.status !== voice_1.VoiceConnectionStatus.Destroyed && newState.status === voice_1.VoiceConnectionStatus.Destroyed) {
                 connection.off("stateChange", onConnectionChange);
-                player.manager._deletePlayerIfExist(player.guildID);
-                const subscription = player._connection.state.subscription;
+                self.manager._deletePlayerIfExist(self.guildID);
+                const subscription = self._connection.state.subscription;
                 subscription?.unsubscribe();
-                if (player._playing) {
-                    if (player._resource.player === player && player.manager.cache && !player._resource.isLive)
-                        player._resource.audio.unpipe();
-                    player._disconnected = true;
-                    player._player.stop();
+                if (self._playing) {
+                    if (self._resource.player === self && self.manager.cache && !self._resource.isLive)
+                        self._resource.audio.unpipe();
+                    self._disconnected = true;
+                    self._player.stop();
                 }
-                player._connection = null;
-                player._cleanup();
+                self.emit("unlink");
+                self._connection = null;
+                self._cleanup();
             }
             else if (oldState.subscription && !newState.subscription) {
                 connection.off("stateChange", onConnectionChange);
@@ -162,6 +163,7 @@ class AudioPlayerImpl {
             this._disconnected = true;
             this._player.stop();
         }
+        this.emit("unlink");
         this._connection = null;
         this._cleanup();
     }
@@ -217,7 +219,7 @@ class AudioPlayerImpl {
     pause(pauseOrUnpause) {
         this._checkPlaying();
         if ((typeof pauseOrUnpause === "boolean" && pauseOrUnpause === false) ||
-            ([voice_1.AudioPlayerStatus.Paused, voice_1.AudioPlayerStatus.AutoPaused].includes(this.status) && pauseOrUnpause !== true)) {
+            ([voice_1.AudioPlayerStatus.Paused].includes(this.status) && pauseOrUnpause !== true)) {
             this._player.unpause();
             return false;
         }
@@ -229,7 +231,7 @@ class AudioPlayerImpl {
     filter() {
         this._checkPlaying();
         const player = this._resource.player;
-        this._abort();
+        this._audio.unpipe();
         const audioResource = this._createAudioResource();
         if (player !== this && !this._resource.allCached)
             this._playResourceOnEnd = true;
@@ -282,8 +284,10 @@ class AudioPlayerImpl {
         validation_1.AudioPlayerValidation.validateSourceType(sourceType);
         this._checkNotPlaying();
         await this._getResource(urlOrLocation, sourceType);
-        if (!this._resource)
+        if (!this._resource) {
+            this.emit("end");
             return;
+        }
         this._playing = true;
         this._sourceType = sourceType;
         this._urlOrLocation = urlOrLocation;
@@ -405,7 +409,7 @@ class AudioPlayerImpl {
     async _getYoutubeResource(url) {
         const identifier = ytdl_core_1.getVideoID(url);
         if (this.manager.cache?.youtube.hasCache(identifier)) {
-            this._resource = this.manager.cache.youtube.getResource(identifier);
+            this._resource = await this.manager.cache.youtube.getResource(identifier);
             return;
         }
         function getOpusFormat(format) {
@@ -538,7 +542,7 @@ class AudioPlayerImpl {
             this._info = info;
         const identifier = String(info.id);
         if (this.manager.cache?.soundcloud.hasCache(identifier)) {
-            this._resource = this.manager.cache.soundcloud.getResource(identifier);
+            this._resource = await this.manager.cache.soundcloud.getResource(identifier);
             return;
         }
         let transcoding = getOpusMedia(info.media.transcodings);
@@ -598,7 +602,7 @@ class AudioPlayerImpl {
         const identifier = await fileHandle.stat({ bigint: true }).then((stat) => String(stat.ino));
         await fileHandle.close();
         if (this.manager.cache?.local.hasCache(identifier)) {
-            this._resource = this.manager.cache.local.getResource(identifier);
+            this._resource = await this.manager.cache.local.getResource(identifier);
             return;
         }
         const { stream, type } = await voice_1.demuxProbe(fs_1.createReadStream(location));
@@ -630,6 +634,11 @@ class AudioPlayerImpl {
      * @internal
      */
     async _onAudioChange(oldState, newState) {
+        const paused = [voice_1.AudioPlayerStatus.Paused, voice_1.AudioPlayerStatus.AutoPaused];
+        if (!paused.includes(oldState.status) && paused.includes(newState.status))
+            this.emit("pause");
+        else if (paused.includes(oldState.status) && !paused.includes(newState.status))
+            this.emit("unpause");
         if (oldState.status === voice_1.AudioPlayerStatus.Paused && newState.status === voice_1.AudioPlayerStatus.Playing && this._switchToCache) {
             this._playCache(this._switchToCache);
             this._switchToCache = 0;
@@ -663,6 +672,7 @@ class AudioPlayerImpl {
                         await this._getYoutubeResource(this._urlOrLocation);
                         if (this._looping || (this._resource.isLive && !stopping)) {
                             if (this._looping && !(this._resource.isLive && !stopping)) {
+                                this.emit("end");
                                 this.manager.emit("audioStart", this.guildID, this._urlOrLocation);
                                 this.manager.emit("audioEnd", this.guildID, this._urlOrLocation);
                             }
@@ -672,11 +682,13 @@ class AudioPlayerImpl {
                         }
                     }
                     else if (this._looping) {
+                        this.emit("end");
                         this.manager.emit("audioEnd", this.guildID, this._urlOrLocation);
                         if (this.manager.cache) {
                             if (this._resource.cacheWriter.destroyed && !this._resource.allCached) {
                                 this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode_1.ErrorCode.noResource);
                                 this._cleanup();
+                                this.emit("end");
                                 return;
                             }
                             this._playCache();
@@ -694,6 +706,7 @@ class AudioPlayerImpl {
                         return;
                     }
                 }
+                this.emit("end");
                 this.manager.emit("audioEnd", this.guildID, this._urlOrLocation);
                 this._cleanup();
             }
@@ -730,3 +743,23 @@ class AudioPlayerImpl {
     }
 }
 exports.AudioPlayerImpl = AudioPlayerImpl;
+/**
+ * Emitted when player is unlinked from connection
+ * @event
+ */
+AudioPlayerImpl.UNLINK = "unlink";
+/**
+ * Emitted whenever player is paused
+ * @event
+ */
+AudioPlayerImpl.PAUSE = "pause";
+/**
+ * Emitted whenever player is unpaused
+ * @event
+ */
+AudioPlayerImpl.UNPAUSE = "unpause";
+/**
+ * Emitted whenever an audio is ended
+ * @event
+ */
+AudioPlayerImpl.END = "end";

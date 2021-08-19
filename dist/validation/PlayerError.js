@@ -142,6 +142,13 @@ var ErrorMessages;
         };
     }
     ErrorMessages.CacheNotExist = CacheNotExist;
+    /**
+     * Error when queue is empty while trying to start queue cycle
+     */
+    ErrorMessages.QueueEmpty = {
+        message: "Queue is empty",
+        code: 40
+    };
 })(ErrorMessages = exports.ErrorMessages || (exports.ErrorMessages = {}));
 /**
  * Custom error for discord-media-player

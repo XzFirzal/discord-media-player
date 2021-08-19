@@ -22,7 +22,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SkipperValidation = exports.ResourceValidation = exports.CacheWriterValidation = exports.CacheManagerValidation = exports.CacheValidation = exports.AudioPlayerValidation = exports.AudioManagerValidation = void 0;
+exports.TrackValidation = exports.QueueValidation = exports.QueueHandlerValidation = exports.QueueManagerValidation = exports.SkipperValidation = exports.ResourceValidation = exports.CacheWriterValidation = exports.CacheManagerValidation = exports.CacheValidation = exports.AudioPlayerValidation = exports.AudioManagerValidation = void 0;
 __exportStar(require("./PlayerError"), exports);
 exports.AudioManagerValidation = __importStar(require("./ManagerValidation"));
 exports.AudioPlayerValidation = __importStar(require("./PlayerValidation"));
@@ -31,3 +31,7 @@ exports.CacheManagerValidation = __importStar(require("./CacheManagerValidation"
 exports.CacheWriterValidation = __importStar(require("./CacheWriterValidation"));
 exports.ResourceValidation = __importStar(require("./ResourceValidation"));
 exports.SkipperValidation = __importStar(require("./SkipperValidation"));
+exports.QueueManagerValidation = __importStar(require("./QueueManagerValidation"));
+exports.QueueHandlerValidation = __importStar(require("./QueueHandlerValidation"));
+exports.QueueValidation = __importStar(require("./QueueValidation"));
+exports.TrackValidation = __importStar(require("./TrackValidation"));

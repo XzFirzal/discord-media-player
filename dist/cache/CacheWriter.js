@@ -9,7 +9,7 @@ const Bps = 192000;
  */
 class CacheWriter extends stream_1.Transform {
     /**
-     * The cache writable stream
+     * The cache OpusEncoder stream
      */
     get writeStream() {
         return this._cache;

@@ -61,6 +61,8 @@ export function validatePlayer(player: AudioPlayer): void {
   if (typeof player !== "object" || player === null) throw new PlayerError(ErrorMessages.Expecting("object", "AudioManager.createAudioPlayer()", player === null ? "null" : typeof player))
 
   if (!("manager" in player)) throw new PlayerError(ErrorMessages.NotProvided("manager", "AudioManager.createAudioPlayer()"))
+  if (!("guildID" in player)) throw new PlayerError(ErrorMessages.NotProvided("guildID", "AudioManager.createAudioPlayer()"))
+
   if (!("status" in player)) throw new PlayerError(ErrorMessages.NotProvided("status", "AudioManager.createAudioPlayer()"))
   else if (typeof player.status !== "string") throw new PlayerError(ErrorMessages.Expecting("string", "AudioManager.createAudioPlayer().status", typeof player.status))
 

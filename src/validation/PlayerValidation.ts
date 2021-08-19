@@ -115,7 +115,6 @@ export function validateFilters(filter?: Filters): void {
  */
 export function validateVolume(volume: number): void {
   if (typeof volume !== "number") throw new PlayerError(ErrorMessages.Expecting("number", "AudioPlayer.volume", typeof volume))
-  if (!Number.isInteger(volume)) throw new PlayerError(ErrorMessages.NotInteger(volume))
 }
 
 /**
