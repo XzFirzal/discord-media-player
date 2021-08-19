@@ -1,40 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cache = void 0;
-const promises_1 = require("fs/promises");
+const prism_media_1 = require("prism-media");
+const stream_1 = require("stream");
+const noop_1 = require("../util/noop");
 const path_1 = require("path");
-const validation_1 = require("../validation");
+const promises_1 = require("fs/promises");
+const CacheReader_1 = require("./CacheReader");
 const fs_1 = require("fs");
-const Bps = 192000;
-function stableCalculate(seconds) {
-    if (!seconds)
-        return 0;
-    if (Number.isInteger(seconds))
-        return seconds * Bps;
-    const base = Math.floor(seconds);
-    let result = String(base);
-    if (seconds >= base + .9)
-        result += "9";
-    else if (seconds >= base + .8)
-        result += "8";
-    else if (seconds >= base + .7)
-        result += "7";
-    else if (seconds >= base + .6)
-        result += "6";
-    else if (seconds >= base + .5)
-        result += "5";
-    else if (seconds >= base + .4)
-        result += "4";
-    else if (seconds >= base + .3)
-        result += "3";
-    else if (seconds >= base + .2)
-        result += "2";
-    else if (seconds >= base + .1)
-        result += "1";
-    else
-        result += "0";
-    return Math.floor((Number(result) * Bps) / 10);
-}
+const PacketReader_1 = require("./PacketReader");
+const validation_1 = require("../validation");
 /**
  * The cache instance to manage cache for a source
  */
@@ -50,19 +25,23 @@ class Cache {
         /**
          * @internal
          */
+        this._packets = new Map();
+        /**
+         * @internal
+         */
         this._resources = new Map();
         /**
          * @internal
          */
         this._users = new Map();
         validation_1.CacheValidation.validateDir(dir);
-        this.dir = dir;
+        this._dir = dir;
     }
     /**
      * The full path of base directory and directory
      */
     get path() {
-        return path_1.join(this.basePath, this.dir);
+        return path_1.join(this.basePath, this._dir);
     }
     /**
      * Set the options for cache
@@ -81,15 +60,17 @@ class Cache {
      * Create a new cache
      * @param identifier The audio identifier
      * @param resource The audio resource
-     * @returns The writable stream to write cache
+     * @returns The OpusEncoder stream to compress and write cache
      */
     create(identifier, resource) {
         validation_1.CacheValidation.validateIdentifier(identifier);
         validation_1.CacheValidation.validateResource(resource);
         this._checkNotExist(identifier);
+        const encoder = new prism_media_1.opus.Encoder({ rate: 48000, channels: 2, frameSize: 960 });
         const writeStream = fs_1.createWriteStream(path_1.join(this.path, identifier), { emitClose: true });
         this._resources.set(identifier, resource);
         this._timeouts.set(identifier, setTimeout(this._deleteCache.bind(this, identifier), this.timeout));
+        this._packets.set(identifier, []);
         this._users.set(identifier, 0);
         resource.cacheWriter.on("play", this._addUser.bind(this, identifier));
         resource.cacheWriter.on("stop", this._removeUser.bind(this, identifier));
@@ -100,25 +81,30 @@ class Cache {
                 this._deleteCache(identifier);
             }
         });
-        return writeStream;
+        stream_1.pipeline(encoder, new PacketReader_1.PacketReader(this._packets.get(identifier)), writeStream, noop_1.noop);
+        return encoder;
     }
     /**
      * Read an existing cache
      * @param identifier The audio identifier
      * @param startOnSeconds Start reading cache on specific second of audio
-     * @returns The readable stream of audio
+     * @returns The OpusDecoder stream of audio
      */
     read(identifier, startOnSeconds = 0) {
         validation_1.CacheValidation.validateIdentifier(identifier);
         validation_1.CacheValidation.validateSeconds(startOnSeconds);
         this._checkExist(identifier);
-        const readStream = fs_1.createReadStream(path_1.join(this.path, identifier), { start: stableCalculate(startOnSeconds), emitClose: true });
+        const file = promises_1.open(path_1.join(this.path, identifier), "r");
+        const reader = new CacheReader_1.CacheReader(this._packets.get(identifier), file, Math.floor(startOnSeconds * 1000));
+        const decoder = new prism_media_1.opus.Decoder({ rate: 48000, channels: 2, frameSize: 960 });
         this._addUser(identifier);
-        readStream.once("close", () => {
+        reader.once("close", async () => await (await file).close());
+        decoder.once("close", () => {
             this._removeUser(identifier);
-            readStream.destroy();
+            reader.destroy();
         });
-        return readStream;
+        stream_1.pipeline(reader, decoder, noop_1.noop);
+        return decoder;
     }
     /**
      * Check if cache exist

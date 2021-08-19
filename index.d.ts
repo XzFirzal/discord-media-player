@@ -4,7 +4,7 @@
 //   ytdl-core
 //   soundcloud-downloader
 //   events
-//   fs
+//   prism-media
 //   stream
 //   axios
 //   m3u8stream
@@ -429,7 +429,7 @@ declare module 'discord-media-player/dist/audio/AudioPlayerImpl' {
 
 declare module 'discord-media-player/dist/cache/Cache' {
     import type { Resource } from "discord-media-player/dist/util/Resource";
-    import type { ReadStream, WriteStream } from "fs";
+    import { opus } from "prism-media";
     /**
         * The options for cache instance
         */
@@ -462,16 +462,16 @@ declare module 'discord-media-player/dist/cache/Cache' {
                 * Create a new cache
                 * @param identifier The audio identifier
                 * @param resource The audio resource
-                * @returns The writable stream to write cache
+                * @returns The OpusEncoder stream to compress and write cache
                 */
-            create(identifier: string, resource: Resource): WriteStream | never;
+            create(identifier: string, resource: Resource): opus.Encoder;
             /**
                 * Read an existing cache
                 * @param identifier The audio identifier
                 * @param startOnSeconds Start reading cache on specific second of audio
-                * @returns The readable stream of audio
+                * @returns The OpusDecoder stream of audio
                 */
-            read(identifier: string, startOnSeconds?: number): ReadStream | never;
+            read(identifier: string, startOnSeconds?: number): opus.Decoder;
             /**
                 * Check if cache exist
                 * @param identifier The audio identifier
@@ -483,7 +483,7 @@ declare module 'discord-media-player/dist/cache/Cache' {
                 * @param identifier The audio identifier
                 * @returns The audio resource
                 */
-            getResource(identifier: string): Resource | never;
+            getResource(identifier: string): Resource;
     }
 }
 
@@ -566,7 +566,7 @@ declare module 'discord-media-player/dist/cache/CacheManagerImpl' {
 }
 
 declare module 'discord-media-player/dist/cache/CacheWriter' {
-    import type { WriteStream } from "fs";
+    import type { opus } from "prism-media";
     import type { Resource } from "discord-media-player/dist/util/Resource";
     import type { TransformCallback } from "stream";
     import { Transform } from "stream";
@@ -575,9 +575,9 @@ declare module 'discord-media-player/dist/cache/CacheWriter' {
         */
     export class CacheWriter extends Transform {
             /**
-                * The cache writable stream
+                * The cache OpusEncoder stream
                 */
-            get writeStream(): WriteStream;
+            get writeStream(): opus.Encoder;
             /**
                 * Set the audio resource
                 * @param resource The audio resource

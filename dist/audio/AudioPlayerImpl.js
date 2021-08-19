@@ -231,7 +231,7 @@ class AudioPlayerImpl extends events_1.EventEmitter {
     filter() {
         this._checkPlaying();
         const player = this._resource.player;
-        this._abort();
+        this._audio.unpipe();
         const audioResource = this._createAudioResource();
         if (player !== this && !this._resource.allCached)
             this._playResourceOnEnd = true;
