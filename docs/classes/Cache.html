@@ -92,7 +92,6 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Cache.html#basePath" class="tsd-kind-icon">base<wbr>Path</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="Cache.html#dir" class="tsd-kind-icon">dir</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="Cache.html#timeout" class="tsd-kind-icon">timeout</a></li>
 							</ul>
 						</section>
@@ -127,7 +126,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L73">src/cache/Cache.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L58">src/cache/Cache.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -154,27 +153,12 @@
 					<div class="tsd-signature tsd-kind-icon">base<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L51">src/cache/Cache.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L32">src/cache/Cache.ts:32</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The base directory of the cache</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="dir" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> dir</h3>
-					<div class="tsd-signature tsd-kind-icon">dir<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L56">src/cache/Cache.ts:56</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The directory of the cache</p>
 						</div>
 					</div>
 				</section>
@@ -184,7 +168,7 @@
 					<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L47">src/cache/Cache.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L28">src/cache/Cache.ts:28</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -206,7 +190,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L81">src/cache/Cache.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L66">src/cache/Cache.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -225,13 +209,13 @@
 					<a name="create" class="tsd-anchor"></a>
 					<h3>create</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>identifier<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, resource<span class="tsd-signature-symbol">: </span><a href="Util.Resource.html" class="tsd-signature-type" data-tsd-kind="Class">Resource</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WriteStream</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>identifier<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, resource<span class="tsd-signature-symbol">: </span><a href="Util.Resource.html" class="tsd-signature-type" data-tsd-kind="Class">Resource</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Encoder</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L106">src/cache/Cache.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L91">src/cache/Cache.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -254,8 +238,8 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">WriteStream</span></h4>
-							<p>The writable stream to write cache</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Encoder</span></h4>
+							<p>The OpusEncoder stream to compress and write cache</p>
 						</li>
 					</ul>
 				</section>
@@ -269,7 +253,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L170">src/cache/Cache.ts:170</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L165">src/cache/Cache.ts:165</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -301,7 +285,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L160">src/cache/Cache.ts:160</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L155">src/cache/Cache.ts:155</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -327,13 +311,13 @@
 					<a name="read" class="tsd-anchor"></a>
 					<h3>read</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">read<span class="tsd-signature-symbol">(</span>identifier<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, startOnSeconds<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadStream</span></li>
+						<li class="tsd-signature tsd-kind-icon">read<span class="tsd-signature-symbol">(</span>identifier<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, startOnSeconds<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Decoder</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L137">src/cache/Cache.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L126">src/cache/Cache.ts:126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -356,8 +340,8 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReadStream</span></h4>
-							<p>The readable stream of audio</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Decoder</span></h4>
+							<p>The OpusDecoder stream of audio</p>
 						</li>
 					</ul>
 				</section>
@@ -371,7 +355,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L89">src/cache/Cache.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/cache/Cache.ts#L74">src/cache/Cache.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -421,9 +405,6 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="Cache.html#basePath" class="tsd-kind-icon">base<wbr>Path</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="Cache.html#dir" class="tsd-kind-icon">dir</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="Cache.html#timeout" class="tsd-kind-icon">timeout</a>
 							</li>
@@ -453,7 +434,25 @@
 						<a href="CacheManagerImpl.html" class="tsd-kind-icon">Cache<wbr>Manager<wbr>Impl</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="CacheReader.html" class="tsd-kind-icon">Cache<wbr>Reader</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="CacheWriter.html" class="tsd-kind-icon">Cache<wbr>Writer</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="PacketReader.html" class="tsd-kind-icon">Packet<wbr>Reader</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="Queue.html" class="tsd-kind-icon">Queue</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="QueueHandler.html" class="tsd-kind-icon">Queue<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="QueueManager.html" class="tsd-kind-icon">Queue<wbr>Manager</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="Track.html" class="tsd-kind-icon">Track</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/AudioManagerEvents.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Events</a>
@@ -469,6 +468,42 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/Packet.html" class="tsd-kind-icon">Packet</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="../interfaces/TrackResolvable.html" class="tsd-kind-icon">Track<wbr>Resolvable</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/soundcloudSearchOptions.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/soundcloudSearchResult.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/youtubeSearchOptions.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../modules.html#AudioManagerResolvable" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../modules.html#soundcloudMetadata" class="tsd-kind-icon">soundcloud<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../modules.html#soundcloudSearchResultType" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../modules.html#youtubeMetadata" class="tsd-kind-icon">youtube<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../modules.html#youtubeSearchResultType" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../modules.html#version" class="tsd-kind-icon">version</a>
