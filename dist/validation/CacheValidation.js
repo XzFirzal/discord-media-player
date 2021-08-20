@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateSeconds = exports.validateResource = exports.validateIdentifier = exports.validateOptions = exports.validateDir = void 0;
+exports.validateDecoder = exports.validateSeconds = exports.validateResource = exports.validateIdentifier = exports.validateOptions = exports.validateDir = void 0;
 const PlayerError_1 = require("./PlayerError");
 const Resource_1 = require("../util/Resource");
+const prism_media_1 = require("prism-media");
 /**
  * Validate the cache directory
  * @param dir The cache directory
@@ -61,3 +62,10 @@ function validateSeconds(seconds) {
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("number", "Cache.seconds", typeof seconds));
 }
 exports.validateSeconds = validateSeconds;
+function validateDecoder(decoder) {
+    if (typeof decoder !== "object" || decoder === null)
+        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("object", "Cache.getReader.decoder", decoder === null ? "null" : typeof decoder));
+    else if (!(decoder instanceof prism_media_1.opus.Decoder))
+        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("OpusDecoder", "Cache.getReader.decoder", decoder));
+}
+exports.validateDecoder = validateDecoder;

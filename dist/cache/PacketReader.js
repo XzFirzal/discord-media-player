@@ -27,7 +27,7 @@ class PacketReader extends stream_1.Transform {
         this.push(packet);
         this._packets.push({
             size: packet.length,
-            frames: frameCount
+            frames: packet.length <= 3 ? 0 : frameCount
         });
         cb();
     }

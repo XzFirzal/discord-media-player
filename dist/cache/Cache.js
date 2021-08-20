@@ -34,6 +34,10 @@ class Cache {
          * @internal
          */
         this._users = new Map();
+        /**
+         * @internal
+         */
+        this._reader = new Map();
         validation_1.CacheValidation.validateDir(dir);
         this._dir = dir;
     }
@@ -97,9 +101,11 @@ class Cache {
         const file = promises_1.open(path_1.join(this.path, identifier), "r");
         const reader = new CacheReader_1.CacheReader(this._packets.get(identifier), file, Math.floor(startOnSeconds * 1000));
         const decoder = new prism_media_1.opus.Decoder({ rate: 48000, channels: 2, frameSize: 960 });
+        this._reader.set(decoder, reader);
         this._addUser(identifier);
         reader.once("close", async () => await (await file).close());
         decoder.once("close", () => {
+            this._reader.delete(decoder);
             this._removeUser(identifier);
             reader.destroy();
         });
@@ -124,6 +130,15 @@ class Cache {
         validation_1.CacheValidation.validateIdentifier(identifier);
         this._checkExist(identifier);
         return this._resources.get(identifier);
+    }
+    /**
+     * Get the cache reader of decoder from cache
+     * @param decoder The opus decoder
+     * @returns The cache reader
+     */
+    getReader(decoder) {
+        validation_1.CacheValidation.validateDecoder(decoder);
+        return this._reader.get(decoder);
     }
     /**
      * @internal

@@ -2,10 +2,9 @@
 var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Track = void 0;
-/* eslint-disable @typescript-eslint/ban-types */
 const validation_1 = require("../validation");
 const kTrack = Symbol("kTrack");
-const kStart = Symbol("kStart");
+const kPlayer = Symbol("kPlayer");
 const kPauses = Symbol("kPauses");
 const kUnpauses = Symbol("kUnpauses");
 /**
@@ -43,9 +42,7 @@ class Track {
      * The playback duration of the track (if playing)
      */
     get playbackDuration() {
-        const now = Date.now();
-        const start = this[kStart] ?? now;
-        return now - start - this.pausedDuration;
+        return this[kPlayer]?.playbackDuration ?? 0;
     }
     /**
      * The paused duration of the track (if playing and paused atleast once)
@@ -76,12 +73,12 @@ class Track {
         this[kTrack].metadata[key] = value;
     }
     /**
-     * Set the starting timestamp if track is started to playing
-     * @param start The starting timestamp
+     * Set the audio player which play the track
+     * @param player The audio player
      */
-    setStart(start) {
-        validation_1.TrackValidation.validateNumber("start", start);
-        this[kStart] = start;
+    setPlayer(player) {
+        validation_1.TrackValidation.validatePlayer(player);
+        this[kPlayer] = player;
     }
     /**
      * Add a pause timestamp when track is paused
@@ -103,7 +100,7 @@ class Track {
      * Cleanup timestamps after track is stopped playing
      */
     cleanup() {
-        this[kStart] = null;
+        this[kPlayer] = null;
         this[kPauses].length = 0;
         this[kUnpauses].length = 0;
     }

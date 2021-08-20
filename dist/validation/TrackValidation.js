@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateNumber = exports.validateTrack = void 0;
+exports.validatePlayer = exports.validateNumber = exports.validateTrack = void 0;
+const PlayerValidation_1 = require("./PlayerValidation");
 const PlayerError_1 = require("./PlayerError");
 // eslint-disable-next-line @typescript-eslint/ban-types
 function validateTrack(track) {
@@ -25,3 +26,7 @@ function validateNumber(where, value) {
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotInteger(value));
 }
 exports.validateNumber = validateNumber;
+function validatePlayer(player) {
+    PlayerValidation_1.validatePlayer(player, "Track.player");
+}
+exports.validatePlayer = validatePlayer;

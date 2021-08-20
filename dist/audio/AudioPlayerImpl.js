@@ -114,6 +114,18 @@ class AudioPlayerImpl extends events_1.EventEmitter {
     /**
      * @internal
      */
+    get playbackDuration() {
+        return !this.playing
+            ? 0
+            : this._resource.player === this
+                ? Math.floor(this._resource.cachedSecond * 1000)
+                : this._audio instanceof prism_media_1.default.opus.Decoder
+                    ? this._resource.cache.getReader(this._audio)?.packetRead ?? 0
+                    : 0;
+    }
+    /**
+     * @internal
+     */
     setManager(manager) {
         validation_1.AudioPlayerValidation.validateManager(manager);
         this.manager = manager;
