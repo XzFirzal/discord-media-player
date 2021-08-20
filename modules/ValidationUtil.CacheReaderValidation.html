@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>QueueManagerValidation | discord-media-player</title>
+	<title>CacheReaderValidation | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="ValidationUtil.html">ValidationUtil</a>
 				</li>
 				<li>
-					<a href="ValidationUtil.QueueManagerValidation.html">QueueManagerValidation</a>
+					<a href="ValidationUtil.CacheReaderValidation.html">CacheReaderValidation</a>
 				</li>
 			</ul>
-			<h1>Namespace QueueManagerValidation</h1>
+			<h1>Namespace CacheReaderValidation</h1>
 		</div>
 	</div>
 </header>
@@ -73,10 +73,10 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.QueueManagerValidation.html#validateAudioManager" class="tsd-kind-icon">validate<wbr>Audio<wbr>Manager</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.QueueManagerValidation.html#validateConnection" class="tsd-kind-icon">validate<wbr>Connection</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.QueueManagerValidation.html#validateSoundcloudSearchOptions" class="tsd-kind-icon">validate<wbr>Soundcloud<wbr>Search<wbr>Options</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.QueueManagerValidation.html#validateYoutubeSearchOptions" class="tsd-kind-icon">validate<wbr>Youtube<wbr>Search<wbr>Options</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.CacheReaderValidation.html#validateFile" class="tsd-kind-icon">validate<wbr>File</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.CacheReaderValidation.html#validateFileHandle" class="tsd-kind-icon">validate<wbr>File<wbr>Handle</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.CacheReaderValidation.html#validateMs" class="tsd-kind-icon">validate<wbr>Ms</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.CacheReaderValidation.html#validatePackets" class="tsd-kind-icon">validate<wbr>Packets</a></li>
 							</ul>
 						</section>
 					</div>
@@ -85,22 +85,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="validateAudioManager" class="tsd-anchor"></a>
-					<h3>validate<wbr>Audio<wbr>Manager</h3>
+					<a name="validateFile" class="tsd-anchor"></a>
+					<h3>validate<wbr>File</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">validate<wbr>Audio<wbr>Manager<span class="tsd-signature-symbol">(</span>audioManager<span class="tsd-signature-symbol">: </span><a href="../classes/AudioManager.html" class="tsd-signature-type" data-tsd-kind="Class">AudioManager</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>File<span class="tsd-signature-symbol">(</span>file<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">FileHandle</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/QueueManagerValidation.ts#L7">src/validation/QueueManagerValidation.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/CacheReaderValidation.ts#L21">src/validation/CacheReaderValidation.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>audioManager: <a href="../classes/AudioManager.html" class="tsd-signature-type" data-tsd-kind="Class">AudioManager</a></h5>
+									<h5>file: <span class="tsd-signature-type">FileHandle</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -108,22 +108,22 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="validateConnection" class="tsd-anchor"></a>
-					<h3>validate<wbr>Connection</h3>
+					<a name="validateFileHandle" class="tsd-anchor"></a>
+					<h3>validate<wbr>File<wbr>Handle</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">validate<wbr>Connection<span class="tsd-signature-symbol">(</span>connection<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">VoiceConnection</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>File<wbr>Handle<span class="tsd-signature-symbol">(</span>fileHandle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">FileHandle</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/QueueManagerValidation.ts#L11">src/validation/QueueManagerValidation.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/CacheReaderValidation.ts#L11">src/validation/CacheReaderValidation.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>connection: <span class="tsd-signature-type">VoiceConnection</span></h5>
+									<h5>fileHandle: <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">FileHandle</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -131,22 +131,22 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="validateSoundcloudSearchOptions" class="tsd-anchor"></a>
-					<h3>validate<wbr>Soundcloud<wbr>Search<wbr>Options</h3>
+					<a name="validateMs" class="tsd-anchor"></a>
+					<h3>validate<wbr>Ms</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">validate<wbr>Soundcloud<wbr>Search<wbr>Options<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/soundcloudSearchOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">soundcloudSearchOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Ms<span class="tsd-signature-symbol">(</span>ms<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/QueueManagerValidation.ts#L26">src/validation/QueueManagerValidation.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/CacheReaderValidation.ts#L16">src/validation/CacheReaderValidation.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../interfaces/soundcloudSearchOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">soundcloudSearchOptions</a></h5>
+									<h5>ms: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -154,22 +154,22 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="validateYoutubeSearchOptions" class="tsd-anchor"></a>
-					<h3>validate<wbr>Youtube<wbr>Search<wbr>Options</h3>
+					<a name="validatePackets" class="tsd-anchor"></a>
+					<h3>validate<wbr>Packets</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">validate<wbr>Youtube<wbr>Search<wbr>Options<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/youtubeSearchOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">youtubeSearchOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Packets<span class="tsd-signature-symbol">(</span>packets<span class="tsd-signature-symbol">: </span><a href="../interfaces/Packet.html" class="tsd-signature-type" data-tsd-kind="Interface">Packet</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/QueueManagerValidation.ts#L16">src/validation/QueueManagerValidation.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/CacheReaderValidation.ts#L6">src/validation/CacheReaderValidation.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../interfaces/youtubeSearchOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">youtubeSearchOptions</a></h5>
+									<h5>packets: <a href="../interfaces/Packet.html" class="tsd-signature-type" data-tsd-kind="Interface">Packet</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -202,7 +202,7 @@
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.CacheManagerValidation.html">Cache<wbr>Manager<wbr>Validation</a>
 							</li>
-							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+							<li class="current tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.CacheReaderValidation.html">Cache<wbr>Reader<wbr>Validation</a>
 							</li>
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
@@ -220,7 +220,7 @@
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.QueueHandlerValidation.html">Queue<wbr>Handler<wbr>Validation</a>
 							</li>
-							<li class="current tsd-kind-namespace tsd-parent-kind-namespace">
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.QueueManagerValidation.html">Queue<wbr>Manager<wbr>Validation</a>
 							</li>
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
@@ -242,16 +242,16 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.QueueManagerValidation.html#validateAudioManager" class="tsd-kind-icon">validate<wbr>Audio<wbr>Manager</a>
+						<a href="ValidationUtil.CacheReaderValidation.html#validateFile" class="tsd-kind-icon">validate<wbr>File</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.QueueManagerValidation.html#validateConnection" class="tsd-kind-icon">validate<wbr>Connection</a>
+						<a href="ValidationUtil.CacheReaderValidation.html#validateFileHandle" class="tsd-kind-icon">validate<wbr>File<wbr>Handle</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.QueueManagerValidation.html#validateSoundcloudSearchOptions" class="tsd-kind-icon">validate<wbr>Soundcloud<wbr>Search<wbr>Options</a>
+						<a href="ValidationUtil.CacheReaderValidation.html#validateMs" class="tsd-kind-icon">validate<wbr>Ms</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.QueueManagerValidation.html#validateYoutubeSearchOptions" class="tsd-kind-icon">validate<wbr>Youtube<wbr>Search<wbr>Options</a>
+						<a href="ValidationUtil.CacheReaderValidation.html#validatePackets" class="tsd-kind-icon">validate<wbr>Packets</a>
 					</li>
 				</ul>
 			</nav>
