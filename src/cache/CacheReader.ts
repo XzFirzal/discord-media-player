@@ -4,13 +4,17 @@ import type { FileHandle } from "fs/promises"
 import { Readable } from "stream"
 import { CacheReaderValidation as validation } from "../validation"
 
-const highWaterMark = 1 << 16
 const frameSize = 20
 
 /**
  * An instance to appropriately read opus packet
  */
 export class CacheReader extends Readable {
+  /**
+   * How many packets has been read (in ms)
+   */
+  public packetRead = 0
+
   /**
    * @internal
    */
@@ -39,7 +43,7 @@ export class CacheReader extends Readable {
    * @param ms Where to start reading (in ms)
    */
   constructor(packets: Array<Packet>, file: Promise<FileHandle>, ms: number) {
-    super({ highWaterMark })
+    super()
 
     validation.validatePackets(packets)
     validation.validateFileHandle(file)
@@ -74,8 +78,10 @@ export class CacheReader extends Readable {
       return
     }
 
+    this.packetRead += packet.frames * frameSize
     this._position += packet.size
-    this.push(buffer.slice(0, bytesRead))
+    
+    this.push(buffer)
   }
 
   /**
@@ -91,8 +97,10 @@ export class CacheReader extends Readable {
 
     for (let index = 0; index < this._packets.length; ++index) {
       const packet = this._packets[this._packet]
+      const packetMs = packet.frames * frameSize
 
-      ms += packet.frames * frameSize
+      ms += packetMs
+      this.packetRead += packetMs
       this._position += packet.size
       this._packet++
 

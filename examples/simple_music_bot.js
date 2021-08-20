@@ -85,7 +85,7 @@ client.on("messageCreate", async msg => {
         const connection = getVoiceConnection(msg.guild.id)
         
         if (!connection) {
-            msg.replY(":x: | Bot is not connected to a voice channel")
+            msg.reply(":x: | Bot is not connected to a voice channel")
             return
         }
         

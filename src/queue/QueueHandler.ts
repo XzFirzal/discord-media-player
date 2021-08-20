@@ -199,9 +199,8 @@ export class QueueHandler<TM extends object> {
    * Seek into specific duration of the current track
    * @param seconds Where to seek (in seconds)
    */
-  async seek(seconds: number): Promise<void> {
-    await this._player.seek(seconds)
-    this.queue.current?.setStart(Date.now() - this.queue.current.pausedDuration - (seconds * 1000))
+  seek(seconds: number): Promise<void> {
+    return this._player.seek(seconds)
   }
 
   /**
@@ -252,7 +251,7 @@ export class QueueHandler<TM extends object> {
 
     if (this.queue.current) {
       if (this.looping) {
-        this.queue.current.setStart(Date.now())
+        this.queue.current.setPlayer(this._player)
         return
       } else if (this.queueLooping) this.queue.add(this.queue.current)
     }
@@ -266,7 +265,7 @@ export class QueueHandler<TM extends object> {
     }
 
     await this._player.play(track.urlOrLocation, track.sourceType)
-    track.setStart(Date.now())
+    track.setPlayer(this._player)
   }
 
   /**

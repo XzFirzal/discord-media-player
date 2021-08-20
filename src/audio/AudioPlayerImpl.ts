@@ -8,7 +8,6 @@ import type { TrackInfo } from "soundcloud-downloader/src/info"
 import type { Readable, Transform, Duplex } from "stream"
 import type { videoFormat, videoInfo } from "ytdl-core"
 import type { FileHandle } from "fs/promises"
-import type { ReadStream } from "fs"
 
 import prism from "prism-media"
 import { noop } from "../util/noop"
@@ -92,7 +91,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
   /**
    * @internal
    */
-  private _audio?: CacheWriter | ReadStream | Duplex
+  private _audio?: CacheWriter | prism.opus.Decoder | Duplex
   /**
    * @internal
    */
@@ -179,6 +178,19 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
    */
   get playing(): boolean {
     return this._playing
+  }
+
+  /**
+   * @internal
+   */
+  get playbackDuration(): number {
+    return !this.playing
+      ? 0
+      : this._resource.player === this
+      ? Math.floor(this._resource.cachedSecond * 1000)
+      : this._audio instanceof prism.opus.Decoder
+      ? this._resource.cache.getReader(this._audio)?.packetRead ?? 0
+      : 0
   }
 
   /**

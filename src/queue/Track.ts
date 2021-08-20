@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
+import type { AudioPlayer } from "../audio/AudioPlayer"
 import { TrackValidation as validation } from "../validation"
 
 const kTrack = Symbol("kTrack")
-const kStart = Symbol("kStart")
+const kPlayer = Symbol("kPlayer")
 const kPauses = Symbol("kPauses")
 const kUnpauses = Symbol("kUnpauses")
 
@@ -22,11 +23,11 @@ export class Track<TM extends object> {
   /**
    * @internal
    */
-  private [kStart]?: number
+  private [kTrack]: TrackResolvable<TM>
   /**
    * @internal
    */
-  private [kTrack]: TrackResolvable<TM>
+  private [kPlayer]: AudioPlayer
   /**
    * @internal
    */
@@ -62,10 +63,7 @@ export class Track<TM extends object> {
    * The playback duration of the track (if playing)
    */
   get playbackDuration(): number {
-    const now = Date.now()
-    const start = this[kStart] ?? now
-
-    return now - start - this.pausedDuration
+    return this[kPlayer]?.playbackDuration ?? 0
   }
 
   /**
@@ -103,12 +101,12 @@ export class Track<TM extends object> {
   }
 
   /**
-   * Set the starting timestamp if track is started to playing
-   * @param start The starting timestamp
+   * Set the audio player which play the track
+   * @param player The audio player
    */
-  setStart(start: number): void {
-    validation.validateNumber("start", start)
-    this[kStart] = start
+  setPlayer(player: AudioPlayer): void {
+    validation.validatePlayer(player)
+    this[kPlayer] = player
   }
 
   /**
@@ -133,7 +131,7 @@ export class Track<TM extends object> {
    * Cleanup timestamps after track is stopped playing
    */
   cleanup(): void {
-    this[kStart] = null
+    this[kPlayer] = null
     this[kPauses].length = 0
     this[kUnpauses].length = 0
   }
