@@ -51,6 +51,10 @@ export class Cache {
    * @internal
    */
   private readonly _users = new Map<string, number>()
+  /**
+   * @internal
+   */
+  private readonly _reader = new Map<opus.Decoder, CacheReader>()
 
   /**
    * @param dir The directory of the cache
@@ -133,11 +137,13 @@ export class Cache {
     const reader = new CacheReader(this._packets.get(identifier), file, Math.floor(startOnSeconds * 1000))
     const decoder = new opus.Decoder({ rate: 48000, channels: 2, frameSize: 960 })
 
+    this._reader.set(decoder, reader)
     this._addUser(identifier)
 
     reader.once("close", async () => await (await file).close())
 
     decoder.once("close", () => {
+      this._reader.delete(decoder)
       this._removeUser(identifier)
       reader.destroy()
     })
@@ -167,6 +173,16 @@ export class Cache {
     this._checkExist(identifier)
 
     return this._resources.get(identifier)
+  }
+
+  /**
+   * Get the cache reader of decoder from cache
+   * @param decoder The opus decoder
+   * @returns The cache reader
+   */
+  getReader(decoder: opus.Decoder): CacheReader {
+    validation.validateDecoder(decoder)
+    return this._reader.get(decoder)
   }
 
   /**

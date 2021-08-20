@@ -4,10 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validatePlayer = exports.validateConnection = exports.validateOptions = void 0;
+const PlayerValidation_1 = require("./PlayerValidation");
 const PlayerError_1 = require("./PlayerError");
 const voice_1 = require("@discordjs/voice");
-const soundcloud_downloader_1 = __importDefault(require("soundcloud-downloader"));
 const Cache_1 = require("../cache/Cache");
+const soundcloud_downloader_1 = __importDefault(require("soundcloud-downloader"));
 function validateCacheManager(cacheManager) {
     if (typeof cacheManager !== "object" || cacheManager === null)
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("object", "AudioManagerOptions.cache", cacheManager === null ? "null" : typeof cacheManager));
@@ -68,67 +69,6 @@ exports.validateConnection = validateConnection;
  * @param player The audio player
  */
 function validatePlayer(player) {
-    if (typeof player !== "object" || player === null)
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("object", "AudioManager.createAudioPlayer()", player === null ? "null" : typeof player));
-    if (!("manager" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("manager", "AudioManager.createAudioPlayer()"));
-    if (!("guildID" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("guildID", "AudioManager.createAudioPlayer()"));
-    if (!("status" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("status", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.status !== "string")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("string", "AudioManager.createAudioPlayer().status", typeof player.status));
-    if (!("playing" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("playing", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.playing !== "boolean")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("boolean", "AudioManager.createAudioPlayer().playing", typeof player.playing));
-    if (!("setManager" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("setManager", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.setManager !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().setManager", typeof player.setManager));
-    if (!("link" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("link", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.link !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().link", typeof player.link));
-    if (!("unlink" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("unlink", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.unlink !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().unlink", typeof player.unlink));
-    if (!("setFilter" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("setFilter", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.setFilter !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().setFilter", typeof player.setFilter));
-    if (!("setVolume" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("setVolume", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.setVolume !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().setVolume", typeof player.setVolume));
-    if (!("stop" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("stop", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.stop !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().stop", typeof player.stop));
-    if (!("loop" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("loop", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.loop !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().loop", typeof player.loop));
-    if (!("pause" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("pause", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.pause !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().pause", typeof player.pause));
-    if (!("filter" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("filter", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.filter !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().filter", typeof player.filter));
-    if (!("seek" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("seek", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.seek !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().seek", typeof player.seek));
-    if (!("play" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("play", "AudioManager.createAudioPlayer()"));
-    else if (typeof player.play !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer().play", typeof player.play));
-    if (!("_switchCache" in player))
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("_switchCache", "AudioManager.createAudioPlayer()"));
-    else if (typeof player._switchCache !== "function")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("function", "AudioManager.createAudioPlayer()._switchCache", typeof player._switchCache));
+    PlayerValidation_1.validatePlayer(player, "AudioManager.createAudioPlayer()");
 }
 exports.validatePlayer = validatePlayer;

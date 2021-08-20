@@ -1,6 +1,7 @@
-import type { CacheOptions} from "../cache/Cache"
+import type { CacheOptions } from "../cache/Cache"
 import { PlayerError, ErrorMessages } from "./PlayerError"
 import { Resource } from "../util/Resource"
+import { opus } from "prism-media"
 
 /**
  * Validate the cache directory
@@ -48,4 +49,9 @@ export function validateResource(resource: Resource): void {
  */
 export function validateSeconds(seconds: number): void {
   if (typeof seconds !== "number") throw new PlayerError(ErrorMessages.Expecting("number", "Cache.seconds", typeof seconds))
+}
+
+export function validateDecoder(decoder: opus.Decoder): void {
+  if (typeof decoder !== "object" || decoder === null) throw new PlayerError(ErrorMessages.Expecting("object", "Cache.getReader.decoder", decoder === null ? "null" : typeof decoder))
+  else if (!(decoder instanceof opus.Decoder)) throw new PlayerError(ErrorMessages.Expecting("OpusDecoder", "Cache.getReader.decoder", decoder))
 }

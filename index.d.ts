@@ -265,6 +265,10 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
                 */
             playing: boolean;
             /**
+                * How many seconds does the audio is playing (in ms)
+                */
+            playbackDuration: number;
+            /**
                 * Set the manager of the audio player
                 * @param manager The audio manager
                 */
@@ -382,6 +386,10 @@ declare module 'discord-media-player/dist/audio/AudioPlayerImpl' {
             /**
                 * @internal
                 */
+            get playbackDuration(): number;
+            /**
+                * @internal
+                */
             setManager(manager: AudioManager): void;
             /**
                 * @internal
@@ -433,6 +441,7 @@ declare module 'discord-media-player/dist/audio/AudioPlayerImpl' {
 declare module 'discord-media-player/dist/cache/Cache' {
     import type { Resource } from "discord-media-player/dist/util/Resource";
     import { opus } from "prism-media";
+    import { CacheReader } from "discord-media-player/dist/cache/CacheReader";
     /**
         * The options for cache instance
         */
@@ -487,6 +496,12 @@ declare module 'discord-media-player/dist/cache/Cache' {
                 * @returns The audio resource
                 */
             getResource(identifier: string): Resource;
+            /**
+                * Get the cache reader of decoder from cache
+                * @param decoder The opus decoder
+                * @returns The cache reader
+                */
+            getReader(decoder: opus.Decoder): CacheReader;
     }
 }
 
@@ -615,6 +630,10 @@ declare module 'discord-media-player/dist/cache/CacheReader' {
         * An instance to appropriately read opus packet
         */
     export class CacheReader extends Readable {
+            /**
+                * How many packets has been read (in ms)
+                */
+            packetRead: number;
             /**
                 * @param packets The array of packets
                 * @param file The file to read
@@ -1124,6 +1143,7 @@ declare module 'discord-media-player/dist/validation/ManagerValidation' {
 
 declare module 'discord-media-player/dist/validation/PlayerValidation' {
     import type { Filters } from "discord-media-player/dist/util/Filters";
+    import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
     import { AudioManager } from "discord-media-player/dist/audio/AudioManager";
     import { VoiceConnection } from "@discordjs/voice";
     /**
@@ -1161,11 +1181,13 @@ declare module 'discord-media-player/dist/validation/PlayerValidation' {
         * @param sourceType The source type
         */
     export function validateSourceType(sourceType: number): void;
+    export function validatePlayer(player: AudioPlayer, where: string): void;
 }
 
 declare module 'discord-media-player/dist/validation/CacheValidation' {
     import type { CacheOptions } from "discord-media-player/dist/cache/Cache";
     import { Resource } from "discord-media-player/dist/util/Resource";
+    import { opus } from "prism-media";
     /**
         * Validate the cache directory
         * @param dir The cache directory
@@ -1191,6 +1213,7 @@ declare module 'discord-media-player/dist/validation/CacheValidation' {
         * @param seconds Where to start the audio (in seconds)
         */
     export function validateSeconds(seconds: number): void;
+    export function validateDecoder(decoder: opus.Decoder): void;
 }
 
 declare module 'discord-media-player/dist/validation/CacheManagerValidation' {
@@ -1244,8 +1267,10 @@ declare module 'discord-media-player/dist/validation/QueueValidation' {
 
 declare module 'discord-media-player/dist/validation/TrackValidation' {
     import type { TrackResolvable } from "discord-media-player/dist/queue";
+    import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
     export function validateTrack<TM extends object>(track: TrackResolvable<TM>): void;
     export function validateNumber(where: string, value: number): void;
+    export function validatePlayer(player: AudioPlayer): void;
 }
 
 declare module 'discord-media-player/dist/validation/PacketReaderValidation' {
@@ -1604,8 +1629,9 @@ declare module 'discord-media-player/dist/queue/Queue' {
 }
 
 declare module 'discord-media-player/dist/queue/Track' {
+    import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
     const kTrack: unique symbol;
-    const kStart: unique symbol;
+    const kPlayer: unique symbol;
     const kPauses: unique symbol;
     const kUnpauses: unique symbol;
     /**
@@ -1653,10 +1679,10 @@ declare module 'discord-media-player/dist/queue/Track' {
                 */
             set<K extends keyof TM, V extends TM[K]>(key: K, value: V): void;
             /**
-                * Set the starting timestamp if track is started to playing
-                * @param start The starting timestamp
+                * Set the audio player which play the track
+                * @param player The audio player
                 */
-            setStart(start: number): void;
+            setPlayer(player: AudioPlayer): void;
             /**
                 * Add a pause timestamp when track is paused
                 * @param timestamp The timestamp when the track is paused

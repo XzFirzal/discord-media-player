@@ -153,9 +153,8 @@ class QueueHandler {
      * Seek into specific duration of the current track
      * @param seconds Where to seek (in seconds)
      */
-    async seek(seconds) {
-        await this._player.seek(seconds);
-        this.queue.current?.setStart(Date.now() - this.queue.current.pausedDuration - (seconds * 1000));
+    seek(seconds) {
+        return this._player.seek(seconds);
     }
     /**
      * Start the queue cycle
@@ -201,7 +200,7 @@ class QueueHandler {
         this.queue.current?.cleanup();
         if (this.queue.current) {
             if (this.looping) {
-                this.queue.current.setStart(Date.now());
+                this.queue.current.setPlayer(this._player);
                 return;
             }
             else if (this.queueLooping)
@@ -214,7 +213,7 @@ class QueueHandler {
             return;
         }
         await this._player.play(track.urlOrLocation, track.sourceType);
-        track.setStart(Date.now());
+        track.setPlayer(this._player);
     }
     /**
      * @internal

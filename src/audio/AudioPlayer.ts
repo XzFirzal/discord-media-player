@@ -71,6 +71,10 @@ export interface AudioPlayer extends EventEmitter {
    * The audio player is playing or not
    */
   playing: boolean
+  /**
+   * How many seconds does the audio is playing (in ms)
+   */
+  playbackDuration: number
   
   /**
    * Set the manager of the audio player

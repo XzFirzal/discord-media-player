@@ -1,4 +1,5 @@
 import type { Filters } from "../util/Filters"
+import type { AudioPlayer } from "../audio/AudioPlayer"
 import { PlayerError, ErrorMessages } from "./PlayerError"
 import { AudioManager } from "../audio/AudioManager"
 import { VoiceConnection} from "@discordjs/voice"
@@ -141,4 +142,56 @@ export function validateUrlOrLocation(urlOrLocation: string): void {
 export function validateSourceType(sourceType: number): void {
   if (typeof sourceType !== "number") throw new PlayerError(ErrorMessages.Expecting("number", "AudioPlayer.sourceType", typeof sourceType))
   if (!Number.isInteger(sourceType)) throw new PlayerError(ErrorMessages.NotInteger(sourceType))
+}
+
+export function validatePlayer(player: AudioPlayer, where: string): void {
+  if (typeof player !== "object" || player === null) throw new PlayerError(ErrorMessages.Expecting("object", where, player === null ? "null" : typeof player))
+
+  if (!("manager" in player)) throw new PlayerError(ErrorMessages.NotProvided("manager", where))
+  if (!("guildID" in player)) throw new PlayerError(ErrorMessages.NotProvided("guildID", where))
+
+  if (!("status" in player)) throw new PlayerError(ErrorMessages.NotProvided("status", where))
+  else if (typeof player.status !== "string") throw new PlayerError(ErrorMessages.Expecting("string", `${where}.status`, typeof player.status))
+
+  if (!("playing" in player)) throw new PlayerError(ErrorMessages.NotProvided("playing", where))
+  else if (typeof player.playing !== "boolean") throw new PlayerError(ErrorMessages.Expecting("boolean", `${where}.playing`, typeof player.playing))
+
+  if (!("playbackDuration" in player)) throw new PlayerError(ErrorMessages.NotProvided("playbackDuration", where))
+  else if (typeof player.playbackDuration !== "number") throw new PlayerError(ErrorMessages.Expecting("number", `${where}.playbackDuration`, typeof player.playbackDuration))
+
+  if (!("setManager" in player)) throw new PlayerError(ErrorMessages.NotProvided("setManager", where))
+  else if (typeof player.setManager !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.setManager`, typeof player.setManager))
+
+  if (!("link" in player)) throw new PlayerError(ErrorMessages.NotProvided("link", where))
+  else if (typeof player.link !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.link`, typeof player.link))
+
+  if (!("unlink" in player)) throw new PlayerError(ErrorMessages.NotProvided("unlink", where))
+  else if (typeof player.unlink !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.unlink`, typeof player.unlink))
+
+  if (!("setFilter" in player)) throw new PlayerError(ErrorMessages.NotProvided("setFilter", where))
+  else if (typeof player.setFilter !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.setFilter`, typeof player.setFilter))
+
+  if (!("setVolume" in player)) throw new PlayerError(ErrorMessages.NotProvided("setVolume", where))
+  else if (typeof player.setVolume !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.setVolume`, typeof player.setVolume))
+
+  if (!("stop" in player)) throw new PlayerError(ErrorMessages.NotProvided("stop", where))
+  else if (typeof player.stop !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.stop`, typeof player.stop))
+
+  if (!("loop" in player)) throw new PlayerError(ErrorMessages.NotProvided("loop", where))
+  else if (typeof player.loop !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.loop`, typeof player.loop))
+
+  if (!("pause" in player)) throw new PlayerError(ErrorMessages.NotProvided("pause", where))
+  else if (typeof player.pause !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.pause`, typeof player.pause))
+
+  if (!("filter" in player)) throw new PlayerError(ErrorMessages.NotProvided("filter", where))
+  else if (typeof player.filter !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.filter`, typeof player.filter))
+
+  if (!("seek" in player)) throw new PlayerError(ErrorMessages.NotProvided("seek", where))
+  else if (typeof player.seek !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.seek`, typeof player.seek))
+
+  if (!("play" in player)) throw new PlayerError(ErrorMessages.NotProvided("play", where))
+  else if (typeof player.play !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}.play`, typeof player.play))
+
+  if (!("_switchCache" in player)) throw new PlayerError(ErrorMessages.NotProvided("_switchCache", where))
+  else if (typeof player._switchCache !== "function") throw new PlayerError(ErrorMessages.Expecting("function", `${where}._switchCache`, typeof player._switchCache))
 }

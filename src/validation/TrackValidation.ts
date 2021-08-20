@@ -1,4 +1,6 @@
 import type { TrackResolvable } from "../queue"
+import type { AudioPlayer } from "../audio/AudioPlayer"
+import { validatePlayer as playerValidate } from "./PlayerValidation"
 import { PlayerError, ErrorMessages } from "./PlayerError"
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -17,4 +19,8 @@ export function validateTrack<TM extends object>(track: TrackResolvable<TM>): vo
 export function validateNumber(where: string, value: number): void {
   if (typeof value !== "number") throw new PlayerError(ErrorMessages.Expecting("number", `Track.${where}`, typeof value))
   else if (!Number.isInteger(value)) throw new PlayerError(ErrorMessages.NotInteger(value))
+}
+
+export function validatePlayer(player: AudioPlayer): void {
+  playerValidate(player, "Track.player")
 }
