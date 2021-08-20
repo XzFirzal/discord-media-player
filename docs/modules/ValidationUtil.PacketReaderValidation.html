@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AudioManagerValidation | discord-media-player</title>
+	<title>PacketReaderValidation | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="ValidationUtil.html">ValidationUtil</a>
 				</li>
 				<li>
-					<a href="ValidationUtil.AudioManagerValidation.html">AudioManagerValidation</a>
+					<a href="ValidationUtil.PacketReaderValidation.html">PacketReaderValidation</a>
 				</li>
 			</ul>
-			<h1>Namespace AudioManagerValidation</h1>
+			<h1>Namespace PacketReaderValidation</h1>
 		</div>
 	</div>
 </header>
@@ -73,9 +73,7 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.AudioManagerValidation.html#validateConnection" class="tsd-kind-icon">validate<wbr>Connection</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.AudioManagerValidation.html#validateOptions" class="tsd-kind-icon">validate<wbr>Options</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.AudioManagerValidation.html#validatePlayer" class="tsd-kind-icon">validate<wbr>Player</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-namespace"><a href="ValidationUtil.PacketReaderValidation.html#validatePackets" class="tsd-kind-icon">validate<wbr>Packets</a></li>
 							</ul>
 						</section>
 					</div>
@@ -84,92 +82,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="validateConnection" class="tsd-anchor"></a>
-					<h3>validate<wbr>Connection</h3>
+					<a name="validatePackets" class="tsd-anchor"></a>
+					<h3>validate<wbr>Packets</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">validate<wbr>Connection<span class="tsd-signature-symbol">(</span>connection<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">VoiceConnection</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Packets<span class="tsd-signature-symbol">(</span>packets<span class="tsd-signature-symbol">: </span><a href="../interfaces/Packet.html" class="tsd-signature-type" data-tsd-kind="Interface">Packet</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/validation/ManagerValidation.ts#L51">src/validation/ManagerValidation.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/validation/PacketReaderValidation.ts#L4">src/validation/PacketReaderValidation.ts:4</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Validate the voice connection</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>connection: <span class="tsd-signature-type">VoiceConnection</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The voice connection</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="validateOptions" class="tsd-anchor"></a>
-					<h3>validate<wbr>Options</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">validate<wbr>Options<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/AudioManagerOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">AudioManagerOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/validation/ManagerValidation.ts#L29">src/validation/ManagerValidation.ts:29</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Validate the audio manager options</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>options: <a href="../interfaces/AudioManagerOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">AudioManagerOptions</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The audio manager options</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-namespace">
-					<a name="validatePlayer" class="tsd-anchor"></a>
-					<h3>validate<wbr>Player</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-namespace">
-						<li class="tsd-signature tsd-kind-icon">validate<wbr>Player<span class="tsd-signature-symbol">(</span>player<span class="tsd-signature-symbol">: </span><a href="../interfaces/AudioPlayer.html" class="tsd-signature-type" data-tsd-kind="Interface">AudioPlayer</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/validation/ManagerValidation.ts#L60">src/validation/ManagerValidation.ts:60</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Validate the audio player</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>player: <a href="../interfaces/AudioPlayer.html" class="tsd-signature-type" data-tsd-kind="Interface">AudioPlayer</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The audio player</p>
-									</div>
+									<h5>packets: <a href="../interfaces/Packet.html" class="tsd-signature-type" data-tsd-kind="Interface">Packet</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -193,7 +121,7 @@
 					<li class="current tsd-kind-namespace">
 						<a href="ValidationUtil.html">Validation<wbr>Util</a>
 						<ul>
-							<li class="current tsd-kind-namespace tsd-parent-kind-namespace">
+							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.AudioManagerValidation.html">Audio<wbr>Manager<wbr>Validation</a>
 							</li>
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
@@ -214,7 +142,7 @@
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.ErrorMessages.html">Error<wbr>Messages</a>
 							</li>
-							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+							<li class="current tsd-kind-namespace tsd-parent-kind-namespace">
 								<a href="ValidationUtil.PacketReaderValidation.html">Packet<wbr>Reader<wbr>Validation</a>
 							</li>
 							<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
@@ -242,13 +170,7 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.AudioManagerValidation.html#validateConnection" class="tsd-kind-icon">validate<wbr>Connection</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.AudioManagerValidation.html#validateOptions" class="tsd-kind-icon">validate<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="ValidationUtil.AudioManagerValidation.html#validatePlayer" class="tsd-kind-icon">validate<wbr>Player</a>
+						<a href="ValidationUtil.PacketReaderValidation.html#validatePackets" class="tsd-kind-icon">validate<wbr>Packets</a>
 					</li>
 				</ul>
 			</nav>

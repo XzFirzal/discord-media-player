@@ -2,6 +2,7 @@ import type { Packet } from "./PacketReader"
 import type { FileHandle } from "fs/promises"
 
 import { Readable } from "stream"
+import { CacheReaderValidation as validation } from "../validation"
 
 const highWaterMark = 1 << 16
 const frameSize = 20
@@ -39,6 +40,10 @@ export class CacheReader extends Readable {
    */
   constructor(packets: Array<Packet>, file: Promise<FileHandle>, ms: number) {
     super({ highWaterMark })
+
+    validation.validatePackets(packets)
+    validation.validateFileHandle(file)
+    validation.validateMs(ms)
     
     this._packets = packets
     this._file = file
@@ -51,6 +56,8 @@ export class CacheReader extends Readable {
   async _read(): Promise<void> {
     if (this._file instanceof Promise) this._file = await this._file
     if (this._position < 0) this._setPosition()
+
+    validation.validateFile(this._file)
 
     const packet = this._packets[this._packet++]
 

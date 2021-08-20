@@ -177,6 +177,7 @@ export class Cache {
 
     this._resources.delete(identifier)
     this._timeouts.delete(identifier)
+    this._packets.delete(identifier)
     this._users.delete(identifier)
 
     if (!writeStream.destroyed) writeStream.destroy()

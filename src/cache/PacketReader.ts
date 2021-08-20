@@ -1,4 +1,6 @@
 import type { TransformCallback } from "stream"
+
+import { PacketReaderValidation as validation } from "../validation"
 import { Transform } from "stream"
 
 /**
@@ -23,6 +25,7 @@ export class PacketReader extends Transform {
    */
   constructor(packets: Array<Packet>) {
     super()
+    validation.validatePackets(packets)
     this._packets = packets
   }
 
