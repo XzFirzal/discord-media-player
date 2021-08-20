@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PacketReader = void 0;
+const validation_1 = require("../validation");
 const stream_1 = require("stream");
 /**
  * An instance to mark the packet size and frames in packet
@@ -11,6 +12,7 @@ class PacketReader extends stream_1.Transform {
      */
     constructor(packets) {
         super();
+        validation_1.PacketReaderValidation.validatePackets(packets);
         this._packets = packets;
     }
     /**

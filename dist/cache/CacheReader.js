@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheReader = void 0;
 const stream_1 = require("stream");
+const validation_1 = require("../validation");
 const highWaterMark = 1 << 16;
 const frameSize = 20;
 /**
@@ -23,6 +24,9 @@ class CacheReader extends stream_1.Readable {
          * @internal
          */
         this._packet = -1;
+        validation_1.CacheReaderValidation.validatePackets(packets);
+        validation_1.CacheReaderValidation.validateFileHandle(file);
+        validation_1.CacheReaderValidation.validateMs(ms);
         this._packets = packets;
         this._file = file;
         this._ms = ms;
@@ -35,6 +39,7 @@ class CacheReader extends stream_1.Readable {
             this._file = await this._file;
         if (this._position < 0)
             this._setPosition();
+        validation_1.CacheReaderValidation.validateFile(this._file);
         const packet = this._packets[this._packet++];
         if (!packet) {
             this.push(null);

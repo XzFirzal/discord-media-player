@@ -977,6 +977,8 @@ declare module 'discord-media-player/dist/validation' {
     export * as QueueHandlerValidation from "discord-media-player/dist/validation/QueueHandlerValidation";
     export * as QueueValidation from "discord-media-player/dist/validation/QueueValidation";
     export * as TrackValidation from "discord-media-player/dist/validation/TrackValidation";
+    export * as PacketReaderValidation from "discord-media-player/dist/validation/PacketReaderValidation";
+    export * as CacheReaderValidation from "discord-media-player/dist/validation/CacheReaderValidation";
 }
 
 declare module 'discord-media-player/dist/queue' {
@@ -1244,6 +1246,20 @@ declare module 'discord-media-player/dist/validation/TrackValidation' {
     import type { TrackResolvable } from "discord-media-player/dist/queue";
     export function validateTrack<TM extends object>(track: TrackResolvable<TM>): void;
     export function validateNumber(where: string, value: number): void;
+}
+
+declare module 'discord-media-player/dist/validation/PacketReaderValidation' {
+    import type { Packet } from "discord-media-player/dist/cache/PacketReader";
+    export function validatePackets(packets: Array<Packet>): void;
+}
+
+declare module 'discord-media-player/dist/validation/CacheReaderValidation' {
+    import type { Packet } from "discord-media-player/dist/cache/PacketReader";
+    import { FileHandle } from "fs/promises";
+    export function validatePackets(packets: Array<Packet>): void;
+    export function validateFileHandle(fileHandle: Promise<FileHandle>): void;
+    export function validateMs(ms: number): void;
+    export function validateFile(file: FileHandle): void;
 }
 
 declare module 'discord-media-player/dist/queue/QueueManager' {
