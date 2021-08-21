@@ -106,7 +106,7 @@ export interface QueueManagerEvents {
  * ...
  * ```
  */
-export class QueueManager<TM extends object> extends TypedEmitter<QueueManagerEvents> {
+export class QueueManager<TM extends object = {}> extends TypedEmitter<QueueManagerEvents> {
   /**
    * Emitted whenever an audio is started playing
    * 

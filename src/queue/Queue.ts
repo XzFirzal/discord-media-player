@@ -14,7 +14,7 @@ import { QueueValidation as validation } from "../validation"
  * Queue[0]
  * ```
  */
-export class Queue<TM extends object> extends Array<Track<TM>> {
+export class Queue<TM extends object = {}> extends Array<Track<TM>> {
   /**
    * The current playing track
    */

@@ -10,7 +10,7 @@ const kUnpauses = Symbol("kUnpauses")
 /**
  * Raw object of the track
  */
-export interface TrackResolvable<TM extends object> {
+export interface TrackResolvable<TM extends object = {}> {
   sourceType: number,
   urlOrLocation: string,
   metadata?: TM
@@ -19,7 +19,7 @@ export interface TrackResolvable<TM extends object> {
 /**
  * Track instance of the raw track
  */
-export class Track<TM extends object> {
+export class Track<TM extends object = {}> {
   /**
    * @internal
    */

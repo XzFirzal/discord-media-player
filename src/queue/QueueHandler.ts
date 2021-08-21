@@ -12,7 +12,7 @@ type VOID = () => void
  * The instance to handle audio player and queue
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export class QueueHandler<TM extends object> {
+export class QueueHandler<TM extends object = {}> {
   /**
    * The manager of the queue handler
    */
