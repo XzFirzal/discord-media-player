@@ -5,7 +5,6 @@ import type { SourceType } from "../util/SourceType"
 import type { VoiceConnection, VoiceConnectionReadyState, VoiceConnectionState, AudioPlayerPlayingState, AudioPlayerState } from "@discordjs/voice"
 import type { Transcoding } from "../soundcloudUtil/transcoding"
 import type { TrackInfo } from "soundcloud-downloader/src/info"
-import type { Readable, Transform, Duplex } from "stream"
 import type { videoFormat, videoInfo } from "ytdl-core"
 import type { FileHandle } from "fs/promises"
 
@@ -91,7 +90,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
   /**
    * @internal
    */
-  private _audio?: CacheWriter | prism.opus.Decoder | Duplex
+  private _audio?: CacheWriter | prism.opus.Decoder
   /**
    * @internal
    */
@@ -227,7 +226,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
         subscription?.unsubscribe()
 
         if (self._playing) {
-          if (self._resource.player === self && self.manager.cache && !self._resource.isLive) self._resource.audio.unpipe()
+          if (self._resource.player === self && self.manager.cache && !self._resource.isLive) self._resource.cacheWriter.unpipe()
 
           self._disconnected = true
           self._player.stop()
@@ -256,7 +255,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
     subscription?.unsubscribe()
 
     if (this._playing) {
-      if (this._resource.player === this && this.manager.cache && !this._resource.isLive) this._resource.audio.unpipe()
+      if (this._resource.player === this && this.manager.cache && !this._resource.isLive) this._resource.cacheWriter.unpipe()
 
       this._disconnected = true
       this._player.stop()
@@ -298,7 +297,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
   stop(): boolean {
     this._checkPlaying()
 
-    if (this._resource.player === this && this.manager.cache && !this._resource.isLive) this._resource.audio.unpipe()
+    if (this._resource.player === this && this.manager.cache && !this._resource.isLive) this._resource.cacheWriter.unpipe()
 
     this._stopping = true
     const stopped = this._player.stop()
@@ -432,7 +431,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
 
     this._resource.player = this
 
-    this._audio = this._resource.audio
+    this._audio = this._resource.cacheWriter
     this._player.play(audioResource)
     this._audio.pipe(audioResource.metadata)
   }
@@ -678,20 +677,18 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
       player: this,
       source: downloadFromInfo(info, options),
       decoder: new prism.FFmpeg({ args: FFMPEG_ARGS }),
-      cacheWriter: info.videoDetails.isLiveContent ? undefined : new CacheWriter(),
-      cache: info.videoDetails.isLiveContent ? undefined : this.manager.cache?.youtube
+      cacheWriter: new CacheWriter(),
+      cache: info.videoDetails.isLiveContent ? null : this.manager.cache?.youtube,
+      isLive: info.videoDetails.isLiveContent
     })
 
-    const lines: (Readable | Duplex | Transform)[] = [resource.source, resource.decoder]
-
-    if (!resource.isLive) lines.push(resource.cacheWriter)
-
-    pipeline(lines, noop)
+    pipeline(resource.source, resource.decoder, resource.cacheWriter, noop)
     onPipeAndUnpipe(resource)
 
-    resource.audio.once("close", () => lines.forEach((line) => {
-      if (!line.destroyed) line.destroy()
-    }))
+    resource.cacheWriter.once("close", () => {
+      resource.source.destroy()
+      resource.decoder.destroy()
+    })
   }
 
   /**
@@ -854,14 +851,12 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
         this._playing = false
         this._playResourceOnEnd = false
 
-        if (!this.manager.cache || this._resource.isLive) {
-          this._resource.audio.destroy()
-          if (this._resource.isLive) this._resource.audio.emit("close")
-        }
+        if (!this.manager.cache || this._resource.isLive) this._resource.cacheWriter.destroy()
 
         if (!this._disconnected) {
           if (this._resource.isLive) {
             const stopping = this._stopping
+            const cachedSeconds = this._resource.cachedSecond
 
             await this._getYoutubeResource(this._urlOrLocation)
 
@@ -870,7 +865,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
                 this.emit("end")
                 this.manager.emit("audioStart", this.guildID, this._urlOrLocation)
                 this.manager.emit("audioEnd", this.guildID, this._urlOrLocation)
-              }
+              } else this._resource.cachedSecond = cachedSeconds
 
               this._playing = true
               this._playResource()
