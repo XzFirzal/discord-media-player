@@ -93,6 +93,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Util.ResourceOptions.html#decoder" class="tsd-kind-icon">decoder</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Util.ResourceOptions.html#demuxer" class="tsd-kind-icon">demuxer</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Util.ResourceOptions.html#identifier" class="tsd-kind-icon">identifier</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Util.ResourceOptions.html#isLive" class="tsd-kind-icon">is<wbr>Live</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Util.ResourceOptions.html#player" class="tsd-kind-icon">player</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Util.ResourceOptions.html#source" class="tsd-kind-icon">source</a></li>
 							</ul>
@@ -108,7 +109,7 @@
 					<div class="tsd-signature tsd-kind-icon">cache<span class="tsd-signature-symbol">:</span> <a href="../classes/Cache.html" class="tsd-signature-type" data-tsd-kind="Class">Cache</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/util/Resource.ts#L31">src/util/Resource.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/util/Resource.ts#L35">src/util/Resource.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -119,11 +120,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="cacheWriter" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cache<wbr>Writer</h3>
+					<h3>cache<wbr>Writer</h3>
 					<div class="tsd-signature tsd-kind-icon">cache<wbr>Writer<span class="tsd-signature-symbol">:</span> <a href="../classes/CacheWriter.html" class="tsd-signature-type" data-tsd-kind="Class">CacheWriter</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/util/Resource.ts#L39">src/util/Resource.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/util/Resource.ts#L31">src/util/Resource.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -135,7 +136,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="decoder" class="tsd-anchor"></a>
 					<h3>decoder</h3>
-					<div class="tsd-signature tsd-kind-icon">decoder<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Duplex</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Transform</span></div>
+					<div class="tsd-signature tsd-kind-icon">decoder<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Transform</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Duplex</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/util/Resource.ts#L23">src/util/Resource.ts:23</a></li>
@@ -153,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">demuxer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Transform</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/util/Resource.ts#L35">src/util/Resource.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/util/Resource.ts#L43">src/util/Resource.ts:43</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -174,6 +175,21 @@
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The audio identifier</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="isLive" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> is<wbr>Live</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Live<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/util/Resource.ts#L39">src/util/Resource.ts:39</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>true if the audio source is livestream, otherwise false</p>
 						</div>
 					</div>
 				</section>
@@ -262,6 +278,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="Util.ResourceOptions.html#identifier" class="tsd-kind-icon">identifier</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="Util.ResourceOptions.html#isLive" class="tsd-kind-icon">is<wbr>Live</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="Util.ResourceOptions.html#player" class="tsd-kind-icon">player</a>
