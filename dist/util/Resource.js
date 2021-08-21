@@ -24,21 +24,16 @@ class Resource {
          */
         this._autoPaused = false;
         validation_1.ResourceValidation.validateOptions(options);
-        const { player, identifier, decoder, source, cache, demuxer, cacheWriter } = options;
+        const { player, identifier, decoder, source, cache, isLive, demuxer, cacheWriter } = options;
         this.player = player;
         this.identifier = identifier;
         this.cache = cache;
         this.source = source;
         this.demuxer = demuxer;
         this.decoder = decoder;
-        if (cacheWriter) {
-            this.audio = cacheWriter;
-            this.cacheWriter = cacheWriter;
-            cacheWriter.setResource(this);
-        }
-        else
-            this.audio = this.decoder;
-        this.isLive = !cacheWriter;
+        this.cacheWriter = cacheWriter;
+        this.isLive = isLive ?? false;
+        cacheWriter.setResource(this);
     }
     set player(player) {
         if (player != null)

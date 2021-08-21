@@ -800,17 +800,21 @@ declare module 'discord-media-player/dist/util/Resource' {
                 */
             source: Readable;
             /**
+                * The audio cache writer
+                */
+            cacheWriter: CacheWriter;
+            /**
                 * The cache instance of audio source
                 */
             cache?: Cache;
             /**
+                * true if the audio source is livestream, otherwise false
+                */
+            isLive?: boolean;
+            /**
                 * The audio demuxer
                 */
             demuxer?: Transform;
-            /**
-                * The audio cache writer
-                */
-            cacheWriter?: CacheWriter;
     }
     /**
         * The audio resource instance
@@ -832,10 +836,6 @@ declare module 'discord-media-player/dist/util/Resource' {
                 * The audio identifier
                 */
             readonly identifier: string;
-            /**
-                * The end of the audio resource pipeline
-                */
-            readonly audio: CacheWriter | Duplex;
             /**
                 * The audio decoder
                 */
