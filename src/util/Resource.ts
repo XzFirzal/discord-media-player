@@ -26,17 +26,21 @@ export interface ResourceOptions {
    */
   source: Readable,
   /**
+   * The audio cache writer
+   */
+  cacheWriter: CacheWriter,
+  /**
    * The cache instance of audio source
    */
   cache?: Cache,
   /**
+   * true if the audio source is livestream, otherwise false
+   */
+  isLive?: boolean,
+  /**
    * The audio demuxer
    */
   demuxer?: Transform
-  /**
-   * The audio cache writer
-   */
-  cacheWriter?: CacheWriter
 }
 
 /**
@@ -69,10 +73,6 @@ export class Resource {
    */
   public readonly identifier: string
   /**
-   * The end of the audio resource pipeline
-   */
-  public readonly audio: CacheWriter | Duplex
-  /**
    * The audio decoder
    */
   public readonly decoder: Transform | Duplex
@@ -98,7 +98,7 @@ export class Resource {
    */
   constructor(options: ResourceOptions) {
     validation.validateOptions(options)
-    const { player, identifier, decoder, source, cache, demuxer, cacheWriter } = options
+    const { player, identifier, decoder, source, cache, isLive, demuxer, cacheWriter } = options
 
     this.player = player
     this.identifier = identifier
@@ -106,14 +106,10 @@ export class Resource {
     this.source = source
     this.demuxer = demuxer
     this.decoder = decoder
+    this.cacheWriter = cacheWriter
+    this.isLive = isLive ?? false
 
-    if (cacheWriter) {
-      this.audio = cacheWriter
-      this.cacheWriter = cacheWriter
-      cacheWriter.setResource(this)
-    } else this.audio = this.decoder as Duplex
-
-    this.isLive = !cacheWriter
+    cacheWriter.setResource(this)
   }
 
   set player(player: AudioPlayer) {

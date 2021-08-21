@@ -27,6 +27,10 @@ export function validateOptions(options: ResourceOptions): void {
   else if (typeof options.source !== "object" || options.source === null) throw new PlayerError(ErrorMessages.Expecting("object", "ResourceOptions.source", options.source === null ? "null" : typeof options.source))
   else if (!(options.source instanceof Readable)) throw new PlayerError(ErrorMessages.Expecting("Readable", "ResourceOptions.source", options.source))
 
+  if (!("cacheWriter" in options)) throw new PlayerError(ErrorMessages.NotProvided("cacheWriter", "ResourceOptions"))
+  else if (typeof options.cacheWriter !== "object" || options.cacheWriter === null) throw new PlayerError(ErrorMessages.Expecting("object", "ResourceOptions.cacheWriter", options.cacheWriter === null ? "null" : typeof options.cacheWriter))
+  else if (!(options.cacheWriter instanceof CacheWriter)) throw new PlayerError(ErrorMessages.Expecting("CacheWriter", "ResourceOptions.cacheWriter", options.cacheWriter))
+  
   if (options.cache != undefined) {
     if (typeof options.cache !== "object" || options.cache === null) throw new PlayerError(ErrorMessages.Expecting("object", "ResourceOptions.cache", options.cache === null ? "null" : typeof options.cache))
     else if (!(options.cache instanceof Cache)) throw new PlayerError(ErrorMessages.Expecting("Cache", "ResourceOptions.cache", options.cache))
@@ -37,10 +41,7 @@ export function validateOptions(options: ResourceOptions): void {
     else if (!(options.demuxer instanceof Transform)) throw new PlayerError(ErrorMessages.Expecting("Transform", "ResourceOptions.demuxer", options.demuxer))
   }
 
-  if (options.cacheWriter != undefined) {
-    if (typeof options.cacheWriter !== "object" || options.cacheWriter === null) throw new PlayerError(ErrorMessages.Expecting("object", "ResourceOptions.cacheWriter", options.cacheWriter === null ? "null" : typeof options.cacheWriter))
-    else if (!(options.cacheWriter instanceof CacheWriter)) throw new PlayerError(ErrorMessages.Expecting("CacheWriter", "ResourceOptions.cacheWriter", options.cacheWriter))
-  }
+  if ("isLive" in options && typeof options.isLive !== "boolean") throw new PlayerError(ErrorMessages.Expecting("boolean", "ResourceOptions.isLive", typeof options.isLive))
 }
 
 export function validatePlayer(player: AudioPlayer): void {

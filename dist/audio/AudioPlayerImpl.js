@@ -148,7 +148,7 @@ class AudioPlayerImpl extends events_1.EventEmitter {
                 subscription?.unsubscribe();
                 if (self._playing) {
                     if (self._resource.player === self && self.manager.cache && !self._resource.isLive)
-                        self._resource.audio.unpipe();
+                        self._resource.cacheWriter.unpipe();
                     self._disconnected = true;
                     self._player.stop();
                 }
@@ -171,7 +171,7 @@ class AudioPlayerImpl extends events_1.EventEmitter {
         subscription?.unsubscribe();
         if (this._playing) {
             if (this._resource.player === this && this.manager.cache && !this._resource.isLive)
-                this._resource.audio.unpipe();
+                this._resource.cacheWriter.unpipe();
             this._disconnected = true;
             this._player.stop();
         }
@@ -206,7 +206,7 @@ class AudioPlayerImpl extends events_1.EventEmitter {
     stop() {
         this._checkPlaying();
         if (this._resource.player === this && this.manager.cache && !this._resource.isLive)
-            this._resource.audio.unpipe();
+            this._resource.cacheWriter.unpipe();
         this._stopping = true;
         const stopped = this._player.stop();
         this._stopping = false;
@@ -315,7 +315,7 @@ class AudioPlayerImpl extends events_1.EventEmitter {
     _playResource() {
         const audioResource = this._createAudioResource();
         this._resource.player = this;
-        this._audio = this._resource.audio;
+        this._audio = this._resource.cacheWriter;
         this._player.play(audioResource);
         this._audio.pipe(audioResource.metadata);
     }
@@ -521,18 +521,16 @@ class AudioPlayerImpl extends events_1.EventEmitter {
             player: this,
             source: ytdl_core_1.downloadFromInfo(info, options),
             decoder: new prism_media_1.default.FFmpeg({ args: FFMPEG_ARGS }),
-            cacheWriter: info.videoDetails.isLiveContent ? undefined : new CacheWriter_1.CacheWriter(),
-            cache: info.videoDetails.isLiveContent ? undefined : this.manager.cache?.youtube
+            cacheWriter: new CacheWriter_1.CacheWriter(),
+            cache: info.videoDetails.isLiveContent ? null : this.manager.cache?.youtube,
+            isLive: info.videoDetails.isLiveContent
         });
-        const lines = [resource.source, resource.decoder];
-        if (!resource.isLive)
-            lines.push(resource.cacheWriter);
-        stream_1.pipeline(lines, noop_1.noop);
+        stream_1.pipeline(resource.source, resource.decoder, resource.cacheWriter, noop_1.noop);
         onPipeAndUnpipe(resource);
-        resource.audio.once("close", () => lines.forEach((line) => {
-            if (!line.destroyed)
-                line.destroy();
-        }));
+        resource.cacheWriter.once("close", () => {
+            resource.source.destroy();
+            resource.decoder.destroy();
+        });
     }
     /**
      * @internal
@@ -673,14 +671,12 @@ class AudioPlayerImpl extends events_1.EventEmitter {
             if (!this._aborting) {
                 this._playing = false;
                 this._playResourceOnEnd = false;
-                if (!this.manager.cache || this._resource.isLive) {
-                    this._resource.audio.destroy();
-                    if (this._resource.isLive)
-                        this._resource.audio.emit("close");
-                }
+                if (!this.manager.cache || this._resource.isLive)
+                    this._resource.cacheWriter.destroy();
                 if (!this._disconnected) {
                     if (this._resource.isLive) {
                         const stopping = this._stopping;
+                        const cachedSeconds = this._resource.cachedSecond;
                         await this._getYoutubeResource(this._urlOrLocation);
                         if (this._looping || (this._resource.isLive && !stopping)) {
                             if (this._looping && !(this._resource.isLive && !stopping)) {
@@ -688,6 +684,8 @@ class AudioPlayerImpl extends events_1.EventEmitter {
                                 this.manager.emit("audioStart", this.guildID, this._urlOrLocation);
                                 this.manager.emit("audioEnd", this.guildID, this._urlOrLocation);
                             }
+                            else
+                                this._resource.cachedSecond = cachedSeconds;
                             this._playing = true;
                             this._playResource();
                             return;
