@@ -14,10 +14,10 @@ const downloadMedia_1 = require("../soundcloudUtil/downloadMedia");
 const voice_1 = require("@discordjs/voice");
 const validation_1 = require("../validation");
 const ytdl_core_1 = require("ytdl-core");
+const tiny_typed_emitter_1 = require("tiny-typed-emitter");
 const stream_1 = require("stream");
 const promises_1 = require("fs/promises");
 const fs_1 = require("fs");
-const events_1 = require("events");
 const FFMPEG_ARGS = [
     "-f",
     "s16le",
@@ -49,7 +49,7 @@ const FILTER_FFMPEG_ARGS = [
 /**
  * The default implementation of {@link AudioPlayer | AudioPlayer}
  */
-class AudioPlayerImpl extends events_1.EventEmitter {
+class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
     /**
      * @internal
      */
@@ -464,7 +464,7 @@ class AudioPlayerImpl extends events_1.EventEmitter {
         if (!this.manager.cache && !info.videoDetails.isLiveContent)
             this._info = info;
         async function onPipeAndUnpipe(resource) {
-            const commander = new events_1.EventEmitter();
+            const commander = new tiny_typed_emitter_1.TypedEmitter();
             let contentLength = 0, downloaded = 0;
             await new Promise((resolve) => resource.source.once("pipe", resolve));
             resource.source.on("progress", (_, audioDownloaded, audioLength) => {
