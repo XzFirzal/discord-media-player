@@ -13,7 +13,7 @@ interface PlayerEvents {
 }
 
 /**
- * The instance to manage and playing audio to discord
+ * The instance to manage and play audio to discord
  */
 export interface AudioPlayer extends EventEmitter {
   /**
@@ -68,11 +68,11 @@ export interface AudioPlayer extends EventEmitter {
    */
   status: AudioPlayerStatus
   /**
-   * The audio player is playing or not
+   * Whether or not the audio player is playing audio.
    */
   playing: boolean
   /**
-   * How many seconds does the audio is playing (in ms)
+   * For how long this player has been playing audio (in ms)
    */
   playbackDuration: number
   
@@ -118,7 +118,7 @@ export interface AudioPlayer extends EventEmitter {
   filter(): void
   /**
    * Seek the audio
-   * @param seconds The seconds of where to seek
+   * @param seconds The position to seek to
    */
   seek(seconds: number): Promise<void>
   /**
