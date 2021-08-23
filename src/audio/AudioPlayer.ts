@@ -1,60 +1,19 @@
-import type { EventEmitter } from "events"
 import type { Filters } from "../util/Filters"
 import type { AudioManager } from "./AudioManager"
+import type { TypedEmitter } from "tiny-typed-emitter"
 import type { VoiceConnection, AudioPlayerStatus } from "@discordjs/voice"
 
-type NOOP = () => void
-
-interface PlayerEvents {
-  unlink: NOOP
-  pause: NOOP,
-  unpause: NOOP,
-  end: NOOP
+export interface PlayerEvents {
+  unlink(): void,
+  pause(): void,
+  unpause(): void,
+  end(): void
 }
 
 /**
  * The instance to manage and play audio to discord
  */
-export interface AudioPlayer extends EventEmitter {
-  /**
-   * @internal
-   */
-   on<E extends keyof PlayerEvents>(
-    event: E, listener: PlayerEvents[E]
-  ): this
-  /**
-   * @internal
-   */
-  once<E extends keyof PlayerEvents>(
-    event: E, listener: PlayerEvents[E]
-  ): this
-  /**
-   * @internal
-   */
-  addListener<E extends keyof PlayerEvents>(
-    event: E, listener: PlayerEvents[E]
-  ): this
-
-  /**
-   * @internal
-   */
-  off<E extends keyof PlayerEvents>(
-    event: E, listener: PlayerEvents[E]
-  ): this
-  /**
-   * @internal
-   */
-  removeListener<E extends keyof PlayerEvents>(
-    event: E, listener: PlayerEvents[E]
-  ): this
-
-  /**
-   * @internal
-   */
-  emit<E extends keyof PlayerEvents>(
-    event: E, ...args: never
-  ): boolean
-
+export interface AudioPlayer extends TypedEmitter<PlayerEvents> {
   /**
    * The manager of the audio player
    */

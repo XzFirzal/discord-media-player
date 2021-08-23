@@ -1,7 +1,7 @@
 import type { Filters } from "../util/Filters"
-import type { AudioPlayer } from "./AudioPlayer"
 import type { AudioManager } from "./AudioManager"
 import type { SourceType } from "../util/SourceType"
+import type { AudioPlayer, PlayerEvents } from "./AudioPlayer"
 import type { VoiceConnection, VoiceConnectionReadyState, VoiceConnectionState, AudioPlayerPlayingState, AudioPlayerState } from "@discordjs/voice"
 import type { Transcoding } from "../soundcloudUtil/transcoding"
 import type { TrackInfo } from "soundcloud-downloader/src/info"
@@ -18,10 +18,10 @@ import { downloadMedia } from "../soundcloudUtil/downloadMedia"
 import { demuxProbe, StreamType, AudioPlayer as DiscordPlayer, AudioResource, AudioPlayerStatus, VoiceConnectionStatus } from "@discordjs/voice"
 import { PlayerError, ErrorMessages, AudioPlayerValidation as playerValidation } from "../validation"
 import { getVideoID, getInfo, downloadFromInfo } from "ytdl-core"
+import { TypedEmitter } from "tiny-typed-emitter"
 import { PassThrough, pipeline } from "stream"
 import { open as fsOpen } from "fs/promises"
 import { createReadStream } from "fs"
-import { EventEmitter } from "events"
 
 const FFMPEG_ARGS = [
   "-f",
@@ -56,7 +56,7 @@ const FILTER_FFMPEG_ARGS = [
 /**
  * The default implementation of {@link AudioPlayer | AudioPlayer}
  */
-export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
+export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements AudioPlayer {
   /**
    * Emitted when player is unlinked from connection
    * @event
@@ -604,7 +604,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
     if (!this.manager.cache && !info.videoDetails.isLiveContent) this._info = info
 
     async function onPipeAndUnpipe(resource: Resource) {
-      const commander = new EventEmitter()
+      const commander = new TypedEmitter<{ unpipe(fn: () => void): void }>()
       let contentLength = 0, downloaded = 0
 
       await new Promise((resolve) => resource.source.once("pipe", resolve))
