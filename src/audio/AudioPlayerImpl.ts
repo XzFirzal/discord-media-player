@@ -1,7 +1,7 @@
 import type { Filters } from "../util/Filters"
-import type { AudioPlayer } from "./AudioPlayer"
 import type { AudioManager } from "./AudioManager"
 import type { SourceType } from "../util/SourceType"
+import type { AudioPlayer, PlayerEvents } from "./AudioPlayer"
 import type { VoiceConnection, VoiceConnectionReadyState, VoiceConnectionState, AudioPlayerPlayingState, AudioPlayerState } from "@discordjs/voice"
 import type { Transcoding } from "../soundcloudUtil/transcoding"
 import type { TrackInfo } from "soundcloud-downloader/src/info"
@@ -18,10 +18,10 @@ import { downloadMedia } from "../soundcloudUtil/downloadMedia"
 import { demuxProbe, StreamType, AudioPlayer as DiscordPlayer, AudioResource, AudioPlayerStatus, VoiceConnectionStatus } from "@discordjs/voice"
 import { PlayerError, ErrorMessages, AudioPlayerValidation as playerValidation } from "../validation"
 import { getVideoID, getInfo, downloadFromInfo } from "ytdl-core"
+import { TypedEmitter } from "tiny-typed-emitter"
 import { PassThrough, pipeline } from "stream"
 import { open as fsOpen } from "fs/promises"
 import { createReadStream } from "fs"
-import { EventEmitter } from "events"
 
 const FFMPEG_ARGS = [
   "-f",
@@ -56,7 +56,7 @@ const FILTER_FFMPEG_ARGS = [
 /**
  * The default implementation of {@link AudioPlayer | AudioPlayer}
  */
-export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
+export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements AudioPlayer {
   /**
    * Emitted when player is unlinked from connection
    * @event
@@ -575,7 +575,7 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
       return filteredFormat || formats[0]
     }
 
-    const options = { highWaterMark: 1 << 22, ...this.manager.youtube }
+    const options = { highWaterMark: 1 << 14, dlChunkSize: 1 << 18, ...this.manager.youtube }
 
     let info = this._info as videoInfo
 
@@ -603,33 +603,6 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
 
     if (!this.manager.cache && !info.videoDetails.isLiveContent) this._info = info
 
-    async function onPipeAndUnpipe(resource: Resource) {
-      const commander = new EventEmitter()
-      let contentLength = 0, downloaded = 0
-
-      await new Promise((resolve) => resource.source.once("pipe", resolve))
-
-      resource.source.on("progress", (_: number, audioDownloaded: number, audioLength: number) => {
-        downloaded = audioDownloaded
-        contentLength = audioLength
-      })
-      
-      resource.source.on("unpipe", async () => {
-        if (downloaded >= contentLength) return
-
-        resource.autoPaused = true
-        setImmediate(commander.emit.bind(commander, "unpipe"))
-      })
-
-      resource.source.on("pipe", async () => {
-        await new Promise((resolve) => commander.once("unpipe", resolve))
-        
-        if (!resource.source.readable || !resource.source.readableFlowing) await new Promise((resolve) => resource.source.once("readable", resolve))
-
-        resource.autoPaused = false
-      })
-    }
-
     let format = info.formats.find(getOpusFormat)
 
     const canDemux = format && !info.videoDetails.isLiveContent
@@ -652,7 +625,6 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
       })
 
       pipeline(resource.source, resource.demuxer, resource.decoder, resource.cacheWriter, noop)
-      onPipeAndUnpipe(resource)
 
       resource.cacheWriter.once("close", () => {
         resource.source.destroy()
@@ -683,7 +655,6 @@ export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
     })
 
     pipeline(resource.source, resource.decoder, resource.cacheWriter, noop)
-    onPipeAndUnpipe(resource)
 
     resource.cacheWriter.once("close", () => {
       resource.source.destroy()

@@ -14,10 +14,10 @@
 - [Contributing](#contributing)
 
 ## About
-[@discordjs/voice](https://npmjs.com/package/@discordjs/voice) wrapper to manage the audio resource easier
+[@discordjs/voice](https://npmjs.com/package/@discordjs/voice) wrapper to manage audio resource easier
 
-With some additional features like caching
-and utility method as:
+With some additional features such as:
+- Caching
 - Looping
 - Filtering
 - Seeking

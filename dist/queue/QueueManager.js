@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.QueueManager = void 0;
 const youtube_sr_1 = __importDefault(require("youtube-sr"));
 const Track_1 = require("./Track");
-const events_1 = require("events");
 const QueueHandler_1 = require("./QueueHandler");
+const tiny_typed_emitter_1 = require("tiny-typed-emitter");
 const AudioManager_1 = require("../audio/AudioManager");
 const validation_1 = require("../validation");
 /**
@@ -23,7 +23,7 @@ const validation_1 = require("../validation");
  * ...
  * ```
  */
-class QueueManager extends events_1.EventEmitter {
+class QueueManager extends tiny_typed_emitter_1.TypedEmitter {
     /**
      * @param manager The audio manager resolvable
      */

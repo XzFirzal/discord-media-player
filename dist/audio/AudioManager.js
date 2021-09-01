@@ -8,8 +8,8 @@ const soundcloud_downloader_1 = __importDefault(require("soundcloud-downloader")
 const validation_1 = require("../validation");
 const fs_1 = require("fs");
 const AudioPlayerImpl_1 = require("./AudioPlayerImpl");
+const tiny_typed_emitter_1 = require("tiny-typed-emitter");
 const path_1 = require("path");
-const events_1 = require("events");
 const child_process_1 = require("child_process");
 const os_1 = require("os");
 function initCache(dir) {
@@ -22,7 +22,7 @@ function defaultCreateAudioPlayerType() {
 /**
  * The manager of the audio players
  */
-class AudioManager extends events_1.EventEmitter {
+class AudioManager extends tiny_typed_emitter_1.TypedEmitter {
     /**
      * @param options The options to create new audio player manager
      */

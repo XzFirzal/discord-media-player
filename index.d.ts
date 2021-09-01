@@ -3,7 +3,7 @@
 //   @discordjs/voice
 //   ytdl-core
 //   soundcloud-downloader
-//   events
+//   tiny-typed-emitter
 //   prism-media
 //   stream
 //   fs/promises
@@ -72,7 +72,7 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
     import type { downloadOptions } from "ytdl-core";
     import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
     import SCDL from "soundcloud-downloader";
-    import { EventEmitter } from "events";
+    import { TypedEmitter } from "tiny-typed-emitter";
     type createAudioPlayerType = () => AudioPlayer;
     /**
         * The options for AudioManager
@@ -121,36 +121,10 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
                 */
             audioError(guildID: string, urlOrLocation: string, errorCode: ErrorCode): void;
     }
-    export interface AudioManager extends EventEmitter {
-            /**
-                * @internal
-                */
-            on<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            once<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            addListener<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            off<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            removeListener<E extends keyof AudioManagerEvents>(event: E, listener: AudioManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            emit<E extends keyof AudioManagerEvents>(event: E, ...args: Parameters<AudioManagerEvents[E]>): boolean;
-    }
     /**
         * The manager of the audio players
         */
-    export class AudioManager extends EventEmitter {
+    export class AudioManager extends TypedEmitter<AudioManagerEvents> {
             /**
                 * Emitted whenever an audio is started playing
                 *
@@ -209,45 +183,20 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
 }
 
 declare module 'discord-media-player/dist/audio/AudioPlayer' {
-    import type { EventEmitter } from "events";
     import type { Filters } from "discord-media-player/dist/util/Filters";
     import type { AudioManager } from "discord-media-player/dist/audio/AudioManager";
+    import type { TypedEmitter } from "tiny-typed-emitter";
     import type { VoiceConnection, AudioPlayerStatus } from "@discordjs/voice";
-    type NOOP = () => void;
-    interface PlayerEvents {
-            unlink: NOOP;
-            pause: NOOP;
-            unpause: NOOP;
-            end: NOOP;
+    export interface PlayerEvents {
+            unlink(): void;
+            pause(): void;
+            unpause(): void;
+            end(): void;
     }
     /**
-        * The instance to manage and playing audio to discord
+        * The instance to manage and play audio to discord
         */
-    export interface AudioPlayer extends EventEmitter {
-            /**
-                * @internal
-                */
-            on<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
-            /**
-                * @internal
-                */
-            once<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
-            /**
-                * @internal
-                */
-            addListener<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
-            /**
-                * @internal
-                */
-            off<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
-            /**
-                * @internal
-                */
-            removeListener<E extends keyof PlayerEvents>(event: E, listener: PlayerEvents[E]): this;
-            /**
-                * @internal
-                */
-            emit<E extends keyof PlayerEvents>(event: E, ...args: never): boolean;
+    export interface AudioPlayer extends TypedEmitter<PlayerEvents> {
             /**
                 * The manager of the audio player
                 */
@@ -261,11 +210,11 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
                 */
             status: AudioPlayerStatus;
             /**
-                * The audio player is playing or not
+                * Whether or not the audio player is playing audio.
                 */
             playing: boolean;
             /**
-                * How many seconds does the audio is playing (in ms)
+                * For how long this player has been playing audio (in ms)
                 */
             playbackDuration: number;
             /**
@@ -310,7 +259,7 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
             filter(): void;
             /**
                 * Seek the audio
-                * @param seconds The seconds of where to seek
+                * @param seconds The position to seek to
                 */
             seek(seconds: number): Promise<void>;
             /**
@@ -328,21 +277,20 @@ declare module 'discord-media-player/dist/audio/AudioPlayer' {
                 */
             _switchCache(): void;
     }
-    export {};
 }
 
 declare module 'discord-media-player/dist/audio/AudioPlayerImpl' {
     import type { Filters } from "discord-media-player/dist/util/Filters";
-    import type { AudioPlayer } from "discord-media-player/dist/audio/AudioPlayer";
     import type { AudioManager } from "discord-media-player/dist/audio/AudioManager";
     import type { SourceType } from "discord-media-player/dist/util/SourceType";
+    import type { AudioPlayer, PlayerEvents } from "discord-media-player/dist/audio/AudioPlayer";
     import type { VoiceConnection } from "@discordjs/voice";
     import { AudioPlayerStatus } from "@discordjs/voice";
-    import { EventEmitter } from "events";
+    import { TypedEmitter } from "tiny-typed-emitter";
     /**
         * The default implementation of {@link AudioPlayer | AudioPlayer}
         */
-    export class AudioPlayerImpl extends EventEmitter implements AudioPlayer {
+    export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements AudioPlayer {
             /**
                 * Emitted when player is unlinked from connection
                 * @event
@@ -1293,8 +1241,8 @@ declare module 'discord-media-player/dist/queue/QueueManager' {
     import type { TrackInfo as SCDLTrackInfo } from "soundcloud-downloader/src/info";
     import type { AudioManagerOptions, AudioManagerEvents } from "discord-media-player/dist/audio/AudioManager";
     import { Track } from "discord-media-player/dist/queue/Track";
-    import { EventEmitter } from "events";
     import { QueueHandler } from "discord-media-player/dist/queue/QueueHandler";
+    import { TypedEmitter } from "tiny-typed-emitter";
     import { AudioManager } from "discord-media-player/dist/audio/AudioManager";
     /**
         * Track metadata of youtube search result
@@ -1349,15 +1297,15 @@ declare module 'discord-media-player/dist/queue/QueueManager' {
     export type AudioManagerResolvable = AudioManager | AudioManagerOptions;
     export interface QueueManagerEvents {
             /**
-                * @internal
+                * {@link AudioManagerEvents.audioStart | AudioStartCallback}
                 */
             audioStart: AudioManagerEvents["audioStart"];
             /**
-                * @internal
+                * {@link AudioManagerEvents.audioEnd | AudioEndCallback}
                 */
             audioEnd: AudioManagerEvents["audioEnd"];
             /**
-                * @internal
+                * {@link AudioManagerEvents.audioError | AudioErrorCallback}
                 */
             audioError: AudioManagerEvents["audioError"];
             /**
@@ -1368,32 +1316,6 @@ declare module 'discord-media-player/dist/queue/QueueManager' {
                 * @param guildID The guildID of the linked connection in queue player
                 */
             queueEnd(guildID: string): void;
-    }
-    export interface QueueManager<TM extends object> {
-            /**
-                * @internal
-                */
-            on<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            once<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            addListener<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            off<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            removeListener<E extends keyof QueueManagerEvents>(event: E, listener: QueueManagerEvents[E]): this;
-            /**
-                * @internal
-                */
-            emit<E extends keyof QueueManagerEvents>(event: E, ...args: Parameters<QueueManagerEvents[E]>): boolean;
     }
     /**
         * The manager of queue handler
@@ -1408,7 +1330,7 @@ declare module 'discord-media-player/dist/queue/QueueManager' {
         * ...
         * ```
         */
-    export class QueueManager<TM extends object> extends EventEmitter {
+    export class QueueManager<TM extends object = {}> extends TypedEmitter<QueueManagerEvents> {
             /**
                 * Emitted whenever an audio is started playing
                 *
@@ -1492,7 +1414,7 @@ declare module 'discord-media-player/dist/queue/QueueHandler' {
     /**
         * The instance to handle audio player and queue
         */
-    export class QueueHandler<TM extends object> {
+    export class QueueHandler<TM extends object = {}> {
             /**
                 * The manager of the queue handler
                 */
@@ -1597,7 +1519,7 @@ declare module 'discord-media-player/dist/queue/Queue' {
         * Queue[0]
         * ```
         */
-    export class Queue<TM extends object> extends Array<Track<TM>> {
+    export class Queue<TM extends object = {}> extends Array<Track<TM>> {
             /**
                 * The current playing track
                 */
@@ -1637,7 +1559,7 @@ declare module 'discord-media-player/dist/queue/Track' {
     /**
         * Raw object of the track
         */
-    export interface TrackResolvable<TM extends object> {
+    export interface TrackResolvable<TM extends object = {}> {
             sourceType: number;
             urlOrLocation: string;
             metadata?: TM;
@@ -1645,7 +1567,7 @@ declare module 'discord-media-player/dist/queue/Track' {
     /**
         * Track instance of the raw track
         */
-    export class Track<TM extends object> {
+    export class Track<TM extends object = {}> {
             /**
                 * @param track The raw track object
                 */

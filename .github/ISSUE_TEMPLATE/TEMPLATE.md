@@ -2,7 +2,7 @@
 name: Issue
 about: Asking for help or reporting a bug
 title: ''
-labels: 's: unverified'
+labels: ''
 assignees: ''
 ---
 
@@ -20,6 +20,8 @@ assignees: ''
 
 **Manager Options:**
 - cache:
+- cacheDir:
+- cacheTimeout:
 - youtubeOptions:
 - soundcloudClient:
 - createAudioPlayer():

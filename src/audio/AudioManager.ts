@@ -8,8 +8,8 @@ import SCDL from "soundcloud-downloader"
 import { AudioManagerValidation as validation } from "../validation"
 import { mkdirSync, mkdtempSync, existsSync } from "fs"
 import { AudioPlayerImpl } from "./AudioPlayerImpl"
+import { TypedEmitter } from "tiny-typed-emitter"
 import { join as pathJoin } from "path"
-import { EventEmitter } from "events"
 import { fork } from "child_process"
 import { tmpdir } from "os"
 
@@ -72,51 +72,10 @@ export interface AudioManagerEvents {
   audioError(guildID: string, urlOrLocation: string, errorCode: ErrorCode): void
 }
 
-export interface AudioManager extends EventEmitter {
-  /**
-   * @internal
-   */
-  on<E extends keyof AudioManagerEvents>(
-    event: E, listener: AudioManagerEvents[E]
-  ): this
-  /**
-   * @internal
-   */
-  once<E extends keyof AudioManagerEvents>(
-    event: E, listener: AudioManagerEvents[E]
-  ): this
-  /**
-   * @internal
-   */
-  addListener<E extends keyof AudioManagerEvents>(
-    event: E, listener: AudioManagerEvents[E]
-  ): this
-
-  /**
-   * @internal
-   */
-  off<E extends keyof AudioManagerEvents>(
-    event: E, listener: AudioManagerEvents[E]
-  ): this
-  /**
-   * @internal
-   */
-  removeListener<E extends keyof AudioManagerEvents>(
-    event: E, listener: AudioManagerEvents[E]
-  ): this
-
-  /**
-   * @internal
-   */
-  emit<E extends keyof AudioManagerEvents>(
-    event: E, ...args: Parameters<AudioManagerEvents[E]>
-  ): boolean
-}
-
 /**
  * The manager of the audio players
  */
-export class AudioManager extends EventEmitter {
+export class AudioManager extends TypedEmitter<AudioManagerEvents> {
   /**
    * Emitted whenever an audio is started playing
    * 

@@ -14,10 +14,10 @@ const downloadMedia_1 = require("../soundcloudUtil/downloadMedia");
 const voice_1 = require("@discordjs/voice");
 const validation_1 = require("../validation");
 const ytdl_core_1 = require("ytdl-core");
+const tiny_typed_emitter_1 = require("tiny-typed-emitter");
 const stream_1 = require("stream");
 const promises_1 = require("fs/promises");
 const fs_1 = require("fs");
-const events_1 = require("events");
 const FFMPEG_ARGS = [
     "-f",
     "s16le",
@@ -49,7 +49,7 @@ const FILTER_FFMPEG_ARGS = [
 /**
  * The default implementation of {@link AudioPlayer | AudioPlayer}
  */
-class AudioPlayerImpl extends events_1.EventEmitter {
+class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
     /**
      * @internal
      */
@@ -440,7 +440,7 @@ class AudioPlayerImpl extends events_1.EventEmitter {
             const filteredFormat = formats.find(noVideo);
             return filteredFormat || formats[0];
         }
-        const options = { highWaterMark: 1 << 22, ...this.manager.youtube };
+        const options = { highWaterMark: 1 << 14, dlChunkSize: 1 << 18, ...this.manager.youtube };
         let info = this._info;
         if (!info)
             info = await ytdl_core_1.getInfo(url, options);
@@ -463,27 +463,6 @@ class AudioPlayerImpl extends events_1.EventEmitter {
         }
         if (!this.manager.cache && !info.videoDetails.isLiveContent)
             this._info = info;
-        async function onPipeAndUnpipe(resource) {
-            const commander = new events_1.EventEmitter();
-            let contentLength = 0, downloaded = 0;
-            await new Promise((resolve) => resource.source.once("pipe", resolve));
-            resource.source.on("progress", (_, audioDownloaded, audioLength) => {
-                downloaded = audioDownloaded;
-                contentLength = audioLength;
-            });
-            resource.source.on("unpipe", async () => {
-                if (downloaded >= contentLength)
-                    return;
-                resource.autoPaused = true;
-                setImmediate(commander.emit.bind(commander, "unpipe"));
-            });
-            resource.source.on("pipe", async () => {
-                await new Promise((resolve) => commander.once("unpipe", resolve));
-                if (!resource.source.readable || !resource.source.readableFlowing)
-                    await new Promise((resolve) => resource.source.once("readable", resolve));
-                resource.autoPaused = false;
-            });
-        }
         let format = info.formats.find(getOpusFormat);
         const canDemux = format && !info.videoDetails.isLiveContent;
         if (canDemux) {
@@ -502,7 +481,6 @@ class AudioPlayerImpl extends events_1.EventEmitter {
                 cache: this.manager.cache?.youtube
             });
             stream_1.pipeline(resource.source, resource.demuxer, resource.decoder, resource.cacheWriter, noop_1.noop);
-            onPipeAndUnpipe(resource);
             resource.cacheWriter.once("close", () => {
                 resource.source.destroy();
                 resource.demuxer.destroy();
@@ -526,7 +504,6 @@ class AudioPlayerImpl extends events_1.EventEmitter {
             isLive: info.videoDetails.isLiveContent
         });
         stream_1.pipeline(resource.source, resource.decoder, resource.cacheWriter, noop_1.noop);
-        onPipeAndUnpipe(resource);
         resource.cacheWriter.once("close", () => {
             resource.source.destroy();
             resource.decoder.destroy();

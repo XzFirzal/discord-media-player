@@ -7,8 +7,8 @@ import type { AudioManagerOptions, AudioManagerEvents } from "../audio/AudioMana
 
 import youtube from "youtube-sr"
 import { Track } from "./Track"
-import { EventEmitter } from "events"
 import { QueueHandler } from "./QueueHandler"
+import { TypedEmitter } from "tiny-typed-emitter"
 import { AudioManager } from "../audio/AudioManager"
 import { QueueManagerValidation as validation } from "../validation"
 
@@ -72,15 +72,15 @@ export type AudioManagerResolvable = AudioManager | AudioManagerOptions
 
 export interface QueueManagerEvents {
   /**
-   * @internal
+   * {@link AudioManagerEvents.audioStart | AudioStartCallback}
    */
   audioStart: AudioManagerEvents["audioStart"]
   /**
-   * @internal
+   * {@link AudioManagerEvents.audioEnd | AudioEndCallback}
    */
   audioEnd: AudioManagerEvents["audioEnd"]
   /**
-   * @internal
+   * {@link AudioManagerEvents.audioError | AudioErrorCallback}
    */
   audioError: AudioManagerEvents["audioError"]
   /**
@@ -91,48 +91,6 @@ export interface QueueManagerEvents {
    * @param guildID The guildID of the linked connection in queue player
    */
   queueEnd(guildID: string): void
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface QueueManager<TM extends object> {
-  /**
-   * @internal
-   */
-   on<E extends keyof QueueManagerEvents>(
-    event: E, listener: QueueManagerEvents[E]
-  ): this
-  /**
-   * @internal
-   */
-  once<E extends keyof QueueManagerEvents>(
-    event: E, listener: QueueManagerEvents[E]
-  ): this
-  /**
-   * @internal
-   */
-  addListener<E extends keyof QueueManagerEvents>(
-    event: E, listener: QueueManagerEvents[E]
-  ): this
-
-  /**
-   * @internal
-   */
-  off<E extends keyof QueueManagerEvents>(
-    event: E, listener: QueueManagerEvents[E]
-  ): this
-  /**
-   * @internal
-   */
-  removeListener<E extends keyof QueueManagerEvents>(
-    event: E, listener: QueueManagerEvents[E]
-  ): this
-
-  /**
-   * @internal
-   */
-  emit<E extends keyof QueueManagerEvents>(
-    event: E, ...args: Parameters<QueueManagerEvents[E]>
-  ): boolean
 }
 
 /**
@@ -148,7 +106,7 @@ export interface QueueManager<TM extends object> {
  * ...
  * ```
  */
-export class QueueManager<TM extends object> extends EventEmitter {
+export class QueueManager<TM extends object = {}> extends TypedEmitter<QueueManagerEvents> {
   /**
    * Emitted whenever an audio is started playing
    * 
