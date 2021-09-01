@@ -440,7 +440,7 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
             const filteredFormat = formats.find(noVideo);
             return filteredFormat || formats[0];
         }
-        const options = { highWaterMark: 1 << 22, ...this.manager.youtube };
+        const options = { highWaterMark: 1 << 14, dlChunkSize: 1 << 18, ...this.manager.youtube };
         let info = this._info;
         if (!info)
             info = await ytdl_core_1.getInfo(url, options);
@@ -463,27 +463,6 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
         }
         if (!this.manager.cache && !info.videoDetails.isLiveContent)
             this._info = info;
-        async function onPipeAndUnpipe(resource) {
-            const commander = new tiny_typed_emitter_1.TypedEmitter();
-            let contentLength = 0, downloaded = 0;
-            await new Promise((resolve) => resource.source.once("pipe", resolve));
-            resource.source.on("progress", (_, audioDownloaded, audioLength) => {
-                downloaded = audioDownloaded;
-                contentLength = audioLength;
-            });
-            resource.source.on("unpipe", async () => {
-                if (downloaded >= contentLength)
-                    return;
-                resource.autoPaused = true;
-                setImmediate(commander.emit.bind(commander, "unpipe"));
-            });
-            resource.source.on("pipe", async () => {
-                await new Promise((resolve) => commander.once("unpipe", resolve));
-                if (!resource.source.readable || !resource.source.readableFlowing)
-                    await new Promise((resolve) => resource.source.once("readable", resolve));
-                resource.autoPaused = false;
-            });
-        }
         let format = info.formats.find(getOpusFormat);
         const canDemux = format && !info.videoDetails.isLiveContent;
         if (canDemux) {
@@ -502,7 +481,6 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
                 cache: this.manager.cache?.youtube
             });
             stream_1.pipeline(resource.source, resource.demuxer, resource.decoder, resource.cacheWriter, noop_1.noop);
-            onPipeAndUnpipe(resource);
             resource.cacheWriter.once("close", () => {
                 resource.source.destroy();
                 resource.demuxer.destroy();
@@ -526,7 +504,6 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
             isLive: info.videoDetails.isLiveContent
         });
         stream_1.pipeline(resource.source, resource.decoder, resource.cacheWriter, noop_1.noop);
-        onPipeAndUnpipe(resource);
         resource.cacheWriter.once("close", () => {
             resource.source.destroy();
             resource.decoder.destroy();
