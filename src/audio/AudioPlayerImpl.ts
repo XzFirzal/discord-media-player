@@ -575,7 +575,7 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
       return filteredFormat || formats[0]
     }
 
-    const options = { highWaterMark: 1 << 22, ...this.manager.youtube }
+    const options = { highWaterMark: 1 << 14, dlChunkSize: 1 << 18, ...this.manager.youtube }
 
     let info = this._info as videoInfo
 
@@ -603,33 +603,6 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
 
     if (!this.manager.cache && !info.videoDetails.isLiveContent) this._info = info
 
-    async function onPipeAndUnpipe(resource: Resource) {
-      const commander = new TypedEmitter<{ unpipe(fn: () => void): void }>()
-      let contentLength = 0, downloaded = 0
-
-      await new Promise((resolve) => resource.source.once("pipe", resolve))
-
-      resource.source.on("progress", (_: number, audioDownloaded: number, audioLength: number) => {
-        downloaded = audioDownloaded
-        contentLength = audioLength
-      })
-      
-      resource.source.on("unpipe", async () => {
-        if (downloaded >= contentLength) return
-
-        resource.autoPaused = true
-        setImmediate(commander.emit.bind(commander, "unpipe"))
-      })
-
-      resource.source.on("pipe", async () => {
-        await new Promise((resolve) => commander.once("unpipe", resolve))
-        
-        if (!resource.source.readable || !resource.source.readableFlowing) await new Promise((resolve) => resource.source.once("readable", resolve))
-
-        resource.autoPaused = false
-      })
-    }
-
     let format = info.formats.find(getOpusFormat)
 
     const canDemux = format && !info.videoDetails.isLiveContent
@@ -652,7 +625,6 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
       })
 
       pipeline(resource.source, resource.demuxer, resource.decoder, resource.cacheWriter, noop)
-      onPipeAndUnpipe(resource)
 
       resource.cacheWriter.once("close", () => {
         resource.source.destroy()
@@ -683,7 +655,6 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
     })
 
     pipeline(resource.source, resource.decoder, resource.cacheWriter, noop)
-    onPipeAndUnpipe(resource)
 
     resource.cacheWriter.once("close", () => {
       resource.source.destroy()
