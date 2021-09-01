@@ -76,12 +76,179 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="QueueManagerEvents.html#audioEnd" class="tsd-kind-icon">audio<wbr>End</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="QueueManagerEvents.html#audioError" class="tsd-kind-icon">audio<wbr>Error</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="QueueManagerEvents.html#audioStart" class="tsd-kind-icon">audio<wbr>Start</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="QueueManagerEvents.html#queueEnd" class="tsd-kind-icon">queue<wbr>End</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="QueueManagerEvents.html#queueStart" class="tsd-kind-icon">queue<wbr>Start</a></li>
 							</ul>
 						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="audioEnd" class="tsd-anchor"></a>
+					<h3>audio<wbr>End</h3>
+					<div class="tsd-signature tsd-kind-icon">audio<wbr>End<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, urlOrLocation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L81">src/queue/QueueManager.ts:81</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="AudioManagerEvents.html#audioEnd">AudioEndCallback</a></p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-interface">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, urlOrLocation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p><a href="AudioManagerEvents.html#audioEnd">AudioEndCallback</a></p>
+											</div>
+										</div>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>guildID: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>The guildID of the linked connection in player</p>
+												</div>
+											</li>
+											<li>
+												<h5>urlOrLocation: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>The audio url or location</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="audioError" class="tsd-anchor"></a>
+					<h3>audio<wbr>Error</h3>
+					<div class="tsd-signature tsd-kind-icon">audio<wbr>Error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, urlOrLocation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, errorCode<span class="tsd-signature-symbol">: </span><a href="../enums/Util.ErrorCode.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ErrorCode</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L85">src/queue/QueueManager.ts:85</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="AudioManagerEvents.html#audioError">AudioErrorCallback</a></p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-interface">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, urlOrLocation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, errorCode<span class="tsd-signature-symbol">: </span><a href="../enums/Util.ErrorCode.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ErrorCode</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p><a href="AudioManagerEvents.html#audioError">AudioErrorCallback</a></p>
+											</div>
+										</div>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>guildID: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>The guildID of the linked connection in player</p>
+												</div>
+											</li>
+											<li>
+												<h5>urlOrLocation: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>The audio url or location</p>
+												</div>
+											</li>
+											<li>
+												<h5>errorCode: <a href="../enums/Util.ErrorCode.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ErrorCode</a></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>The error code to identify error</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="audioStart" class="tsd-anchor"></a>
+					<h3>audio<wbr>Start</h3>
+					<div class="tsd-signature tsd-kind-icon">audio<wbr>Start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, urlOrLocation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L77">src/queue/QueueManager.ts:77</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="AudioManagerEvents.html#audioStart">AudioStartCallback</a></p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-interface">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, urlOrLocation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p><a href="AudioManagerEvents.html#audioStart">AudioStartCallback</a></p>
+											</div>
+										</div>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>guildID: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>The guildID of the linked connection in player</p>
+												</div>
+											</li>
+											<li>
+												<h5>urlOrLocation: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>The audio url or location</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</div>
 				</section>
 			</section>
@@ -202,11 +369,23 @@
 					<li class=" tsd-kind-interface">
 						<a href="Packet.html" class="tsd-kind-icon">Packet</a>
 					</li>
+					<li class=" tsd-kind-interface">
+						<a href="PlayerEvents.html" class="tsd-kind-icon">Player<wbr>Events</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
 						<a href="QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
 						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="QueueManagerEvents.html#audioEnd" class="tsd-kind-icon">audio<wbr>End</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="QueueManagerEvents.html#audioError" class="tsd-kind-icon">audio<wbr>Error</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="QueueManagerEvents.html#audioStart" class="tsd-kind-icon">audio<wbr>Start</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="QueueManagerEvents.html#queueEnd" class="tsd-kind-icon">queue<wbr>End</a>
 							</li>

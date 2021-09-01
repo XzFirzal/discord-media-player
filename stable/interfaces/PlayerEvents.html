@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AudioManagerEvents | discord-media-player</title>
+	<title>PlayerEvents | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -53,10 +53,10 @@
 					<a href="../modules.html">discord-media-player</a>
 				</li>
 				<li>
-					<a href="AudioManagerEvents.html">AudioManagerEvents</a>
+					<a href="PlayerEvents.html">PlayerEvents</a>
 				</li>
 			</ul>
-			<h1>Interface AudioManagerEvents</h1>
+			<h1>Interface PlayerEvents</h1>
 		</div>
 	</div>
 </header>
@@ -67,7 +67,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AudioManagerEvents</span>
+						<span class="target">PlayerEvents</span>
 					</li>
 				</ul>
 			</section>
@@ -78,9 +78,10 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="AudioManagerEvents.html#audioEnd" class="tsd-kind-icon">audio<wbr>End</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="AudioManagerEvents.html#audioError" class="tsd-kind-icon">audio<wbr>Error</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="AudioManagerEvents.html#audioStart" class="tsd-kind-icon">audio<wbr>Start</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="PlayerEvents.html#end" class="tsd-kind-icon">end</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="PlayerEvents.html#pause" class="tsd-kind-icon">pause</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="PlayerEvents.html#unlink" class="tsd-kind-icon">unlink</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="PlayerEvents.html#unpause" class="tsd-kind-icon">unpause</a></li>
 							</ul>
 						</section>
 					</div>
@@ -89,103 +90,69 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="audioEnd" class="tsd-anchor"></a>
-					<h3>audio<wbr>End</h3>
+					<a name="end" class="tsd-anchor"></a>
+					<h3>end</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">audio<wbr>End<span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, urlOrLocation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">end<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/audio/AudioManager.ts#L66">src/audio/AudioManager.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/audio/AudioPlayer.ts#L10">src/audio/AudioPlayer.ts:10</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>guildID: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The guildID of the linked connection in player</p>
-									</div>
-								</li>
-								<li>
-									<h5>urlOrLocation: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The audio url or location</p>
-									</div>
-								</li>
-							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="audioError" class="tsd-anchor"></a>
-					<h3>audio<wbr>Error</h3>
+					<a name="pause" class="tsd-anchor"></a>
+					<h3>pause</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">audio<wbr>Error<span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, urlOrLocation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, errorCode<span class="tsd-signature-symbol">: </span><a href="../enums/Util.ErrorCode.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ErrorCode</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">pause<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/audio/AudioManager.ts#L72">src/audio/AudioManager.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/audio/AudioPlayer.ts#L8">src/audio/AudioPlayer.ts:8</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>guildID: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The guildID of the linked connection in player</p>
-									</div>
-								</li>
-								<li>
-									<h5>urlOrLocation: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The audio url or location</p>
-									</div>
-								</li>
-								<li>
-									<h5>errorCode: <a href="../enums/Util.ErrorCode.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ErrorCode</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The error code to identify error</p>
-									</div>
-								</li>
-							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="audioStart" class="tsd-anchor"></a>
-					<h3>audio<wbr>Start</h3>
+					<a name="unlink" class="tsd-anchor"></a>
+					<h3>unlink</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">audio<wbr>Start<span class="tsd-signature-symbol">(</span>guildID<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, urlOrLocation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">unlink<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/audio/AudioManager.ts#L61">src/audio/AudioManager.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/audio/AudioPlayer.ts#L7">src/audio/AudioPlayer.ts:7</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>guildID: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The guildID of the linked connection in player</p>
-									</div>
-								</li>
-								<li>
-									<h5>urlOrLocation: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The audio url or location</p>
-									</div>
-								</li>
-							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="unpause" class="tsd-anchor"></a>
+					<h3>unpause</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">unpause<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/audio/AudioPlayer.ts#L9">src/audio/AudioPlayer.ts:9</a></li>
+								</ul>
+							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -235,24 +202,9 @@
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="../classes/Track.html" class="tsd-kind-icon">Track</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface">
+					<li class=" tsd-kind-interface">
 						<a href="AudioManagerEvents.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Events</a>
-						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="AudioManagerEvents.html#audioEnd" class="tsd-kind-icon">audio<wbr>End</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="AudioManagerEvents.html#audioError" class="tsd-kind-icon">audio<wbr>Error</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="AudioManagerEvents.html#audioStart" class="tsd-kind-icon">audio<wbr>Start</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="AudioManagerOptions.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Options</a>
 					</li>
@@ -268,9 +220,27 @@
 					<li class=" tsd-kind-interface">
 						<a href="Packet.html" class="tsd-kind-icon">Packet</a>
 					</li>
-					<li class=" tsd-kind-interface">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
 						<a href="PlayerEvents.html" class="tsd-kind-icon">Player<wbr>Events</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="PlayerEvents.html#end" class="tsd-kind-icon">end</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="PlayerEvents.html#pause" class="tsd-kind-icon">pause</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="PlayerEvents.html#unlink" class="tsd-kind-icon">unlink</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="PlayerEvents.html#unpause" class="tsd-kind-icon">unpause</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
 					</li>
