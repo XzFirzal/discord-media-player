@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CacheManager | discord-media-player</title>
+	<title>youtubeVideoType | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -53,28 +53,29 @@
 					<a href="../modules.html">discord-media-player</a>
 				</li>
 				<li>
-					<a href="CacheManager.html">CacheManager</a>
+					<a href="youtubeVideoType.html">youtubeVideoType</a>
 				</li>
 			</ul>
-			<h1>Interface CacheManager</h1>
+			<h1>Interface youtubeVideoType</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The youtube video types</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">CacheManager</span>
+						<span class="target">youtubeVideoType</span>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implemented by</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../classes/CacheManagerImpl.html" class="tsd-signature-type" data-tsd-kind="Class">CacheManagerImpl</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -84,18 +85,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="CacheManager.html#local" class="tsd-kind-icon">local</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="CacheManager.html#path" class="tsd-kind-icon">path</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="CacheManager.html#soundcloud" class="tsd-kind-icon">soundcloud</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="CacheManager.html#timeout" class="tsd-kind-icon">timeout</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="CacheManager.html#youtube" class="tsd-kind-icon">youtube</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="CacheManager.html#setPath" class="tsd-kind-icon">set<wbr>Path</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="CacheManager.html#setTimeout" class="tsd-kind-icon">set<wbr>Timeout</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="youtubeVideoType.html#playlist" class="tsd-kind-icon">playlist</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="youtubeVideoType.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="youtubeVideoType.html#video" class="tsd-kind-icon">video</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,144 +96,34 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="local" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> local</h3>
-					<div class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">:</span> <a href="../classes/Cache.html" class="tsd-signature-type" data-tsd-kind="Class">Cache</a></div>
+					<a name="playlist" class="tsd-anchor"></a>
+					<h3>playlist</h3>
+					<div class="tsd-signature tsd-kind-icon">playlist<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PlaylistVideo</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/CacheManager.ts#L24">src/cache/CacheManager.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L49">src/queue/QueueManager.ts:49</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Audio cache from local source</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="path" class="tsd-anchor"></a>
-					<h3>path</h3>
-					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="search" class="tsd-anchor"></a>
+					<h3>search</h3>
+					<div class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">YoutubeSearchVideoInfo</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/CacheManager.ts#L7">src/cache/CacheManager.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L50">src/queue/QueueManager.ts:50</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The base directory of the caches</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="soundcloud" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> soundcloud</h3>
-					<div class="tsd-signature tsd-kind-icon">soundcloud<span class="tsd-signature-symbol">:</span> <a href="../classes/Cache.html" class="tsd-signature-type" data-tsd-kind="Class">Cache</a></div>
+					<a name="video" class="tsd-anchor"></a>
+					<h3>video</h3>
+					<div class="tsd-signature tsd-kind-icon">video<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">YoutubeVideoDetails</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/CacheManager.ts#L20">src/cache/CacheManager.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L48">src/queue/QueueManager.ts:48</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Audio cache from soundcloud source</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="timeout" class="tsd-anchor"></a>
-					<h3>timeout</h3>
-					<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/CacheManager.ts#L11">src/cache/CacheManager.ts:11</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The timeout for deleting cache after inactivity</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="youtube" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> youtube</h3>
-					<div class="tsd-signature tsd-kind-icon">youtube<span class="tsd-signature-symbol">:</span> <a href="../classes/Cache.html" class="tsd-signature-type" data-tsd-kind="Class">Cache</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/CacheManager.ts#L16">src/cache/CacheManager.ts:16</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Audio cache from youtube source</p>
-						</div>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="setPath" class="tsd-anchor"></a>
-					<h3>set<wbr>Path</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Path<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/CacheManager.ts#L35">src/cache/CacheManager.ts:35</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Set the base directory of the caches</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>path: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The base directory</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="setTimeout" class="tsd-anchor"></a>
-					<h3>set<wbr>Timeout</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Timeout<span class="tsd-signature-symbol">(</span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/cache/CacheManager.ts#L30">src/cache/CacheManager.ts:30</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Set the cache deletion timeout of the caches</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>timeout: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The cache timeout</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
 				</section>
 			</section>
 		</div>
@@ -297,36 +179,9 @@
 					<li class=" tsd-kind-interface">
 						<a href="AudioPlayer.html" class="tsd-kind-icon">Audio<wbr>Player</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface">
+					<li class=" tsd-kind-interface">
 						<a href="CacheManager.html" class="tsd-kind-icon">Cache<wbr>Manager</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="CacheManager.html#local" class="tsd-kind-icon">local</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="CacheManager.html#path" class="tsd-kind-icon">path</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="CacheManager.html#soundcloud" class="tsd-kind-icon">soundcloud</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="CacheManager.html#timeout" class="tsd-kind-icon">timeout</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="CacheManager.html#youtube" class="tsd-kind-icon">youtube</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="CacheManager.html#setPath" class="tsd-kind-icon">set<wbr>Path</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="CacheManager.html#setTimeout" class="tsd-kind-icon">set<wbr>Timeout</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="CacheOptions.html" class="tsd-kind-icon">Cache<wbr>Options</a>
 					</li>
@@ -354,9 +209,24 @@
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a>
 					</li>
-					<li class=" tsd-kind-interface">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
 						<a href="youtubeVideoType.html" class="tsd-kind-icon">youtube<wbr>Video<wbr>Type</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="youtubeVideoType.html#playlist" class="tsd-kind-icon">playlist</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="youtubeVideoType.html#search" class="tsd-kind-icon">search</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="youtubeVideoType.html#video" class="tsd-kind-icon">video</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-type-alias">
 						<a href="../modules.html#AudioManagerResolvable" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable</a>
 					</li>
