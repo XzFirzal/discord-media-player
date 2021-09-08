@@ -1,21 +1,32 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { VoiceConnection } from "@discordjs/voice"
-import type { Video as YoutubeSRVideo } from "youtube-sr"
 import type { SearchResponseAll } from "soundcloud-downloader/src/search"
 import type { TrackInfo as SCDLTrackInfo } from "soundcloud-downloader/src/info"
 import type { AudioManagerOptions, AudioManagerEvents } from "../audio/AudioManager"
+import type { PlaylistVideo, YoutubeSearchVideoInfo, YoutubeVideoDetails } from "youtube-scrapper"
 
-import youtube from "youtube-sr"
 import { Track } from "./Track"
 import { QueueHandler } from "./QueueHandler"
 import { TypedEmitter } from "tiny-typed-emitter"
 import { AudioManager } from "../audio/AudioManager"
 import { QueueManagerValidation as validation } from "../validation"
+import { getVideoInfo, getPlaylistInfo, search } from "youtube-scrapper"
+
+/**
+ * A RegExp instance to identify youtube playlist url
+ */
+export const PLAYLIST_URL = /^(http|https)?:\/\/(www.)?youtube.com\/playlist\?list=((PL|UU|LL|RD|OL)[a-zA-Z0-9-_]{16,41})$/
+
+/**
+ * A RegExp instance to identify youtube video url
+ */
+// eslint-disable-next-line no-useless-escape
+export const VIDEO_URL = /^(http|https)?:\/\/?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
 
 /**
  * Track metadata of youtube search result
  */
-export type youtubeMetadata = YoutubeSRVideo
+export type youtubeMetadata = PlaylistVideo | YoutubeSearchVideoInfo | YoutubeVideoDetails
 /**
  * Track metadata of soundcloud search result
  */
@@ -31,30 +42,38 @@ export type youtubeSearchResultType = "video" | "playlist" | "search"
 export type soundcloudSearchResultType = "track" | "set" | "search"
 
 /**
+ * The youtube video types
+ */
+export interface youtubeVideoType {
+  video: YoutubeVideoDetails
+  playlist: PlaylistVideo
+  search: YoutubeSearchVideoInfo
+}
+
+/**
  * The youtube search options
  */
 export interface youtubeSearchOptions {
-  query: string,
-  searchLimit?: number,
-  playlistLimit?: number
+  query: string
+  fullPlaylist?: boolean
 }
 
 /**
  * The soundcloud search options
  */
 export interface soundcloudSearchOptions {
-  query: string,
-  searchLimit?: number,
-  searchOffset?: number,
+  query: string
+  searchLimit?: number
+  searchOffset?: number
   setLimit?: number
 }
 
 /**
  * The youtube search result
  */
-export interface youtubeSearchResult {
-  type: youtubeSearchResultType,
-  tracks: Track<youtubeMetadata>[]
+export interface youtubeSearchResult<T extends youtubeSearchResultType> {
+  type: T,
+  tracks: Track<youtubeVideoType[T]>[]
 }
 
 /**
@@ -225,33 +244,28 @@ export class QueueManager<TM extends object = {}> extends TypedEmitter<QueueMana
    * @param options The youtube search options
    * @returns The youtube search result
    */
-  async youtubeSearch(options: youtubeSearchOptions): Promise<youtubeSearchResult> {
+  async youtubeSearch(options: youtubeSearchOptions): Promise<youtubeSearchResult<youtubeSearchResultType>> {
     validation.validateYoutubeSearchOptions(options)
 
     const tracks: Track<youtubeMetadata>[] = []
-    const type: youtubeSearchResultType = youtube.Regex.VIDEO_URL.test(options.query)
-      ? "video"
-      : youtube.Regex.PLAYLIST_URL.test(options.query)
+    const type: youtubeSearchResultType = PLAYLIST_URL.test(options.query)
       ? "playlist"
+      : VIDEO_URL.test(options.query)
+      ? "video"
       : "search"
-      
+
     if (type === "video") {
-      const video = await youtube.getVideo(options.query)
+      const { details } = await getVideoInfo(options.query)
 
       tracks.push(new Track({
         sourceType: 0,
-        urlOrLocation: video.url,
-        metadata: video
+        urlOrLocation: details.url,
+        metadata: details
       }))
     } else if (type === "playlist") {
-      const limit = options.playlistLimit ?? 100
-      const playlist = await youtube.getPlaylist(options.query, { limit })
+      const playlist = await getPlaylistInfo(options.query, { full: options.fullPlaylist ?? false })
 
-      await playlist.fetch()
-
-      for (const video of playlist) {
-        if (tracks.length >= limit) break
-
+      for (const video of playlist.tracks) {
         tracks.push(new Track({
           sourceType: 0,
           urlOrLocation: video.url,
@@ -259,13 +273,9 @@ export class QueueManager<TM extends object = {}> extends TypedEmitter<QueueMana
         }))
       }
     } else {
-      const searchResult = await youtube.search(options.query, {
-        limit: options.searchLimit ?? 1,
-        type: "video",
-        safeSearch: true
-      })
+      const searchResult = await search(options.query)
 
-      for (const video of searchResult) {
+      for (const video of searchResult.videos) {
         tracks.push(new Track({
           sourceType: 0,
           urlOrLocation: video.url,

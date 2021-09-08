@@ -29,7 +29,7 @@ const fs_1 = require("fs");
 /**
  * The current installed version of the package
  */
-exports.version = JSON.parse(fs_1.readFileSync("package.json", "utf-8")).version;
+exports.version = JSON.parse(fs_1.readFileSync(require.resolve("../package.json"), "utf-8")).version;
 __exportStar(require("./audio/AudioManager"), exports);
 __exportStar(require("./audio/AudioPlayer"), exports);
 __exportStar(require("./audio/AudioPlayerImpl"), exports);

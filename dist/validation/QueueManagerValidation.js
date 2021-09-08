@@ -22,10 +22,8 @@ function validateYoutubeSearchOptions(options) {
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.NotProvided("query", "YoutubeSearchOptions"));
     else if (typeof options.query !== "string")
         throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("string", "YoutubeSearchOptions.query", typeof options.query));
-    if ("searchLimit" in options && typeof options.searchLimit !== "number")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("number", "YoutubeSearchOptions.searchLimit", typeof options.searchLimit));
-    if ("playlistLimit" in options && typeof options.playlistLimit !== "number")
-        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("number", "YoutubeSearchOptions.playlistLimit", typeof options.playlistLimit));
+    if ("fullPlaylist" in options && typeof options.fullPlaylist !== "boolean")
+        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("boolean", "YoutubeSearchOptions.fullPlaylist", typeof options.fullPlaylist));
 }
 exports.validateYoutubeSearchOptions = validateYoutubeSearchOptions;
 function validateSoundcloudSearchOptions(options) {

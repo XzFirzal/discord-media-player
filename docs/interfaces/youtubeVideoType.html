@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TrackResolvable | discord-media-player</title>
+	<title>youtubeVideoType | discord-media-player</title>
 	<meta name="description" content="Documentation for discord-media-player">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -53,10 +53,10 @@
 					<a href="../modules.html">discord-media-player</a>
 				</li>
 				<li>
-					<a href="TrackResolvable.html">TrackResolvable</a>
+					<a href="youtubeVideoType.html">youtubeVideoType</a>
 				</li>
 			</ul>
-			<h1>Interface TrackResolvable&lt;TM&gt;</h1>
+			<h1>Interface youtubeVideoType</h1>
 		</div>
 	</div>
 </header>
@@ -66,23 +66,15 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Raw object of the track</p>
+						<p>The youtube video types</p>
 					</div>
 				</div>
-			</section>
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>TM<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-symbol">{}</span></h4>
-					</li>
-				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">TrackResolvable</span>
+						<span class="target">youtubeVideoType</span>
 					</li>
 				</ul>
 			</section>
@@ -93,9 +85,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="TrackResolvable.html#metadata" class="tsd-kind-icon">metadata</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="TrackResolvable.html#sourceType" class="tsd-kind-icon">source<wbr>Type</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="TrackResolvable.html#urlOrLocation" class="tsd-kind-icon">url<wbr>OrLocation</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="youtubeVideoType.html#playlist" class="tsd-kind-icon">playlist</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="youtubeVideoType.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="youtubeVideoType.html#video" class="tsd-kind-icon">video</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,32 +96,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="metadata" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> metadata</h3>
-					<div class="tsd-signature tsd-kind-icon">metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TM</span></div>
+					<a name="playlist" class="tsd-anchor"></a>
+					<h3>playlist</h3>
+					<div class="tsd-signature tsd-kind-icon">playlist<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PlaylistVideo</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/queue/Track.ts#L16">src/queue/Track.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L49">src/queue/QueueManager.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="sourceType" class="tsd-anchor"></a>
-					<h3>source<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">source<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="search" class="tsd-anchor"></a>
+					<h3>search</h3>
+					<div class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">YoutubeSearchVideoInfo</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/queue/Track.ts#L14">src/queue/Track.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L50">src/queue/QueueManager.ts:50</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="urlOrLocation" class="tsd-anchor"></a>
-					<h3>url<wbr>OrLocation</h3>
-					<div class="tsd-signature tsd-kind-icon">url<wbr>OrLocation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="video" class="tsd-anchor"></a>
+					<h3>video</h3>
+					<div class="tsd-signature tsd-kind-icon">video<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">YoutubeVideoDetails</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/stable/src/queue/Track.ts#L15">src/queue/Track.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L48">src/queue/QueueManager.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -202,24 +194,9 @@
 					<li class=" tsd-kind-interface">
 						<a href="QueueManagerEvents.html" class="tsd-kind-icon">Queue<wbr>Manager<wbr>Events</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-has-type-parameter">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="TrackResolvable.html" class="tsd-kind-icon">Track<wbr>Resolvable</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="TrackResolvable.html#metadata" class="tsd-kind-icon">metadata</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="TrackResolvable.html#sourceType" class="tsd-kind-icon">source<wbr>Type</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="TrackResolvable.html#urlOrLocation" class="tsd-kind-icon">url<wbr>OrLocation</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="soundcloudSearchOptions.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Options</a>
 					</li>
@@ -232,9 +209,24 @@
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a>
 					</li>
-					<li class=" tsd-kind-interface">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
 						<a href="youtubeVideoType.html" class="tsd-kind-icon">youtube<wbr>Video<wbr>Type</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="youtubeVideoType.html#playlist" class="tsd-kind-icon">playlist</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="youtubeVideoType.html#search" class="tsd-kind-icon">search</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="youtubeVideoType.html#video" class="tsd-kind-icon">video</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-type-alias">
 						<a href="../modules.html#AudioManagerResolvable" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable</a>
 					</li>
