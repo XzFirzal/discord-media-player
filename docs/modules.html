@@ -98,7 +98,8 @@
 								<li class="tsd-kind-interface"><a href="interfaces/soundcloudSearchOptions.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Options</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/soundcloudSearchResult.html" class="tsd-kind-icon">soundcloud<wbr>Search<wbr>Result</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/youtubeSearchOptions.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Options</a></li>
-								<li class="tsd-kind-interface"><a href="interfaces/youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/youtubeVideoType.html" class="tsd-kind-icon">youtube<wbr>Video<wbr>Type</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -114,6 +115,8 @@
 						<section class="tsd-index-section ">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable"><a href="modules.html#PLAYLIST_URL" class="tsd-kind-icon">PLAYLIST_<wbr>URL</a></li>
+								<li class="tsd-kind-variable"><a href="modules.html#VIDEO_URL" class="tsd-kind-icon">VIDEO_<wbr>URL</a></li>
 								<li class="tsd-kind-variable"><a href="modules.html#version" class="tsd-kind-icon">version</a></li>
 							</ul>
 						</section>
@@ -128,7 +131,7 @@
 					<div class="tsd-signature tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable<span class="tsd-signature-symbol">:</span> <a href="classes/AudioManager.html" class="tsd-signature-type" data-tsd-kind="Class">AudioManager</a><span class="tsd-signature-symbol"> | </span><a href="interfaces/AudioManagerOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">AudioManagerOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L71">src/queue/QueueManager.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L90">src/queue/QueueManager.ts:90</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -143,7 +146,7 @@
 					<div class="tsd-signature tsd-kind-icon">soundcloud<wbr>Metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SCDLTrackInfo</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L22">src/queue/QueueManager.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L33">src/queue/QueueManager.ts:33</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -158,7 +161,7 @@
 					<div class="tsd-signature tsd-kind-icon">soundcloud<wbr>Search<wbr>Result<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;track&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;set&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;search&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L31">src/queue/QueueManager.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L42">src/queue/QueueManager.ts:42</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -170,10 +173,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="youtubeMetadata" class="tsd-anchor"></a>
 					<h3>youtube<wbr>Metadata</h3>
-					<div class="tsd-signature tsd-kind-icon">youtube<wbr>Metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">YoutubeSRVideo</span></div>
+					<div class="tsd-signature tsd-kind-icon">youtube<wbr>Metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PlaylistVideo</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">YoutubeSearchVideoInfo</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">YoutubeVideoDetails</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L18">src/queue/QueueManager.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L29">src/queue/QueueManager.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -188,7 +191,7 @@
 					<div class="tsd-signature tsd-kind-icon">youtube<wbr>Search<wbr>Result<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;video&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;playlist&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;search&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L27">src/queue/QueueManager.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L38">src/queue/QueueManager.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -200,6 +203,36 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="PLAYLIST_URL" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> PLAYLIST_<wbr>URL</h3>
+					<div class="tsd-signature tsd-kind-icon">PLAYLIST_<wbr>URL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L18">src/queue/QueueManager.ts:18</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A RegExp instance to identify youtube playlist url</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="VIDEO_URL" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> VIDEO_<wbr>URL</h3>
+					<div class="tsd-signature tsd-kind-icon">VIDEO_<wbr>URL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/queue/QueueManager.ts#L24">src/queue/QueueManager.ts:24</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A RegExp instance to identify youtube video url</p>
+						</div>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="version" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> version</h3>
@@ -305,8 +338,11 @@
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/youtubeSearchOptions.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-interface">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="interfaces/youtubeSearchResult.html" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/youtubeVideoType.html" class="tsd-kind-icon">youtube<wbr>Video<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#AudioManagerResolvable" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Resolvable</a>
@@ -322,6 +358,12 @@
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="modules.html#youtubeSearchResultType" class="tsd-kind-icon">youtube<wbr>Search<wbr>Result<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#PLAYLIST_URL" class="tsd-kind-icon">PLAYLIST_<wbr>URL</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#VIDEO_URL" class="tsd-kind-icon">VIDEO_<wbr>URL</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="modules.html#version" class="tsd-kind-icon">version</a>

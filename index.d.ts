@@ -9,8 +9,8 @@
 //   fs/promises
 //   axios
 //   m3u8stream
-//   youtube-sr
 //   soundcloud-downloader/src/info
+//   youtube-scrapper
 
 declare module 'discord-media-player' {
     /**
@@ -1237,17 +1237,25 @@ declare module 'discord-media-player/dist/validation/CacheReaderValidation' {
 
 declare module 'discord-media-player/dist/queue/QueueManager' {
     import type { VoiceConnection } from "@discordjs/voice";
-    import type { Video as YoutubeSRVideo } from "youtube-sr";
     import type { TrackInfo as SCDLTrackInfo } from "soundcloud-downloader/src/info";
     import type { AudioManagerOptions, AudioManagerEvents } from "discord-media-player/dist/audio/AudioManager";
+    import type { PlaylistVideo, YoutubeSearchVideoInfo, YoutubeVideoDetails } from "youtube-scrapper";
     import { Track } from "discord-media-player/dist/queue/Track";
     import { QueueHandler } from "discord-media-player/dist/queue/QueueHandler";
     import { TypedEmitter } from "tiny-typed-emitter";
     import { AudioManager } from "discord-media-player/dist/audio/AudioManager";
     /**
+        * A RegExp instance to identify youtube playlist url
+        */
+    export const PLAYLIST_URL: RegExp;
+    /**
+        * A RegExp instance to identify youtube video url
+        */
+    export const VIDEO_URL: RegExp;
+    /**
         * Track metadata of youtube search result
         */
-    export type youtubeMetadata = YoutubeSRVideo;
+    export type youtubeMetadata = PlaylistVideo | YoutubeSearchVideoInfo | YoutubeVideoDetails;
     /**
         * Track metadata of soundcloud search result
         */
@@ -1261,12 +1269,19 @@ declare module 'discord-media-player/dist/queue/QueueManager' {
         */
     export type soundcloudSearchResultType = "track" | "set" | "search";
     /**
+        * The youtube video types
+        */
+    export interface youtubeVideoType {
+            video: YoutubeVideoDetails;
+            playlist: PlaylistVideo;
+            search: YoutubeSearchVideoInfo;
+    }
+    /**
         * The youtube search options
         */
     export interface youtubeSearchOptions {
             query: string;
-            searchLimit?: number;
-            playlistLimit?: number;
+            fullPlaylist?: boolean;
     }
     /**
         * The soundcloud search options
@@ -1280,9 +1295,9 @@ declare module 'discord-media-player/dist/queue/QueueManager' {
     /**
         * The youtube search result
         */
-    export interface youtubeSearchResult {
-            type: youtubeSearchResultType;
-            tracks: Track<youtubeMetadata>[];
+    export interface youtubeSearchResult<T extends youtubeSearchResultType> {
+            type: T;
+            tracks: Track<youtubeVideoType[T]>[];
     }
     /**
         * The soundcloud search result
@@ -1395,7 +1410,7 @@ declare module 'discord-media-player/dist/queue/QueueManager' {
                 * @param options The youtube search options
                 * @returns The youtube search result
                 */
-            youtubeSearch(options: youtubeSearchOptions): Promise<youtubeSearchResult>;
+            youtubeSearch(options: youtubeSearchOptions): Promise<youtubeSearchResult<youtubeSearchResultType>>;
             /**
                 * Search for a soundcloud track
                 * @param options The soundcloud search options

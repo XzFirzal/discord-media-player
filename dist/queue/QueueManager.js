@@ -1,15 +1,21 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QueueManager = void 0;
-const youtube_sr_1 = __importDefault(require("youtube-sr"));
+exports.QueueManager = exports.VIDEO_URL = exports.PLAYLIST_URL = void 0;
 const Track_1 = require("./Track");
 const QueueHandler_1 = require("./QueueHandler");
 const tiny_typed_emitter_1 = require("tiny-typed-emitter");
 const AudioManager_1 = require("../audio/AudioManager");
 const validation_1 = require("../validation");
+const youtube_scrapper_1 = require("youtube-scrapper");
+/**
+ * A RegExp instance to identify youtube playlist url
+ */
+exports.PLAYLIST_URL = /^(http|https)?:\/\/(www.)?youtube.com\/playlist\?list=((PL|UU|LL|RD|OL)[a-zA-Z0-9-_]{16,41})$/;
+/**
+ * A RegExp instance to identify youtube video url
+ */
+// eslint-disable-next-line no-useless-escape
+exports.VIDEO_URL = /^(http|https)?:\/\/?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
 /**
  * The manager of queue handler
  *
@@ -88,26 +94,22 @@ class QueueManager extends tiny_typed_emitter_1.TypedEmitter {
     async youtubeSearch(options) {
         validation_1.QueueManagerValidation.validateYoutubeSearchOptions(options);
         const tracks = [];
-        const type = youtube_sr_1.default.Regex.VIDEO_URL.test(options.query)
-            ? "video"
-            : youtube_sr_1.default.Regex.PLAYLIST_URL.test(options.query)
-                ? "playlist"
+        const type = exports.PLAYLIST_URL.test(options.query)
+            ? "playlist"
+            : exports.VIDEO_URL.test(options.query)
+                ? "video"
                 : "search";
         if (type === "video") {
-            const video = await youtube_sr_1.default.getVideo(options.query);
+            const { details } = await youtube_scrapper_1.getVideoInfo(options.query);
             tracks.push(new Track_1.Track({
                 sourceType: 0,
-                urlOrLocation: video.url,
-                metadata: video
+                urlOrLocation: details.url,
+                metadata: details
             }));
         }
         else if (type === "playlist") {
-            const limit = options.playlistLimit ?? 100;
-            const playlist = await youtube_sr_1.default.getPlaylist(options.query, { limit });
-            await playlist.fetch();
-            for (const video of playlist) {
-                if (tracks.length >= limit)
-                    break;
+            const playlist = await youtube_scrapper_1.getPlaylistInfo(options.query, { full: options.fullPlaylist ?? false });
+            for (const video of playlist.tracks) {
                 tracks.push(new Track_1.Track({
                     sourceType: 0,
                     urlOrLocation: video.url,
@@ -116,12 +118,8 @@ class QueueManager extends tiny_typed_emitter_1.TypedEmitter {
             }
         }
         else {
-            const searchResult = await youtube_sr_1.default.search(options.query, {
-                limit: options.searchLimit ?? 1,
-                type: "video",
-                safeSearch: true
-            });
-            for (const video of searchResult) {
+            const searchResult = await youtube_scrapper_1.search(options.query);
+            for (const video of searchResult.videos) {
                 tracks.push(new Track_1.Track({
                     sourceType: 0,
                     urlOrLocation: video.url,
