@@ -71,7 +71,7 @@ client.on("messageCreate", async msg => {
         
         const handler = queueManager.getHandler(connection)
         
-        handler.queue.add(tracks)
+        handler.queue.add(type !== "playlist" ? tracks[0] : tracks)
         
         if (handler.queue.current) {
             msg.reply(`Added ${type === "playlist" ? "Playlist" : `'${tracks[0].get("title")}'`} to queue`)

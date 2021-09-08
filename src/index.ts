@@ -5,7 +5,7 @@ import { readFileSync } from "fs"
 /**
  * The current installed version of the package
  */
-export const version: string = JSON.parse(readFileSync("package.json", "utf-8")).version
+export const version: string = JSON.parse(readFileSync(require.resolve("../package.json"), "utf-8")).version
 
 export * from "./audio/AudioManager"
 export * from "./audio/AudioPlayer"
