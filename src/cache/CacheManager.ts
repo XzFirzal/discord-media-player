@@ -33,4 +33,8 @@ export interface CacheManager {
    * @param path The base directory
    */
   setPath(path: string): void
+  /**
+   * A function to force delete cache directory
+   */
+  delete?(): void | Promise<void>
 }

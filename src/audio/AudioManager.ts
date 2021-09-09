@@ -10,7 +10,6 @@ import { mkdirSync, mkdtempSync, existsSync } from "fs"
 import { AudioPlayerImpl } from "./AudioPlayerImpl"
 import { TypedEmitter } from "tiny-typed-emitter"
 import { join as pathJoin } from "path"
-import { fork } from "child_process"
 import { tmpdir } from "os"
 
 function initCache(dir: string): void {
@@ -153,11 +152,6 @@ export class AudioManager extends TypedEmitter<AudioManagerEvents> {
       initCache(path)
       cache.setTimeout(timeout)
       cache.setPath(mkdtempSync(pathJoin(path, "node-discord-media-player-")))
-
-      const daemon = fork(require.resolve("../nodeDeleteDaemon"), { detached: true })
-      daemon.send(process.pid)
-      daemon.send(cache.path)
-      daemon.unref()
     }
   }
 
