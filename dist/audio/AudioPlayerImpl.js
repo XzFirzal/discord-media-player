@@ -625,7 +625,7 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
     async _onAudioChange(oldState, newState) {
         if (oldState.status !== voice_1.AudioPlayerStatus.Buffering && newState.status === voice_1.AudioPlayerStatus.Buffering) {
             try {
-                await voice_1.entersState(this._player, voice_1.AudioPlayerStatus.Playing, this.manager.playTimeout);
+                await voice_1.entersState(this._player, voice_1.AudioPlayerStatus.Playing, this.manager.bufferTimeout);
             }
             catch {
                 if (this._player.state.status === voice_1.AudioPlayerStatus.Playing)

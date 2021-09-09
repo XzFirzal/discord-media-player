@@ -93,7 +93,7 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
             /**
                 * Abort the player after reaching timeout on buffering (in ms), default to 7 seconds
                 */
-            playTimeout?: number;
+            bufferTimeout?: number;
             /**
                 * The downloadOptions (ytdl-core) when getting audio source from youtube
                 */
@@ -157,7 +157,7 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
             /**
                 * Abort the player after reaching timeout on buffering (in ms), default to 7 seconds
                 */
-            readonly playTimeout?: number;
+            readonly bufferTimeout?: number;
             /**
                 * The soundcloud client (soundcloud-downloader) when getting audio source
                 */

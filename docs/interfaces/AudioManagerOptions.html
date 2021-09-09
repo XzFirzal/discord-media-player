@@ -85,11 +85,11 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="AudioManagerOptions.html#bufferTimeout" class="tsd-kind-icon">buffer<wbr>Timeout</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="AudioManagerOptions.html#cache" class="tsd-kind-icon">cache</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="AudioManagerOptions.html#cacheDir" class="tsd-kind-icon">cache<wbr>Dir</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="AudioManagerOptions.html#cacheTimeout" class="tsd-kind-icon">cache<wbr>Timeout</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="AudioManagerOptions.html#createAudioPlayer" class="tsd-kind-icon">create<wbr>Audio<wbr>Player</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="AudioManagerOptions.html#playTimeout" class="tsd-kind-icon">play<wbr>Timeout</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="AudioManagerOptions.html#soundcloudClient" class="tsd-kind-icon">soundcloud<wbr>Client</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="AudioManagerOptions.html#youtubeOptions" class="tsd-kind-icon">youtube<wbr>Options</a></li>
 							</ul>
@@ -99,6 +99,21 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="bufferTimeout" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> buffer<wbr>Timeout</h3>
+					<div class="tsd-signature tsd-kind-icon">buffer<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/audio/AudioManager.ts#L44">src/audio/AudioManager.ts:44</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Abort the player after reaching timeout on buffering (in ms), default to 7 seconds</p>
+						</div>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="cache" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cache</h3>
@@ -156,21 +171,6 @@
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Custom method for creating audio player implementation</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="playTimeout" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> play<wbr>Timeout</h3>
-					<div class="tsd-signature tsd-kind-icon">play<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/XzFirzal/discord-media-player/blob/main/src/audio/AudioManager.ts#L44">src/audio/AudioManager.ts:44</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Abort the player after reaching timeout on buffering (in ms), default to 7 seconds</p>
 						</div>
 					</div>
 				</section>
@@ -258,6 +258,9 @@
 						<a href="AudioManagerOptions.html" class="tsd-kind-icon">Audio<wbr>Manager<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="AudioManagerOptions.html#bufferTimeout" class="tsd-kind-icon">buffer<wbr>Timeout</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="AudioManagerOptions.html#cache" class="tsd-kind-icon">cache</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
@@ -268,9 +271,6 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="AudioManagerOptions.html#createAudioPlayer" class="tsd-kind-icon">create<wbr>Audio<wbr>Player</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="AudioManagerOptions.html#playTimeout" class="tsd-kind-icon">play<wbr>Timeout</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="AudioManagerOptions.html#soundcloudClient" class="tsd-kind-icon">soundcloud<wbr>Client</a>

@@ -32,9 +32,9 @@ class AudioManager extends tiny_typed_emitter_1.TypedEmitter {
          */
         this._players = new Map();
         validation_1.AudioManagerValidation.validateOptions(options);
-        const { cache, cacheDir, cacheTimeout, playTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options;
+        const { cache, cacheDir, cacheTimeout, bufferTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options;
         this.cache = cache;
-        this.playTimeout = playTimeout ?? 7 * 1000;
+        this.bufferTimeout = bufferTimeout ?? 7 * 1000;
         this.youtube = youtubeOptions ?? {};
         this.soundcloud = soundcloudClient ?? soundcloud_downloader_1.default;
         this._createAudioPlayer = createAudioPlayer || defaultCreateAudioPlayerType;
