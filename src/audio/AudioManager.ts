@@ -40,6 +40,10 @@ export interface AudioManagerOptions {
    */
   cacheTimeout?: number
   /**
+   * Abort the player after reaching timeout on buffering (in ms), default to 7 seconds
+   */
+  playTimeout?: number
+  /**
    * The downloadOptions (ytdl-core) when getting audio source from youtube
    */
   youtubeOptions?: downloadOptions
@@ -105,6 +109,10 @@ export class AudioManager extends TypedEmitter<AudioManagerEvents> {
    */
   public readonly cache?: CacheManager
   /**
+   * Abort the player after reaching timeout on buffering (in ms), default to 7 seconds
+   */
+  public readonly playTimeout?: number
+  /**
    * The soundcloud client (soundcloud-downloader) when getting audio source
    */
   public readonly soundcloud: typeof SCDL
@@ -129,9 +137,10 @@ export class AudioManager extends TypedEmitter<AudioManagerEvents> {
     super()
     validation.validateOptions(options)
 
-    const { cache, cacheDir, cacheTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options
+    const { cache, cacheDir, cacheTimeout, playTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options
 
     this.cache = cache
+    this.playTimeout = playTimeout ?? 7 * 1000
     this.youtube = youtubeOptions ?? {}
     this.soundcloud = soundcloudClient ?? SCDL
 

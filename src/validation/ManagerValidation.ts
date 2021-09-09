@@ -37,6 +37,8 @@ export function validateOptions(options: AudioManagerOptions): void {
     if ("cacheTimeout" in options && typeof options.cacheTimeout !== "number") throw new PlayerError(ErrorMessages.Expecting("number", "AudioManagerOptions.cacheTimeout", typeof options.cacheTimeout))
   }
 
+  if ("playTimeout" in options && typeof options.playTimeout !== "number") throw new PlayerError(ErrorMessages.Expecting("number", "AudioManagerOptions.playTimeout", typeof options.playTimeout))
+
   if ("soundcloudClient" in options) {
     if (typeof options.soundcloudClient !== "object" || options.soundcloudClient === null) throw new PlayerError(ErrorMessages.Expecting("object", "AudioManagerOptions.soundcloudClient", options.soundcloudClient === null ? "null" : typeof options.soundcloudClient))
     if (!(options.soundcloudClient instanceof SCDL.constructor)) throw new PlayerError(ErrorMessages.Expecting("SCDL", "AudioManagerOptions.soundcloudClient", options.soundcloudClient))
