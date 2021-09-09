@@ -33,13 +33,14 @@ class QueueManager extends tiny_typed_emitter_1.TypedEmitter {
     /**
      * @param manager The audio manager resolvable
      */
-    constructor(manager) {
+    constructor(manager, metadata) {
         super();
         /**
          * @internal
          */
         this._handlers = new Map();
         validation_1.QueueManagerValidation.validateAudioManager(manager);
+        this.metadata = metadata;
         if (manager instanceof AudioManager_1.AudioManager)
             this.audioManager = manager;
         else
