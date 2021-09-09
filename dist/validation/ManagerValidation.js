@@ -43,6 +43,8 @@ function validateOptions(options) {
         if ("cacheTimeout" in options && typeof options.cacheTimeout !== "number")
             throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("number", "AudioManagerOptions.cacheTimeout", typeof options.cacheTimeout));
     }
+    if ("playTimeout" in options && typeof options.playTimeout !== "number")
+        throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("number", "AudioManagerOptions.playTimeout", typeof options.playTimeout));
     if ("soundcloudClient" in options) {
         if (typeof options.soundcloudClient !== "object" || options.soundcloudClient === null)
             throw new PlayerError_1.PlayerError(PlayerError_1.ErrorMessages.Expecting("object", "AudioManagerOptions.soundcloudClient", options.soundcloudClient === null ? "null" : typeof options.soundcloudClient));

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheManagerImpl = void 0;
 const validation_1 = require("../validation");
+const child_process_1 = require("child_process");
 const Cache_1 = require("./Cache");
 /**
  * The default implementation of {@link CacheManager | CacheManager}
@@ -10,7 +11,6 @@ class CacheManagerImpl {
     /**
      * @internal
      */
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     constructor() {
         /**
          * @internal
@@ -24,6 +24,11 @@ class CacheManagerImpl {
          * @internal
          */
         this.local = new Cache_1.Cache("local");
+        /**
+         * @internal
+         */
+        this.deleter = child_process_1.fork(require.resolve("./CacheDeleter"), { detached: true });
+        this.deleter.unref();
     }
     /**
      * @internal
@@ -44,6 +49,16 @@ class CacheManagerImpl {
         this.youtube.setOptions({ path });
         this.soundcloud.setOptions({ path });
         this.local.setOptions({ path });
+        this.deleter.send([0, path]);
+    }
+    /**
+     * @internal
+     */
+    async delete() {
+        if (!this.path)
+            return;
+        this.deleter.send([1]);
+        await new Promise((res) => this.deleter.once("exit", res));
     }
 }
 exports.CacheManagerImpl = CacheManagerImpl;

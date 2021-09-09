@@ -10,7 +10,6 @@ const fs_1 = require("fs");
 const AudioPlayerImpl_1 = require("./AudioPlayerImpl");
 const tiny_typed_emitter_1 = require("tiny-typed-emitter");
 const path_1 = require("path");
-const child_process_1 = require("child_process");
 const os_1 = require("os");
 function initCache(dir) {
     if (!fs_1.existsSync(dir))
@@ -33,8 +32,9 @@ class AudioManager extends tiny_typed_emitter_1.TypedEmitter {
          */
         this._players = new Map();
         validation_1.AudioManagerValidation.validateOptions(options);
-        const { cache, cacheDir, cacheTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options;
+        const { cache, cacheDir, cacheTimeout, playTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options;
         this.cache = cache;
+        this.playTimeout = playTimeout ?? 7 * 1000;
         this.youtube = youtubeOptions ?? {};
         this.soundcloud = soundcloudClient ?? soundcloud_downloader_1.default;
         this._createAudioPlayer = createAudioPlayer || defaultCreateAudioPlayerType;
@@ -44,10 +44,6 @@ class AudioManager extends tiny_typed_emitter_1.TypedEmitter {
             initCache(path);
             cache.setTimeout(timeout);
             cache.setPath(fs_1.mkdtempSync(path_1.join(path, "node-discord-media-player-")));
-            const daemon = child_process_1.fork(require.resolve("../nodeDeleteDaemon"), { detached: true });
-            daemon.send(process.pid);
-            daemon.send(cache.path);
-            daemon.unref();
         }
     }
     /**

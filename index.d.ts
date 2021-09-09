@@ -91,6 +91,10 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
                 */
             cacheTimeout?: number;
             /**
+                * Abort the player after reaching timeout on buffering (in ms), default to 7 seconds
+                */
+            playTimeout?: number;
+            /**
                 * The downloadOptions (ytdl-core) when getting audio source from youtube
                 */
             youtubeOptions?: downloadOptions;
@@ -150,6 +154,10 @@ declare module 'discord-media-player/dist/audio/AudioManager' {
                 * The audio cache manager
                 */
             readonly cache?: CacheManager;
+            /**
+                * Abort the player after reaching timeout on buffering (in ms), default to 7 seconds
+                */
+            readonly playTimeout?: number;
             /**
                 * The soundcloud client (soundcloud-downloader) when getting audio source
                 */
@@ -486,6 +494,10 @@ declare module 'discord-media-player/dist/cache/CacheManager' {
                 * @param path The base directory
                 */
             setPath(path: string): void;
+            /**
+                * A function to force delete cache directory
+                */
+            delete?(): void | Promise<void>;
     }
 }
 
@@ -519,6 +531,10 @@ declare module 'discord-media-player/dist/cache/CacheManagerImpl' {
             /**
                 * @internal
                 */
+            readonly deleter: import("child_process").ChildProcess;
+            /**
+                * @internal
+                */
             constructor();
             /**
                 * @internal
@@ -528,6 +544,10 @@ declare module 'discord-media-player/dist/cache/CacheManagerImpl' {
                 * @internal
                 */
             setPath(path: string): void;
+            /**
+                * @internal
+                */
+            delete(): Promise<void>;
     }
 }
 
@@ -630,7 +650,8 @@ declare module 'discord-media-player/dist/util/ErrorCode' {
         youtubeNoPlayerResponse = 2,
         youtubeUnplayable = 3,
         youtubeLoginRequired = 4,
-        noResource = 5
+        noResource = 5,
+        timedOut = 6
     }
 }
 
@@ -1345,7 +1366,7 @@ declare module 'discord-media-player/dist/queue/QueueManager' {
         * ...
         * ```
         */
-    export class QueueManager<TM extends object = {}> extends TypedEmitter<QueueManagerEvents> {
+    export class QueueManager<TM extends object = {}, M = unknown> extends TypedEmitter<QueueManagerEvents> {
             /**
                 * Emitted whenever an audio is started playing
                 *
@@ -1386,9 +1407,13 @@ declare module 'discord-media-player/dist/queue/QueueManager' {
                 */
             readonly audioManager: AudioManager;
             /**
+                * The queue manager metadata (if any)
+                */
+            readonly metadata?: M;
+            /**
                 * @param manager The audio manager resolvable
                 */
-            constructor(manager: AudioManagerResolvable);
+            constructor(manager: AudioManagerResolvable, metadata?: M);
             /**
                 * Get queue handler from list if exist, otherwise create new
                 * @param connection The voice connection
