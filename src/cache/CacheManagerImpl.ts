@@ -1,5 +1,6 @@
 import type { CacheManager } from "./CacheManager"
 import { CacheManagerValidation as validation } from "../validation"
+import { fork } from "child_process"
 import { Cache } from "./Cache"
 
 /**
@@ -27,12 +28,17 @@ export class CacheManagerImpl implements CacheManager {
    * @internal
    */
   public readonly local = new Cache("local")
+  /**
+   * @internal
+   */
+  public readonly deleter = fork(require.resolve("./CacheDeleter"), { detached: true })
 
   /**
    * @internal
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
+  constructor() {
+    this.deleter.unref()
+  }
 
   /**
    * @internal
@@ -56,5 +62,18 @@ export class CacheManagerImpl implements CacheManager {
     this.youtube.setOptions({ path })
     this.soundcloud.setOptions({ path })
     this.local.setOptions({ path })
+
+    this.deleter.send([0, path])
+  }
+
+  /**
+   * @internal
+   */
+  async delete(): Promise<void> {
+    if (!this.path) return
+
+    this.deleter.send([1])
+
+    await new Promise((res) => this.deleter.once("exit", res))
   }
 }

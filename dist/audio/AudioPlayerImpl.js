@@ -70,6 +70,10 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
         /**
          * @internal
          */
+        this._timedOut = false;
+        /**
+         * @internal
+         */
         this._aborting = false;
         /**
          * @internal
@@ -335,14 +339,8 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
      * @internal
      */
     _createAudioResource() {
-        const streams = [new prism_media_1.default.VolumeTransformer({
-                type: "s16le",
-                volume: this._volume
-            }), new prism_media_1.default.opus.Encoder({
-                rate: 48000,
-                channels: 2,
-                frameSize: 960
-            })];
+        const passthrough = new stream_1.PassThrough();
+        let stream = passthrough;
         if (this._filters) {
             const filters = [];
             Object.entries(this._filters).forEach((filter) => {
@@ -352,11 +350,15 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
                 }
                 filters.push(filter.join("="));
             });
-            streams.unshift(new prism_media_1.default.FFmpeg({ args: [...FILTER_FFMPEG_ARGS, filters.join(",")] }));
+            const ffmpeg = new prism_media_1.default.FFmpeg({ args: [...FILTER_FFMPEG_ARGS, filters.join(",")] });
+            stream = stream.pipe(ffmpeg);
         }
-        //Avoid null on _readableState.awaitDrainWriters
-        streams.unshift(new stream_1.PassThrough());
-        return new voice_1.AudioResource([], streams, streams[0], 0);
+        return voice_1.createAudioResource(stream, {
+            metadata: passthrough,
+            silencePaddingFrames: 1,
+            inputType: voice_1.StreamType.Raw,
+            inlineVolume: true
+        });
     }
     /**
      * @internal
@@ -621,6 +623,17 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
      * @internal
      */
     async _onAudioChange(oldState, newState) {
+        if (oldState.status !== voice_1.AudioPlayerStatus.Buffering && newState.status === voice_1.AudioPlayerStatus.Buffering) {
+            try {
+                await voice_1.entersState(this._player, voice_1.AudioPlayerStatus.Playing, this.manager.bufferTimeout);
+            }
+            catch {
+                if (this._player.state.status === voice_1.AudioPlayerStatus.Playing)
+                    return;
+                this._timedOut = true;
+                this._player.stop();
+            }
+        }
         const paused = [voice_1.AudioPlayerStatus.Paused, voice_1.AudioPlayerStatus.AutoPaused];
         if (!paused.includes(oldState.status) && paused.includes(newState.status))
             this.emit("pause");
@@ -631,75 +644,88 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
             this._switchToCache = 0;
         }
         else if (oldState.status !== voice_1.AudioPlayerStatus.Idle && !newState.resource) {
-            if (!(this._aborting || this._stopping) && this._playResourceOnEnd && !this._resource.allCached) {
-                this._playResourceOnEnd = false;
-                if (this._resource.player && this._resource.player !== this)
-                    this._resource.player._switchCache();
-                this._playResource();
-                return;
-            }
-            if (this._resource.player === this) {
-                if (!this.manager.cache && !this._resource.cacheWriter.destroyed)
-                    this._resource.cacheWriter.read();
-                this._resource.player = null;
-            }
-            else
-                this._audio.destroy();
-            if (!this._aborting) {
-                this._playing = false;
-                this._playResourceOnEnd = false;
-                if (!this.manager.cache || this._resource.isLive)
-                    this._resource.cacheWriter.destroy();
-                if (!this._disconnected) {
-                    if (this._resource.isLive) {
-                        const stopping = this._stopping;
-                        const cachedSeconds = this._resource.cachedSecond;
-                        await this._getYoutubeResource(this._urlOrLocation);
-                        if (this._looping || (this._resource.isLive && !stopping)) {
-                            if (this._looping && !(this._resource.isLive && !stopping)) {
-                                this.emit("end");
-                                this.manager.emit("audioStart", this.guildID, this._urlOrLocation);
-                                this.manager.emit("audioEnd", this.guildID, this._urlOrLocation);
+            try {
+                if (!(this._aborting || this._stopping) && this._playResourceOnEnd && !this._resource.allCached) {
+                    this._playResourceOnEnd = false;
+                    if (this._resource.player && this._resource.player !== this)
+                        this._resource.player._switchCache();
+                    this._playResource();
+                    return;
+                }
+                if (this._resource.player === this) {
+                    if (!this.manager.cache && !this._resource.cacheWriter.destroyed)
+                        this._resource.cacheWriter.read();
+                    this._resource.player = null;
+                }
+                else
+                    this._audio.destroy();
+                if (!this._aborting) {
+                    this._playing = false;
+                    this._playResourceOnEnd = false;
+                    if (!this.manager.cache || this._resource.isLive)
+                        this._resource.cacheWriter.destroy();
+                    if (!this._disconnected) {
+                        if (this._resource.isLive) {
+                            const stopping = this._stopping;
+                            const cachedSeconds = this._resource.cachedSecond;
+                            await this._getYoutubeResource(this._urlOrLocation);
+                            if (this._looping || (this._resource.isLive && !stopping)) {
+                                if (this._looping && !(this._resource.isLive && !stopping)) {
+                                    this._emitEnd();
+                                    this.manager.emit("audioStart", this.guildID, this._urlOrLocation);
+                                }
+                                else
+                                    this._resource.cachedSecond = cachedSeconds;
+                                this._playing = true;
+                                this._playResource();
+                                return;
                             }
-                            else
-                                this._resource.cachedSecond = cachedSeconds;
+                        }
+                        else if (this._looping) {
+                            if (this.manager.cache) {
+                                if (this._resource.cacheWriter.destroyed && !this._resource.allCached) {
+                                    this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode_1.ErrorCode.noResource);
+                                    this._cleanup();
+                                    this.emit("end");
+                                    return;
+                                }
+                                this._playCache();
+                            }
+                            else {
+                                await this._getResource(this._urlOrLocation, this._sourceType);
+                                if (!this._resource) {
+                                    this._cleanup();
+                                    return;
+                                }
+                                this._playResource();
+                            }
+                            this._emitEnd();
                             this._playing = true;
-                            this._playResource();
+                            this.manager.emit("audioStart", this.guildID, this._urlOrLocation);
                             return;
                         }
                     }
-                    else if (this._looping) {
-                        this.emit("end");
-                        this.manager.emit("audioEnd", this.guildID, this._urlOrLocation);
-                        if (this.manager.cache) {
-                            if (this._resource.cacheWriter.destroyed && !this._resource.allCached) {
-                                this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode_1.ErrorCode.noResource);
-                                this._cleanup();
-                                this.emit("end");
-                                return;
-                            }
-                            this._playCache();
-                        }
-                        else {
-                            await this._getResource(this._urlOrLocation, this._sourceType);
-                            if (!this._resource) {
-                                this._cleanup();
-                                return;
-                            }
-                            this._playResource();
-                        }
-                        this._playing = true;
-                        this.manager.emit("audioStart", this.guildID, this._urlOrLocation);
-                        return;
-                    }
+                    this._emitEnd();
+                    this._cleanup();
                 }
-                this.emit("end");
-                this.manager.emit("audioEnd", this.guildID, this._urlOrLocation);
-                this._cleanup();
+                else
+                    this._playResourceOnEnd = false;
             }
-            else
-                this._playResourceOnEnd = false;
+            finally {
+                this._timedOut = false;
+            }
         }
+    }
+    /**
+     * @internal
+     */
+    _emitEnd() {
+        this.emit("end");
+        if (this._timedOut) {
+            this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode_1.ErrorCode.timedOut);
+            return;
+        }
+        this.manager.emit("audioEnd", this.guildID, this._urlOrLocation);
     }
     /**
      * @internal

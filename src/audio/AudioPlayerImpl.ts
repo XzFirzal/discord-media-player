@@ -2,7 +2,7 @@ import type { Filters } from "../util/Filters"
 import type { AudioManager } from "./AudioManager"
 import type { SourceType } from "../util/SourceType"
 import type { AudioPlayer, PlayerEvents } from "./AudioPlayer"
-import type { VoiceConnection, VoiceConnectionReadyState, VoiceConnectionState, AudioPlayerPlayingState, AudioPlayerState } from "@discordjs/voice"
+import type { VoiceConnection, VoiceConnectionReadyState, VoiceConnectionState, AudioPlayerPlayingState, AudioPlayerState, AudioResource } from "@discordjs/voice"
 import type { Transcoding } from "../soundcloudUtil/transcoding"
 import type { TrackInfo } from "soundcloud-downloader/src/info"
 import type { videoFormat, videoInfo } from "ytdl-core"
@@ -15,7 +15,7 @@ import { Resource } from "../util/Resource"
 import { ErrorCode } from "../util/ErrorCode"
 import { CacheWriter } from "../cache/CacheWriter"
 import { downloadMedia } from "../soundcloudUtil/downloadMedia"
-import { demuxProbe, StreamType, AudioPlayer as DiscordPlayer, AudioResource, AudioPlayerStatus, VoiceConnectionStatus } from "@discordjs/voice"
+import { demuxProbe, entersState, StreamType, AudioPlayer as DiscordPlayer, AudioPlayerStatus, VoiceConnectionStatus, createAudioResource } from "@discordjs/voice"
 import { PlayerError, ErrorMessages, AudioPlayerValidation as playerValidation } from "../validation"
 import { getVideoID, getInfo, downloadFromInfo } from "ytdl-core"
 import { TypedEmitter } from "tiny-typed-emitter"
@@ -124,6 +124,10 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
    * @internal
    */
   private _disconnected = false
+  /**
+   * @internal
+   */
+  private _timedOut = false
   /**
    * @internal
    */
@@ -454,14 +458,8 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
    * @internal
    */
   private _createAudioResource(): AudioResource<PassThrough> {
-    const streams: (PassThrough | prism.FFmpeg | prism.VolumeTransformer | prism.opus.Encoder)[] = [new prism.VolumeTransformer({
-      type: "s16le",
-      volume: this._volume
-    }), new prism.opus.Encoder({
-      rate: 48000,
-      channels: 2,
-      frameSize: 960
-    })]
+    const passthrough = new PassThrough()
+    let stream: PassThrough | prism.FFmpeg = passthrough
 
     if (this._filters) {
       const filters: string[] = []
@@ -475,13 +473,17 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
         filters.push(filter.join("="))
       })
 
-      streams.unshift(new prism.FFmpeg({ args: [...FILTER_FFMPEG_ARGS, filters.join(",")] }))
+      const ffmpeg = new prism.FFmpeg({ args: [...FILTER_FFMPEG_ARGS, filters.join(",")] })
+
+      stream = stream.pipe(ffmpeg)
     }
 
-    //Avoid null on _readableState.awaitDrainWriters
-    streams.unshift(new PassThrough())
-
-    return new AudioResource([], streams, streams[0] as PassThrough, 0)
+    return createAudioResource(stream, {
+      metadata: passthrough,
+      silencePaddingFrames: 1,
+      inputType: StreamType.Raw,
+      inlineVolume: true
+    })
   }
 
   /**
@@ -794,6 +796,17 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
    * @internal
    */
   private async _onAudioChange(oldState: AudioPlayerState, newState: AudioPlayerState): Promise<void> {
+    if (oldState.status !== AudioPlayerStatus.Buffering && newState.status === AudioPlayerStatus.Buffering) {
+      try {
+        await entersState(this._player, AudioPlayerStatus.Playing, this.manager.bufferTimeout)
+      } catch {
+        if (this._player.state.status === AudioPlayerStatus.Playing) return
+
+        this._timedOut = true
+        this._player.stop()
+      }
+    }
+
     const paused = [AudioPlayerStatus.Paused, AudioPlayerStatus.AutoPaused]
 
     if (!paused.includes(oldState.status) && paused.includes(newState.status)) this.emit("pause")
@@ -803,83 +816,98 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
       this._playCache(this._switchToCache)
       this._switchToCache = 0
     } else if (oldState.status !== AudioPlayerStatus.Idle && !(newState as AudioPlayerPlayingState).resource) {
-      if (!(this._aborting || this._stopping) && this._playResourceOnEnd && !this._resource.allCached) {
-        this._playResourceOnEnd = false
-
-        if (this._resource.player && this._resource.player !== this) (this._resource.player as AudioPlayerImpl)._switchCache()
-
-        this._playResource()
-        return
-      }
-
-      if (this._resource.player === this) {
-        if (!this.manager.cache && !this._resource.cacheWriter.destroyed) this._resource.cacheWriter.read()
-
-        this._resource.player = null
-      } else this._audio.destroy()
-
-      if (!this._aborting) {
-        this._playing = false
-        this._playResourceOnEnd = false
-
-        if (!this.manager.cache || this._resource.isLive) this._resource.cacheWriter.destroy()
-
-        if (!this._disconnected) {
-          if (this._resource.isLive) {
-            const stopping = this._stopping
-            const cachedSeconds = this._resource.cachedSecond
-
-            await this._getYoutubeResource(this._urlOrLocation)
-
-            if (this._looping || (this._resource.isLive && !stopping)) {
-              if (this._looping && !(this._resource.isLive && !stopping)) {
-                this.emit("end")
-                this.manager.emit("audioStart", this.guildID, this._urlOrLocation)
-                this.manager.emit("audioEnd", this.guildID, this._urlOrLocation)
-              } else this._resource.cachedSecond = cachedSeconds
-
+      try {
+        if (!(this._aborting || this._stopping) && this._playResourceOnEnd && !this._resource.allCached) {
+          this._playResourceOnEnd = false
+  
+          if (this._resource.player && this._resource.player !== this) (this._resource.player as AudioPlayerImpl)._switchCache()
+  
+          this._playResource()
+          return
+        }
+  
+        if (this._resource.player === this) {
+          if (!this.manager.cache && !this._resource.cacheWriter.destroyed) this._resource.cacheWriter.read()
+  
+          this._resource.player = null
+        } else this._audio.destroy()
+  
+        if (!this._aborting) {
+          this._playing = false
+          this._playResourceOnEnd = false
+  
+          if (!this.manager.cache || this._resource.isLive) this._resource.cacheWriter.destroy()
+  
+          if (!this._disconnected) {
+            if (this._resource.isLive) {
+              const stopping = this._stopping
+              const cachedSeconds = this._resource.cachedSecond
+  
+              await this._getYoutubeResource(this._urlOrLocation)
+  
+              if (this._looping || (this._resource.isLive && !stopping)) {
+                if (this._looping && !(this._resource.isLive && !stopping)) {
+                  this._emitEnd()
+                  this.manager.emit("audioStart", this.guildID, this._urlOrLocation)
+                } else this._resource.cachedSecond = cachedSeconds
+  
+                this._playing = true
+                this._playResource()
+  
+                return
+              }
+            } else if (this._looping) {
+              if (this.manager.cache) {
+                if (this._resource.cacheWriter.destroyed && !this._resource.allCached) {
+                  this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode.noResource)
+                  this._cleanup()
+                  this.emit("end")
+  
+                  return
+                }
+  
+                this._playCache()
+              } else {
+                await this._getResource(this._urlOrLocation, this._sourceType)
+  
+                if (!this._resource) {
+                  this._cleanup()
+                  return
+                }
+  
+                this._playResource()
+              }
+  
+              this._emitEnd()
               this._playing = true
-              this._playResource()
-
+              this.manager.emit("audioStart", this.guildID, this._urlOrLocation)
+  
               return
             }
-          } else if (this._looping) {
-            this.emit("end")
-            this.manager.emit("audioEnd", this.guildID, this._urlOrLocation)
-
-            if (this.manager.cache) {
-              if (this._resource.cacheWriter.destroyed && !this._resource.allCached) {
-                this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode.noResource)
-                this._cleanup()
-                this.emit("end")
-
-                return
-              }
-
-              this._playCache()
-            } else {
-              await this._getResource(this._urlOrLocation, this._sourceType)
-
-              if (!this._resource) {
-                this._cleanup()
-                return
-              }
-
-              this._playResource()
-            }
-
-            this._playing = true
-            this.manager.emit("audioStart", this.guildID, this._urlOrLocation)
-
-            return
           }
-        }
-
-        this.emit("end")
-        this.manager.emit("audioEnd", this.guildID, this._urlOrLocation)
-        this._cleanup()
-      } else this._playResourceOnEnd = false
+  
+          this._emitEnd()
+          this._cleanup()
+        } else this._playResourceOnEnd = false
+      } finally {
+        this._timedOut = false
+      }
     }
+  }
+
+  /**
+   * @internal
+   */
+  private _emitEnd(): void {
+    this.emit("end")
+
+    if (this._timedOut) {
+      this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode.timedOut)
+
+      return
+    }
+
+    this.manager.emit("audioEnd", this.guildID, this._urlOrLocation)
   }
 
   /**

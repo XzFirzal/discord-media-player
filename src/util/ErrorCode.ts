@@ -7,5 +7,6 @@ export enum ErrorCode {
   youtubeNoPlayerResponse = 2,
   youtubeUnplayable = 3,
   youtubeLoginRequired = 4,
-  noResource = 5
+  noResource = 5,
+  timedOut = 6
 }

@@ -125,7 +125,7 @@ export interface QueueManagerEvents {
  * ...
  * ```
  */
-export class QueueManager<TM extends object = {}> extends TypedEmitter<QueueManagerEvents> {
+export class QueueManager<TM extends object = {}, M = unknown> extends TypedEmitter<QueueManagerEvents> {
   /**
    * Emitted whenever an audio is started playing
    * 
@@ -170,6 +170,10 @@ export class QueueManager<TM extends object = {}> extends TypedEmitter<QueueMana
    * The audio manager of the queue
    */
   public readonly audioManager: AudioManager
+  /**
+   * The queue manager metadata (if any)
+   */
+  public readonly metadata?: M
 
   /**
    * @internal
@@ -179,9 +183,11 @@ export class QueueManager<TM extends object = {}> extends TypedEmitter<QueueMana
   /**
    * @param manager The audio manager resolvable
    */
-  constructor(manager: AudioManagerResolvable) {
+  constructor(manager: AudioManagerResolvable, metadata?: M) {
     super()
     validation.validateAudioManager(manager as AudioManager)
+
+    this.metadata = metadata
 
     if (manager instanceof AudioManager) this.audioManager = manager
     else this.audioManager = new AudioManager(manager)

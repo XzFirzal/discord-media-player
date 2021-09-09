@@ -10,7 +10,6 @@ import { mkdirSync, mkdtempSync, existsSync } from "fs"
 import { AudioPlayerImpl } from "./AudioPlayerImpl"
 import { TypedEmitter } from "tiny-typed-emitter"
 import { join as pathJoin } from "path"
-import { fork } from "child_process"
 import { tmpdir } from "os"
 
 function initCache(dir: string): void {
@@ -39,6 +38,10 @@ export interface AudioManagerOptions {
    * The timeout for cache deletion (in ms)
    */
   cacheTimeout?: number
+  /**
+   * Abort the player after reaching timeout on buffering (in ms), default to 7 seconds
+   */
+  bufferTimeout?: number
   /**
    * The downloadOptions (ytdl-core) when getting audio source from youtube
    */
@@ -105,6 +108,10 @@ export class AudioManager extends TypedEmitter<AudioManagerEvents> {
    */
   public readonly cache?: CacheManager
   /**
+   * Abort the player after reaching timeout on buffering (in ms), default to 7 seconds
+   */
+  public readonly bufferTimeout?: number
+  /**
    * The soundcloud client (soundcloud-downloader) when getting audio source
    */
   public readonly soundcloud: typeof SCDL
@@ -129,9 +136,10 @@ export class AudioManager extends TypedEmitter<AudioManagerEvents> {
     super()
     validation.validateOptions(options)
 
-    const { cache, cacheDir, cacheTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options
+    const { cache, cacheDir, cacheTimeout, bufferTimeout, youtubeOptions, soundcloudClient, createAudioPlayer } = options
 
     this.cache = cache
+    this.bufferTimeout = bufferTimeout ?? 7 * 1000
     this.youtube = youtubeOptions ?? {}
     this.soundcloud = soundcloudClient ?? SCDL
 
@@ -144,11 +152,6 @@ export class AudioManager extends TypedEmitter<AudioManagerEvents> {
       initCache(path)
       cache.setTimeout(timeout)
       cache.setPath(mkdtempSync(pathJoin(path, "node-discord-media-player-")))
-
-      const daemon = fork(require.resolve("../nodeDeleteDaemon"), { detached: true })
-      daemon.send(process.pid)
-      daemon.send(cache.path)
-      daemon.unref()
     }
   }
 
