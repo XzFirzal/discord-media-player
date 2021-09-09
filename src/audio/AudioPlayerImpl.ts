@@ -798,7 +798,7 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
   private async _onAudioChange(oldState: AudioPlayerState, newState: AudioPlayerState): Promise<void> {
     if (oldState.status !== AudioPlayerStatus.Buffering && newState.status === AudioPlayerStatus.Buffering) {
       try {
-        await entersState(this._player, AudioPlayerStatus.Playing, this.manager.playTimeout)
+        await entersState(this._player, AudioPlayerStatus.Playing, this.manager.bufferTimeout)
       } catch {
         if (this._player.state.status === AudioPlayerStatus.Playing) return
 
