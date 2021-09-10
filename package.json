@@ -1,6 +1,6 @@
 {
   "name": "discord-media-player",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "@discordjs/voice wrapper to manage audio resource easier",
   "main": "dist/index.js",
   "types": "index.d.ts",
