@@ -694,7 +694,9 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
                             else {
                                 await this._getResource(this._urlOrLocation, this._sourceType);
                                 if (!this._resource) {
+                                    this._emitEnd(false);
                                     this._cleanup();
+                                    this.emit("end");
                                     return;
                                 }
                                 this._playResource();
@@ -705,8 +707,9 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
                             return;
                         }
                     }
-                    this._emitEnd();
+                    this._emitEnd(false);
                     this._cleanup();
+                    this.emit("end");
                 }
                 else
                     this._playResourceOnEnd = false;
@@ -719,8 +722,9 @@ class AudioPlayerImpl extends tiny_typed_emitter_1.TypedEmitter {
     /**
      * @internal
      */
-    _emitEnd() {
-        this.emit("end");
+    _emitEnd(end = true) {
+        if (end)
+            this.emit("end");
         if (this._timedOut) {
             this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode_1.ErrorCode.timedOut);
             return;
