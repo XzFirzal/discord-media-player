@@ -10,12 +10,11 @@ const youtube_scrapper_1 = require("youtube-scrapper");
 /**
  * A RegExp instance to identify youtube playlist url
  */
-exports.PLAYLIST_URL = /^(http|https)?:\/\/(www.)?youtube.com\/playlist\?list=((PL|UU|LL|RD|OL)[a-zA-Z0-9-_]{16,41})$/;
+exports.PLAYLIST_URL = /^(?:(?:http|https):\/\/)?(?:www\.)?youtube\.com\/playlist\?list=((?:PL|UU|LL|RD|OL)[\w-]{16,41})$/;
 /**
  * A RegExp instance to identify youtube video url
  */
-// eslint-disable-next-line no-useless-escape
-exports.VIDEO_URL = /^(http|https)?:\/\/?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
+exports.VIDEO_URL = /^(?:(?:http|https):\/\/)?(?:youtu\.be\/|(?:(?:www|m)\.)?youtube\.com\/(?:watch\?v=|v\/|embed\/))([\w-]{11})$/;
 /**
  * The manager of queue handler
  *
@@ -101,7 +100,8 @@ class QueueManager extends tiny_typed_emitter_1.TypedEmitter {
                 ? "video"
                 : "search";
         if (type === "video") {
-            const { details } = await youtube_scrapper_1.getVideoInfo(options.query);
+            const videoID = exports.VIDEO_URL.exec(options.query)[1];
+            const { details } = await youtube_scrapper_1.getVideoInfo(`https://www.youtube.com/watch?v=${videoID}`);
             tracks.push(new Track_1.Track({
                 sourceType: 0,
                 urlOrLocation: details.url,
@@ -109,7 +109,8 @@ class QueueManager extends tiny_typed_emitter_1.TypedEmitter {
             }));
         }
         else if (type === "playlist") {
-            const playlist = await youtube_scrapper_1.getPlaylistInfo(options.query, { full: options.fullPlaylist ?? false });
+            const playlistID = exports.PLAYLIST_URL.exec(options.query)[1];
+            const playlist = await youtube_scrapper_1.getPlaylistInfo(`https://www.youtube.com/playlist?list=${playlistID}`, { full: options.fullPlaylist ?? false });
             for (const video of playlist.tracks) {
                 tracks.push(new Track_1.Track({
                     sourceType: 0,

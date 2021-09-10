@@ -15,13 +15,12 @@ import { getVideoInfo, getPlaylistInfo, search } from "youtube-scrapper"
 /**
  * A RegExp instance to identify youtube playlist url
  */
-export const PLAYLIST_URL = /^(http|https)?:\/\/(www.)?youtube.com\/playlist\?list=((PL|UU|LL|RD|OL)[a-zA-Z0-9-_]{16,41})$/
+export const PLAYLIST_URL = /^(?:(?:http|https):\/\/)?(?:www\.)?youtube\.com\/playlist\?list=((?:PL|UU|LL|RD|OL)[\w-]{16,41})$/
 
 /**
  * A RegExp instance to identify youtube video url
  */
-// eslint-disable-next-line no-useless-escape
-export const VIDEO_URL = /^(http|https)?:\/\/?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
+export const VIDEO_URL = /^(?:(?:http|https):\/\/)?(?:youtu\.be\/|(?:(?:www|m)\.)?youtube\.com\/(?:watch\?v=|v\/|embed\/))([\w-]{11})$/
 
 /**
  * Track metadata of youtube search result
@@ -261,7 +260,8 @@ export class QueueManager<TM extends object = {}, M = unknown> extends TypedEmit
       : "search"
 
     if (type === "video") {
-      const { details } = await getVideoInfo(options.query)
+      const videoID = VIDEO_URL.exec(options.query)[1]
+      const { details } = await getVideoInfo(`https://www.youtube.com/watch?v=${videoID}`)
 
       tracks.push(new Track({
         sourceType: 0,
@@ -269,7 +269,8 @@ export class QueueManager<TM extends object = {}, M = unknown> extends TypedEmit
         metadata: details
       }))
     } else if (type === "playlist") {
-      const playlist = await getPlaylistInfo(options.query, { full: options.fullPlaylist ?? false })
+      const playlistID = PLAYLIST_URL.exec(options.query)[1]
+      const playlist = await getPlaylistInfo(`https://www.youtube.com/playlist?list=${playlistID}`, { full: options.fullPlaylist ?? false })
 
       for (const video of playlist.tracks) {
         tracks.push(new Track({

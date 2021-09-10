@@ -871,7 +871,9 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
                 await this._getResource(this._urlOrLocation, this._sourceType)
   
                 if (!this._resource) {
+                  this._emitEnd(false)
                   this._cleanup()
+                  this.emit("end")
                   return
                 }
   
@@ -886,8 +888,9 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
             }
           }
   
-          this._emitEnd()
+          this._emitEnd(false)
           this._cleanup()
+          this.emit("end")
         } else this._playResourceOnEnd = false
       } finally {
         this._timedOut = false
@@ -898,9 +901,8 @@ export class AudioPlayerImpl extends TypedEmitter<PlayerEvents> implements Audio
   /**
    * @internal
    */
-  private _emitEnd(): void {
-    this.emit("end")
-
+  private _emitEnd(end = true): void {
+    if (end) this.emit("end")
     if (this._timedOut) {
       this.manager.emit("audioError", this.guildID, this._urlOrLocation, ErrorCode.timedOut)
 
