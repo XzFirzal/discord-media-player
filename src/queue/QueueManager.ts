@@ -15,12 +15,12 @@ import { getVideoInfo, getPlaylistInfo, search } from "youtube-scrapper"
 /**
  * A RegExp instance to identify youtube playlist url
  */
-export const PLAYLIST_URL = /^(?:http|https):\/\/?(?:www\.)?youtube\.com\/playlist\?list=((?:PL|UU|LL|RD|OL)[\w-]{16,41})$/
+export const PLAYLIST_URL = /^(?:(?:http|https):\/\/)?(?:www\.)?youtube\.com\/playlist\?list=((?:PL|UU|LL|RD|OL)[\w-]{16,41})$/
 
 /**
  * A RegExp instance to identify youtube video url
  */
-export const VIDEO_URL = /^(?:http|https):\/\/?(?:(?:www|m)\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/)?([\w-]{11})$/
+export const VIDEO_URL = /^(?:(?:http|https):\/\/)?(?:youtu\.be\/|(?:(?:www|m)\.)?youtube\.com\/(?:watch\?v=|v\/|embed\/))([\w-]{11})$/
 
 /**
  * Track metadata of youtube search result
